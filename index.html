@@ -4,351 +4,214 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EduAI – Thư viện học liệu cho giáo viên Việt Nam</title>
-<!-- Đã thay đổi thẻ link icon dưới đây bằng mã SVG tạo hình logo giống như hình ảnh của bạn -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23B23A2E' stroke='%23E5B5AF' stroke-width='6' stroke-dasharray='10, 6'/%3E%3Ctext x='50' y='63' font-family='sans-serif' font-weight='bold' font-size='38' fill='%23FFF' text-anchor='middle'%3EEdu%3C/text%3E%3C/svg%3E">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=Be+Vietnam+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  // Cấu hình Tailwind đồng bộ với Font chữ và Chế độ Sáng/Tối
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Inter', 'sans-serif'],
+          heading: ['Plus Jakarta Sans', 'sans-serif'],
+          mono: ['IBM Plex Mono', 'monospace'],
+        },
+        colors: {
+          primary: {
+            50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8',
+          }
+        }
+      }
+    }
+  }
+</script>
+
+<!-- Favicon hình tròn đỏ ngói -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23B23A2E' stroke='%23E5B5AF' stroke-width='4' stroke-dasharray='6,6'/%3E%3Ctext x='50%25' y='57%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-weight='bold' font-size='26' fill='%23FFFFFF'%3EEdu%3C/text%3E%3C/svg%3E">
+
 <style>
-    :root {
-      /* Bảng màu mới giống giao diện Vnteach: Sáng sủa, xanh dương và cam */
-      --bg-body: #F4F6F9; /* Nền trang xám nhạt */
-      --bg-card: #FFFFFF; /* Nền thẻ trắng tinh */
-      --text-main: #333333; /* Chữ xám đậm */
-      --text-dark: #111827; /* Chữ tiêu đề gần đen */
-      --text-muted: #6B7280; /* Chữ phụ xám */
-      --primary: #3B82F6; /* Xanh dương sáng (chủ đạo) */
-      --primary-dark: #2563EB;
-      --accent: #F97316; /* Cam sáng cho nút nhấn (giống nút Hướng dẫn) */
-      --line: #E5E7EB; /* Viền mỏng, nhạt */
-      --header-bg: #FFFFFF; /* Nền Header trắng */
-      --nav-bg: #FFFFFF;
-      --radius: 8px; /* Bo góc vuông vức hơn một chút */
-      --shadow: 0 2px 8px rgba(0,0,0,0.05);
-      --shadow-hover: 0 8px 24px rgba(0,0,0,0.1);
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  /* Scrollbar gọn gàng */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+  .dark ::-webkit-scrollbar-thumb { background: #475569; }
 
-      /* Tương thích ngược với các style inline cũ */
-      --green-900: var(--text-dark);
-      --green-800: #1E293B;
-      --paper: var(--bg-body);
-      --paper-light: #F8FAFC;
-      --paper-card: var(--bg-card);
-      --red: var(--accent);
-      --red-dark: #BE123C;
-      --brass: var(--primary);
-      --ink: var(--text-main);
-      --ink-soft: var(--text-muted);
-    }
+  /* Logo Stamp */
+  .logo-stamp {
+    background-color: #B23A2E;
+    border: 2px dashed #E5B5AF;
+  }
 
-    /* ---------- DARK MODE VARIABLES ---------- */
-    [data-theme="dark"] {
-      --bg-body: #0F172A; /* Nền trang xanh đen tối */
-      --bg-card: #1E293B; /* Nền thẻ xám đen */
-      --text-main: #CBD5E1; /* Chữ xám sáng */
-      --text-dark: #F8FAFC; /* Chữ tiêu đề trắng */
-      --text-muted: #94A3B8; /* Chữ phụ xám */
-      --primary: #60A5FA; /* Xanh dương nhạt hơn cho dễ nhìn trên nền đen */
-      --primary-dark: #3B82F6;
-      --accent: #FB923C; /* Cam sáng hơn */
-      --line: #334155; /* Viền tối */
-      --header-bg: #1E293B; 
-      --nav-bg: #1E293B;
-      --shadow: 0 4px 12px rgba(0,0,0,0.4);
-      --shadow-hover: 0 8px 24px rgba(0,0,0,0.6);
-    }
-    
-    /* Ghi đè một số thành phần đặc biệt cho Dark Mode */
-    [data-theme="dark"] .badge-subject { background: rgba(59,130,246,0.15); color: #93C5FD; border-color: rgba(59,130,246,0.3); }
-    [data-theme="dark"] .badge-grade { background: #0F172A; color: #CBD5E1; border-color: #334155; }
-    [data-theme="dark"] .badge-type { background: rgba(249,115,22,0.15); color: #FDBA74; border-color: rgba(249,115,22,0.3); }
-    [data-theme="dark"] .search-form input { background: #0F172A; color: #F8FAFC; border-color: #334155; }
-    [data-theme="dark"] .search-form input:focus { background: #1E293B; }
-    [data-theme="dark"] .chip:hover { background: #334155; }
-    [data-theme="dark"] .doctype-chip .dt-icon { background: #334155; }
-    [data-theme="dark"] footer { background: #0B1120; border-top: 1px solid #1E293B; }
-    [data-theme="dark"] .index-card .hole { background: var(--bg-body); border-color: var(--line); }
-    [data-theme="dark"] .ai-opt-btn:hover { background: #334155; box-shadow: 0 6px 16px rgba(0,0,0,0.3); }
+  /* Nút công tắc Sáng / Tối (Chuẩn thiết kế Day/Night Mode) */
+  .theme-switch {
+    position: relative;
+    width: 156px;
+    height: 40px;
+    cursor: pointer;
+    display: inline-block;
+    user-select: none;
+    flex-shrink: 0;
+  }
+  .theme-switch input { display: none; }
+  .theme-slider {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, #56CCF2 0%, #2F80ED 100%);
+    border-radius: 99px;
+    transition: 0.4s;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.15);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 14px; overflow: hidden;
+  }
+  /* Trạng thái Tối */
+  .theme-switch input:checked + .theme-slider {
+    background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
+  }
+  /* Viên bi */
+  .theme-slider::before {
+    content: ""; position: absolute;
+    height: 32px; width: 32px;
+    left: 4px; bottom: 4px;
+    background-color: #FFD026;
+    border-radius: 50%;
+    transition: 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    z-index: 10;
+  }
+  /* Hiệu ứng trăng khuyết khi ở chế độ tối */
+  .theme-switch input:checked + .theme-slider::before {
+    transform: translateX(116px);
+    background-color: #E2E8F0;
+    box-shadow: inset -8px -3px 0px 0px #94A3B8;
+  }
+  /* Chữ trạng thái */
+  .theme-text {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800; font-size: 10px;
+    letter-spacing: 0.05em; color: #FFFFFF;
+    z-index: 8; pointer-events: none;
+    transition: 0.4s;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  }
+  .text-dark { opacity: 0; transform: translateX(10px); }
+  .text-light { opacity: 1; transform: translateX(32px); }
+  
+  .theme-switch input:checked + .theme-slider .text-light {
+    opacity: 0; transform: translateX(-10px);
+  }
+  .theme-switch input:checked + .theme-slider .text-dark {
+    opacity: 1; transform: translateX(-32px);
+  }
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      background: var(--bg-body);
-      color: var(--text-main);
-      font-family: 'Be Vietnam Pro', sans-serif;
-      line-height: 1.6;
-    }
-    h1, h2, h3, h4 {
-      font-family: 'Lora', serif;
-      margin: 0 0 .4em;
-      color: var(--text-dark);
-      font-weight: 700;
-    }
-    a { color: inherit; text-decoration: none; transition: all 0.15s; }
-    .mono { font-family: 'IBM Plex Mono', monospace; }
-    button { font-family: inherit; cursor: pointer; transition: all 0.15s; }
-    :focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
-    @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
-
-    /* ---------- Top bar ---------- */
-    .topbar {
-      background: var(--header-bg);
-      padding: 14px 24px;
-      display: flex; align-items: center; gap: 24px;
-      flex-wrap: wrap;
-      position: sticky; top: 0; z-index: 50;
-      border-bottom: 1px solid var(--line);
-    }
-    .logo { display: flex; align-items: center; gap: 10px; font-family: 'Lora', serif; font-weight: 700; font-size: 1.5rem; color: var(--primary); white-space: nowrap; }
-    
-    /* Thiết kế lại phần .stamp để giống với ảnh bạn cung cấp */
-    .logo .stamp { 
-      width: 38px; height: 38px; 
-      border-radius: 50%; 
-      background: #B23A2E; /* Màu đỏ gạch/ngói */
-      display: flex; align-items: center; justify-content: center; 
-      font-family: sans-serif; /* Đổi sang sans-serif cho giống font trong ảnh */
-      font-weight: 700; font-size: 1rem; 
-      color: #FFF; 
-      border: 3px dashed #E5B5AF; /* Viền đứt nét màu sáng */
-    }
-    
-    .tagline { font-size: .78rem; color: var(--text-muted); margin-top: -2px; font-family: 'IBM Plex Mono', monospace; letter-spacing: .02em; }
-    .search-form { flex: 1; min-width: 220px; max-width: 520px; display: flex; }
-    .search-form input { flex: 1; padding: 10px 14px; border: 1px solid var(--line); border-radius: 8px 0 0 8px; font-family: inherit; font-size: .92rem; background: #F3F4F6; color: var(--text-main); outline: none; transition: all 0.2s; }
-    .search-form input::placeholder { color: #9CA3AF; }
-    .search-form input:focus { background: #FFFFFF; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(59,130,246,0.1); }
-    .search-form button { padding: 10px 16px; border: none; border-radius: 0 8px 8px 0; background: var(--primary); color: #FFF; font-weight: 600; }
-    .search-form button:hover { background: var(--primary-dark); }
-    
-    .topbar-actions { display: flex; gap: 10px; margin-left: auto; flex-wrap: wrap; }
-    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 8px; border: none; font-weight: 600; font-size: .88rem; }
-    .btn-red { background: var(--accent); color: #FFF; }
-    .btn-red:hover { background: #EA580C; }
-    .btn-outline { background: transparent; border: 1.5px solid var(--primary); color: var(--primary); }
-    .btn-outline:hover { background: var(--primary); color: #FFF; }
-    .btn-brass { background: var(--primary); color: #FFF; }
-    .btn-brass:hover { background: var(--primary-dark); }
-
-    /* ---------- Catalog nav ---------- */
-    .catalog-nav {
-      background: var(--nav-bg);
-      position: sticky; top: 68px; z-index: 40;
-      border-bottom: 1px solid var(--line);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-    }
-    .subject-row { display: flex; gap: 4px; overflow-x: auto; padding: 0 16px; scrollbar-width: thin; }
-    .subject-row::-webkit-scrollbar { height: 6px; }
-    .subject-row::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
-    .subject-tab { background: none; border: none; color: var(--text-muted); padding: 13px 14px; font-size: .9rem; font-weight: 600; white-space: nowrap; border-bottom: 3px solid transparent; }
-    .subject-tab:hover { color: var(--primary); }
-    .subject-tab.active { color: var(--primary-dark); border-bottom-color: var(--primary); font-weight: 700; }
-    
-    .mega-panel { background: var(--bg-card); border-top: 1px solid var(--line); box-shadow: 0 12px 30px rgba(15,23,42,0.1); position: absolute; width: 100%; left: 0; }
-    .mega-panel.hidden { display: none; }
-    .mega-inner { max-width: 1180px; margin: 0 auto; padding: 24px; display: grid; grid-template-columns: 1fr 1.4fr; gap: 32px; }
-    @media (max-width:760px) { .mega-inner { grid-template-columns: 1fr; } }
-    .mega-col h4 { font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); font-family: 'IBM Plex Mono',monospace; font-weight: 600; margin-bottom: 12px; }
-    .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
-    .chip { padding: 8px 14px; border-radius: 20px; border: 1px solid var(--line); background: var(--bg-body); font-size: .85rem; font-weight: 500; color: var(--text-main); }
-    .chip:hover { border-color: var(--primary); color: var(--primary); background: #EFF6FF; }
-    .chip.active { background: var(--primary); color: #FFF; border-color: var(--primary); }
-    .mega-doctype-list { display: flex; flex-direction: column; gap: 4px; }
-    .mega-doctype-list a { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; font-size: .92rem; font-weight: 500; }
-    .mega-doctype-list a:hover { background: var(--bg-body); color: var(--primary); }
-
-    /* ---------- Layout helpers ---------- */
-    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
-    .section { padding: 48px 0; }
-    .section-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 24px; gap: 12px; flex-wrap: wrap; }
-    .section-head .eyebrow { font-family: 'IBM Plex Mono',monospace; font-size: .8rem; letter-spacing: .08em; color: var(--primary); text-transform: uppercase; font-weight: 700; }
-    
-    /* ---------- Hero ---------- */
-    .hero { background: var(--bg-card); color: var(--text-main); border-bottom: 1px solid var(--line); padding: 70px 0 90px; position: relative; overflow: hidden; }
-    .hero-inner { max-width: 1180px; margin: 0 auto; padding: 0 24px; display: grid; grid-template-columns: 1.05fr .95fr; gap: 40px; align-items: center; }
-    @media (max-width:860px) { .hero-inner { grid-template-columns: 1fr; } }
-    .hero h1 { color: var(--text-dark); font-size: 2.5rem; line-height: 1.25; max-width: 520px; }
-    .hero h1 em { color: var(--primary); font-style: normal; }
-    .hero p { color: var(--text-muted); max-width: 460px; font-size: 1.05rem; margin-bottom: 30px; line-height: 1.6; }
-    .hero-stats { display: flex; gap: 30px; margin-top: 34px; flex-wrap: wrap; }
-    .hero-stats .stat-num { font-family: 'IBM Plex Mono',monospace; font-size: 1.4rem; font-weight: 700; color: var(--primary); }
-    .hero-stats .stat-label { font-size: .8rem; color: var(--text-muted); margin-top: 2px; }
-    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
-
-    .card-fan { position: relative; height: 340px; }
-    .index-card {
-      position: absolute; width: 210px; min-height: 140px;
-      background: var(--bg-card); border-radius: 12px; padding: 20px;
-      box-shadow: 0 16px 32px rgba(0,0,0,.2);
-      transition: transform .3s ease, box-shadow .3s ease;
-      border-top: 6px solid var(--primary);
-    }
-    .index-card:hover { transform: translateY(-12px) rotate(0deg) !important; box-shadow: 0 20px 40px rgba(0,0,0,.3); z-index: 10; }
-    .index-card .hole { width: 12px; height: 12px; border-radius: 50%; background: #F8FAFC; border: 1px solid var(--line); position: absolute; top: 12px; left: 12px; }
-    .index-card .ic-icon { font-size: 1.6rem; margin: 16px 0 10px; }
-    .index-card .ic-name { font-family: 'Lora',serif; font-weight: 700; color: var(--text-dark); font-size: 1.1rem; }
-    .index-card .ic-count { font-family: 'IBM Plex Mono',monospace; font-size: .75rem; color: var(--text-muted); margin-top: 6px; }
-    .card-fan .c1 { top: 0; left: 30px; transform: rotate(-9deg); z-index: 1; }
-    .card-fan .c2 { top: 18px; left: 130px; transform: rotate(-2deg); z-index: 2; }
-    .card-fan .c3 { top: 6px; left: 230px; transform: rotate(6deg); z-index: 3; }
-    .card-fan .c4 { top: 60px; left: 55px; transform: rotate(3deg); z-index: 1; }
-    .card-fan .c5 { top: 90px; left: 190px; transform: rotate(-5deg); z-index: 2; }
-    @media (max-width:520px) { .card-fan { display: none; } }
-
-    /* ---------- Subject grid ---------- */
-    .subject-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; }
-    .subject-card {
-      background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius);
-      padding: 22px 16px; text-align: center; transition: all .2s ease; box-shadow: var(--shadow);
-    }
-    .subject-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: var(--primary); }
-    .subject-card .sc-icon { font-size: 1.8rem; }
-    .subject-card .sc-name { font-weight: 700; margin-top: 10px; font-family: 'Lora',serif; color: var(--text-dark); font-size: 1.05rem; }
-    .subject-card .sc-meta { font-size: .8rem; color: var(--text-muted); margin-top: 6px; font-family: 'IBM Plex Mono',monospace; }
-
-    /* ---------- Document cards ---------- */
-    .doc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-    .doc-card {
-      background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius);
-      padding: 20px; display: flex; flex-direction: column; gap: 14px;
-      transition: all .2s ease; box-shadow: var(--shadow);
-    }
-    .doc-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-4px); border-color: var(--primary); }
-    .doc-badges { display: flex; gap: 6px; flex-wrap: wrap; }
-    .badge { font-size: .72rem; font-weight: 600; padding: 4px 10px; border-radius: 20px; font-family: 'IBM Plex Mono',monospace; }
-    .badge-subject { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
-    .badge-grade { background: #F8FAFC; color: #475569; border: 1px solid #E2E8F0; }
-    .badge-type { background: #FFF7ED; color: #C2410C; border: 1px solid #FFEDD5; } /* Chuyển badge sang viền cam */
-    .doc-title { font-family: 'Lora',serif; font-weight: 700; font-size: 1.1rem; color: var(--text-dark); line-height: 1.4; }
-    .doc-meta { font-size: .8rem; color: var(--text-muted); font-family: 'IBM Plex Mono',monospace; display: flex; gap: 10px; flex-wrap: wrap; }
-    .doc-card .dl-link { margin-top: auto; font-size: .88rem; border-top: 1px dashed var(--line); padding-top: 14px; display: flex; justify-content: space-between; align-items: center; }
-    .btn-contact { color: var(--primary); font-weight: 700; display: flex; align-items: center; gap: 6px; transition: color 0.15s; }
-    .btn-contact:hover { color: var(--primary-dark); text-decoration: underline; }
-
-    /* ---------- Doctype chips section ---------- */
-    .doctype-chip-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
-    .doctype-chip {
-      background: var(--bg-card); color: var(--text-main); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px;
-      display: flex; gap: 14px; align-items: flex-start; box-shadow: var(--shadow); transition: all 0.2s;
-    }
-    .doctype-chip:hover { border-color: var(--primary); box-shadow: var(--shadow-hover); transform: translateY(-3px); }
-    .doctype-chip .dt-icon { font-size: 1.4rem; background: #F1F5F9; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; border-radius: 10px; }
-    .doctype-chip .dt-name { font-weight: 700; font-size: .95rem; color: var(--text-dark); }
-    .doctype-chip .dt-desc { font-size: .78rem; color: var(--text-muted); margin-top: 6px; line-height: 1.4; }
-
-    /* ---------- Breadcrumb ---------- */
-    .breadcrumb { font-size: .85rem; color: var(--text-muted); padding: 24px 0 0; display: flex; gap: 8px; flex-wrap: wrap; }
-    .breadcrumb a { color: var(--text-muted); font-weight: 500; }
-    .breadcrumb a:hover { color: var(--primary); }
-    .breadcrumb span:last-child { color: var(--text-dark); font-weight: 600; }
-
-    /* ---------- Category page layout ---------- */
-    .cat-layout { display: grid; grid-template-columns: 240px 1fr; gap: 32px; align-items: start; }
-    @media (max-width:760px) { .cat-layout { grid-template-columns: 1fr; } }
-    .filter-box { background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
-    .filter-box h4 { font-family: 'IBM Plex Mono',monospace; font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); margin-bottom: 14px; }
-    .filter-box + .filter-box { margin-top: 20px; }
-    .filter-list a { display: block; padding: 8px 10px; border-radius: 8px; font-size: .9rem; font-weight: 500; margin-bottom: 2px; }
-    .filter-list a.active { background: var(--primary); color: #FFF; }
-    .filter-list a:hover:not(.active) { background: var(--bg-body); color: var(--primary); }
-
-    /* ---------- Doc detail ---------- */
-    .detail-layout { display: grid; grid-template-columns: 1fr 300px; gap: 32px; align-items: start; }
-    @media (max-width:860px) { .detail-layout { grid-template-columns: 1fr; } }
-    .detail-card { background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow); }
-    .meta-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 26px 0; padding: 20px; background: var(--bg-body); border-radius: 10px; border: 1px solid var(--line); }
-    .meta-item .mi-label { font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted); font-family: 'IBM Plex Mono',monospace; }
-    .meta-item .mi-value { font-weight: 600; margin-top: 4px; color: var(--text-dark); font-size: .95rem; }
-    .desc-text { color: var(--text-main); line-height: 1.7; font-size: 1.05rem; margin-bottom: 24px; }
-    
-    .related-card { background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
-    .related-card a { display: block; padding: 12px 0; border-bottom: 1px dashed var(--line); font-size: .9rem; font-weight: 500; line-height: 1.4; }
-    .related-card a:last-child { border-bottom: none; padding-bottom: 0; }
-    .related-card a:first-of-type { padding-top: 4px; }
-    .related-card a:hover { color: var(--primary); }
-
-    /* ---------- Misc ---------- */
-    .empty-state { text-align: center; padding: 80px 20px; color: var(--text-muted); }
-    .empty-state .es-icon { font-size: 3rem; margin-bottom: 16px; }
-    .note { font-size: .8rem; color: var(--text-muted); font-family: 'IBM Plex Mono',monospace; margin-top: 14px; }
-
-    /* ---------- Footer ---------- */
-    footer { background: #1E293B; color: #94A3B8; margin-top: 60px; } /* Giữ Footer màu xanh đen (Slate) để làm điểm tựa cho giao diện sáng */
-    .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; padding: 60px 24px; max-width: 1180px; margin: 0 auto; }
-    @media (max-width:760px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
-    .footer-grid h5 { color: #FFF; font-family: 'IBM Plex Mono',monospace; font-size: .85rem; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 16px; }
-    .footer-grid a { display: block; font-size: .9rem; padding: 6px 0; color: #94A3B8; }
-    .footer-grid a:hover { color: #FFF; }
-    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding: 20px 24px; text-align: center; font-size: .8rem; color: #64748B; }
-
-    /* ---------- Modal ---------- */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
-    .modal-box { background: var(--bg-card); border-radius: var(--radius); padding: 32px; width: 100%; max-width: 400px; box-shadow: 0 24px 60px rgba(0,0,0,.2); }
-    .modal-box h3 { font-size: 1.4rem; color: var(--text-dark); margin-bottom: 12px; }
-    .modal-box p { font-size: .95rem; color: var(--text-muted); margin-bottom: 24px; }
-
-    .ai-opt-btn {
-      display: flex; align-items: center; gap: 14px; padding: 16px;
-      background: var(--bg-body); border: 1px solid var(--line); border-radius: 10px;
-      width: 100%; cursor: pointer; transition: all 0.2s ease;
-      font-family: inherit; color: var(--text-dark); text-align: left;
-    }
-    .ai-opt-btn:hover {
-      border-color: var(--primary);
-      background: #EFF6FF;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(37,99,235,0.08);
-    }
+  /* Modals */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100; padding: 20px;
+    animation: fadeIn 0.2s ease-out;
+  }
+  .modal-box {
+    animation: scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes scaleUp { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 </style>
 </head>
-<body>
 
-<header class="topbar">
-  <a href="#/" class="logo"><span class="stamp">Edu</span>EduAI</a>
-  <span class="tagline">Thư viện học liệu &amp; trợ lý AI cho giáo viên</span>
-  <form class="search-form" id="searchForm">
-    <input type="text" id="searchInput" placeholder="Tìm môn học, lớp, loại tài liệu…">
-    <button type="submit">Tìm</button>
-  </form>
-  <div class="topbar-actions">
-    <button class="btn btn-outline" id="themeToggle" style="padding: 10px; border-radius: 50%; font-size: 1.1rem; border-color: transparent;" title="Đổi giao diện Sáng/Tối">🌙</button>
-    <button class="btn btn-outline" id="contactBtn">📞 Liên hệ</button>
-    <button class="btn btn-brass" id="aiBtn">✨ Trợ lý AI</button>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-200">
+
+<!-- Thanh Header -->
+<header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm transition-colors duration-200">
+  <div class="max-w-[1280px] mx-auto px-4 md:px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
+    
+    <!-- Logo -->
+    <a href="#/" class="flex items-center gap-3 shrink-0">
+      <div class="logo-stamp w-10 h-10 rounded-full flex items-center justify-center font-mono font-bold text-sm text-white">Edu</div>
+      <span class="text-2xl font-heading font-extrabold tracking-tight text-primary-600 dark:text-primary-500">EduAI</span>
+    </a>
+    
+    <!-- Thanh tìm kiếm -->
+    <form class="flex-1 min-w-[240px] max-w-[480px] flex rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 focus-within:border-primary-500 dark:focus-within:border-primary-500 transition shadow-sm" id="searchForm">
+      <input type="text" id="searchInput" placeholder="Tìm kiếm tài liệu học tập..." class="flex-1 px-4 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 outline-none text-sm placeholder-slate-400">
+      <button type="submit" class="bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 font-semibold px-5 text-sm transition">Tìm</button>
+    </form>
+
+    <!-- Nút chức năng -->
+    <div class="flex items-center gap-3 flex-wrap">
+      <label class="theme-switch" title="Chuyển đổi giao diện Sáng/Tối">
+        <input type="checkbox" id="themeToggleCheckbox">
+        <div class="theme-slider">
+          <span class="theme-text text-light">CHẾ ĐỘ SÁNG</span>
+          <span class="theme-text text-dark">CHẾ ĐỘ TỐI</span>
+        </div>
+      </label>
+      
+      <button class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:text-primary-600 dark:hover:text-primary-400 hover:border-primary-500 font-semibold text-sm px-4 py-2.5 rounded-xl transition flex items-center gap-2 shadow-sm" onclick="showServiceModal()">
+        🚀 Dịch vụ khác
+      </button>
+      <button class="bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/50 font-semibold text-sm px-4 py-2.5 rounded-xl transition flex items-center gap-2 shadow-sm" id="aiBtn">
+        ✨ Trợ lý AI
+      </button>
+      <button class="bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition shadow-sm" id="contactBtn">
+        📞 Liên hệ
+      </button>
+    </div>
+
   </div>
 </header>
 
-<nav class="catalog-nav">
-  <div class="subject-row" id="subjectRow"></div>
-  <div class="mega-panel hidden" id="megaPanel"></div>
+<!-- Thanh Danh mục môn học -->
+<nav class="bg-primary-600 dark:bg-slate-900 sticky top-[73px] z-40 shadow-md">
+  <div class="max-w-[1280px] mx-auto px-4 md:px-6">
+    <div class="flex gap-2 overflow-x-auto py-1.5 scrollbar-none" id="subjectRow"></div>
+  </div>
+  <!-- Menu con hiển thị khi bấm vào môn học -->
+  <div class="hidden absolute left-0 right-0 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-xl z-50 transition-colors" id="megaPanel"></div>
 </nav>
 
-<main id="app"></main>
+<!-- Vùng nội dung chính -->
+<main id="app" class="min-h-[75vh]"></main>
 
-<footer>
-  <div class="footer-grid" id="footerGrid"></div>
-  <div class="footer-bottom">
-    EduAI © 2026 — Trang web EDUAI phát triển và xây dựng bời Nguyễn Tiến Thành
-     Uy tín - Chất lượng - Giá rẻ.
+<!-- Footer -->
+<footer class="bg-slate-900 text-slate-400 mt-16">
+  <div class="max-w-[1280px] mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 py-12 px-6" id="footerGrid"></div>
+  <div class="border-t border-slate-800 py-6 px-6 text-center text-xs bg-slate-950">
+    EduAI © 2026 — Được phát triển và xây dựng bởi Nguyễn Tiến Thành - Uy tín - chất lượng - giá rẻ.
   </div>
 </footer>
 
 <script>
-/* ============== DATA ============== */
+/* ============== DATA CONFIGURATION ============== */
 const DOCS_PER_CATEGORY = 8;
 const CONTACT_PHONE = "0819161835";
 
 const SUBJECTS = [
   {id:'toan', name:'Toán', icon:'📐', grades:range(1,12)},
+  {id:'nguvan', name:'Ngữ Văn', icon:'📖', grades:range(1,12)},
+  {id:'tienganh', name:'Tiếng Anh', icon:'🗣️', grades:range(1,12)},
+  {id:'khtn', name:'Khoa Học Tự Nhiên', icon:'🔬', grades:range(6,9)},
   {id:'vatli', name:'Vật Lí', icon:'⚛️', grades:range(10,12)},
   {id:'hoahoc', name:'Hóa Học', icon:'🧪', grades:range(10,12)},
   {id:'sinhhoc', name:'Sinh Học', icon:'🌱', grades:range(10,12)},
-  {id:'khtn', name:'Khoa Học Tự Nhiên', icon:'🔬', grades:range(6,9)},
   {id:'tinhoc', name:'Tin Học', icon:'💻', grades:range(3,12)},
   {id:'congnghe', name:'Công Nghệ', icon:'⚙️', grades:range(1,12)},
-  {id:'nguvan', name:'Ngữ Văn', icon:'📖', grades:range(1,12)},
   {id:'lichsu', name:'Lịch Sử', icon:'🏛️', grades:range(4,12)},
   {id:'dialy', name:'Địa Lí', icon:'🌍', grades:range(4,12)},
   {id:'gdcd', name:'GDCD / KTPL', icon:'⚖️', grades:range(6,12)},
-  {id:'tienganh', name:'Tiếng Anh', icon:'🗣️', grades:range(1,12)},
+  {id:'hdtn', name:'HĐ Trải Nghiệm', icon:'🏕️', grades:range(1,12)},
 ];
 
 const DOC_TYPES = [
@@ -364,27 +227,27 @@ const DOC_TYPES = [
 
 const TOPICS = {
   toan:['Các phép tính trong phạm vi 100','Phân số và số thập phân','Hình học phẳng cơ bản','Phương trình – bất phương trình','Hàm số bậc nhất','Thống kê và xác suất','Hình học không gian','Đạo hàm và ứng dụng','Tích phân','Lượng giác'],
+  nguvan:['Truyện ngắn hiện đại','Thơ trung đại Việt Nam','Văn nghị luận xã hội','Kĩ năng viết đoạn văn','Văn học dân gian'],
+  tienganh:['Family and Friends','School Life','Travel and Tourism','Environment','Grammar: Tenses Review','Technology'],
+  khtn:['Chất và sự biến đổi của chất','Vật sống','Năng lượng và sự biến đổi','Trái Đất và bầu trời','Lực và chuyển động','Đa dạng thế giới sống'],
   vatli:['Chuyển động cơ học','Lực và áp suất','Điện học cơ bản','Quang học','Nhiệt học','Điện từ học','Dao động và sóng','Thuyết tương đối hẹp'],
   hoahoc:['Cấu tạo nguyên tử','Bảng tuần hoàn nguyên tố','Phản ứng oxi hoá – khử','Axit – bazơ – muối','Hoá học hữu cơ cơ bản','Polime và vật liệu'],
   sinhhoc:['Tế bào và mô','Hệ tuần hoàn','Di truyền học','Sinh thái học','Quang hợp và hô hấp','Tiến hoá'],
-  khtn:['Chất và sự biến đổi của chất','Vật sống','Năng lượng và sự biến đổi','Trái Đất và bầu trời','Lực và chuyển động','Đa dạng thế giới sống'],
   tinhoc:['Soạn thảo văn bản','Lập trình Scratch','Mạng máy tính cơ bản','Cơ sở dữ liệu','Lập trình Python','An toàn thông tin'],
   congnghe:['Kĩ thuật trồng trọt','Thiết kế kĩ thuật','An toàn điện trong gia đình','Chế biến thực phẩm'],
-  nguvan:['Truyện ngắn hiện đại','Thơ trung đại Việt Nam','Văn nghị luận xã hội','Kĩ năng viết đoạn văn','Văn học dân gian'],
   lichsu:['Việt Nam thời kì dựng nước','Phong trào đấu tranh giành độc lập','Lịch sử thế giới cận đại','Cách mạng công nghiệp'],
   dialy:['Địa lí tự nhiên Việt Nam','Dân cư và đô thị hoá','Khí hậu và thuỷ văn','Địa lí kinh tế các vùng'],
   gdcd:['Quyền và nghĩa vụ công dân','Pháp luật hôn nhân – gia đình','Kĩ năng sống và ứng xử','Kinh tế thị trường cơ bản'],
-  tienganh:['Family and Friends','School Life','Travel and Tourism','Environment','Grammar: Tenses Review','Technology'],
+  hdtn:['Khám phá bản thân','Rèn luyện nếp sống','Chủ đề nghề nghiệp','Tham gia hoạt động cộng đồng','Bảo vệ môi trường'],
 };
 
-const EDITIONS = ['Kết Nối Tri Thức'];
 const FORMATS = ['PDF','DOCX','PPTX'];
-const AUTHORS = ['EduAI'];
+const AUTHORS = ['EduAI']; 
 const PROVINCES = ['Hà Nội','TP. Hồ Chí Minh','Đà Nẵng','Hải Phòng','Cần Thơ','Huế','Nghệ An','Phú Thọ','Thanh Hoá','Bình Dương'];
 
 const LATEST = [
   ['toan',5,'khbd',0],['nguvan',9,'dethi',1],['khtn',8,'ontap',2],['tienganh',6,'khbd',1],
-  ['hoahoc',11,'hsg',0],['khtn',7,'sgk',2],['lichsu',12,'dethi',0],['tinhoc',4,'stem',0],
+  ['hoahoc',11,'hsg',0],['khtn',7,'sgk',2],['hdtn',10,'khbd',0],['tinhoc',4,'stem',0],
   ['dialy',10,'ontap',1],['congnghe',3,'khgd',0],
 ];
 
@@ -392,201 +255,186 @@ function range(a,b){const r=[];for(let i=a;i<=b;i++)r.push(i);return r;}
 function subjectOf(id){return SUBJECTS.find(s=>s.id===id);}
 function doctypeOf(id){return DOC_TYPES.find(t=>t.id===id);}
 
-/* ---- seeded RNG ---- */
-function strHash(s){let h=0;for(let i=0;i<s.length;i++){h=(h*31+s.charCodeAt(i))>>>0;}return h;}
+function strHash(s){let h=0;for(let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))>>>0; return h;}
 function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
 function rngFor(seed){return mulberry32(strHash(seed));}
 
-function buildTitle(docType, subjectName, grade, topic, edition, idx){
+function buildTitle(docType, subjectName, grade, topic, idx){
+  if(docType === 'khbd' && idx === 0) return `Giáo án cả năm môn ${subjectName} lớp ${grade} – Kết Nối Tri Thức`;
+  
   switch(docType){
-    case 'sgk': return `SGK – SGV – STK ${subjectName} lớp ${grade} (${edition})`;
-    case 'khgd': return `Kế hoạch giáo dục (PPCT) ${subjectName} lớp ${grade} – ${edition}`;
-    case 'khbd': 
-      if (idx === 0) return `Giáo án cả năm ${subjectName} lớp ${grade} (${edition})`;
-      return `Giáo án ${subjectName} lớp ${grade} – Bài ${idx}: ${topic}`;
-    case 'dethi': return `Đề kiểm tra ${subjectName} lớp ${grade} – ${['Giữa kì 1','Cuối kì 1','Giữa kì 2','Cuối kì 2'][idx%4]} (có đáp án)`;
-    case 'ontap': return `Tài liệu ôn tập ${subjectName} lớp ${grade} – Chủ đề: ${topic}`;
-    case 'hsg': return `Bồi dưỡng học sinh giỏi ${subjectName} lớp ${grade} – Chuyên đề: ${topic}`;
-    case 'skkn': return `SKKN: Một số biện pháp nâng cao chất lượng dạy học ${subjectName} lớp ${grade}`;
-    case 'stem': return `Chủ đề STEM ${subjectName} lớp ${grade}: ${topic}`;
+    case 'sgk': return `SGK – SGV – STK môn ${subjectName} lớp ${grade} (Kết Nối Tri Thức)`;
+    case 'khgd': return `Kế hoạch giáo dục (PPCT) môn ${subjectName} lớp ${grade} – Kết Nối Tri Thức`;
+    case 'khbd': return `Giáo án ${subjectName} lớp ${grade} – Bài ${idx}: ${topic}`;
+    case 'dethi': return `Đề kiểm tra môn ${subjectName} lớp ${grade} – ${['Giữa kì 1','Cuối kì 1','Giữa kì 2','Cuối kì 2'][idx%4]} (có đáp án)`;
+    case 'ontap': return `Tài liệu ôn tập môn ${subjectName} lớp ${grade} – Chủ đề: ${topic}`;
+    case 'hsg': return `Bồi dưỡng học sinh giỏi môn ${subjectName} lớp ${grade} – Chuyên đề: ${topic}`;
+    case 'skkn': return `SKKN: Một số biện pháp nâng cao chất lượng dạy học môn ${subjectName} lớp ${grade}`;
+    case 'stem': return `Chủ đề STEM môn ${subjectName} lớp ${grade}: ${topic}`;
   }
 }
+
 function descFor(docType, subjectName, grade, topic, idx){
+  if(docType === 'khbd' && idx === 0) return `Bộ tài liệu tích hợp toàn bộ kế hoạch bài dạy (giáo án) môn ${subjectName} lớp ${grade} đầy đủ cả năm học, biên soạn kĩ lưỡng theo cấu trúc chương trình mới Kết Nối Tri Thức.`;
+  
   switch(docType){
-    case 'sgk': return `Tài liệu sách giáo khoa, sách giáo viên và sách tham khảo môn ${subjectName} lớp ${grade}, biên soạn theo chương trình GDPT 2018, hỗ trợ giáo viên tra cứu nội dung và chuẩn kiến thức kĩ năng của bài học "${topic}".`;
-    case 'khgd': return `Kế hoạch giáo dục và phân phối chương trình môn ${subjectName} lớp ${grade}, trình bày chi tiết số tiết và tiến độ dạy học theo tuần, học kì, phù hợp để tổ chuyên môn tham khảo xây dựng kế hoạch năm học.`;
-    case 'khbd': 
-      if (idx === 0) return `Bộ giáo án (kế hoạch bài dạy) cả năm môn ${subjectName} lớp ${grade}, bám sát chương trình GDPT 2018, thiết kế đầy đủ các hoạt động. File Word dễ dàng chỉnh sửa.`;
-      return `Giáo án (kế hoạch bài dạy) môn ${subjectName} lớp ${grade} cho bài "${topic}", trình bày đầy đủ mục tiêu, thiết bị dạy học, tiến trình hoạt động và hướng dẫn về nhà.`;
-    case 'dethi': return `Đề kiểm tra môn ${subjectName} lớp ${grade}, kèm ma trận, bản đặc tả và đáp án chi tiết, dùng để ôn luyện hoặc kiểm tra định kì.`;
-    case 'ontap': return `Tài liệu ôn tập, hệ thống lại kiến thức trọng tâm môn ${subjectName} lớp ${grade} theo chủ đề "${topic}", kèm bài tập vận dụng có hướng dẫn giải.`;
-    case 'hsg': return `Chuyên đề bồi dưỡng học sinh giỏi môn ${subjectName} lớp ${grade} về "${topic}", tổng hợp dạng bài nâng cao và phương pháp giải.`;
-    case 'skkn': return `Sáng kiến kinh nghiệm chia sẻ biện pháp nâng cao chất lượng dạy học môn ${subjectName} lớp ${grade}, được tổng kết từ thực tế giảng dạy.`;
-    case 'stem': return `Chủ đề dạy học STEM tích hợp môn ${subjectName} lớp ${grade}: "${topic}", hướng dẫn tổ chức hoạt động trải nghiệm, sản phẩm và tiêu chí đánh giá.`;
+    case 'sgk': return `Tài liệu sách môn ${subjectName} lớp ${grade}, biên soạn theo chương trình GDPT 2018 bộ Kết Nối Tri Thức.`;
+    case 'khgd': return `Kế hoạch giáo dục và phân phối chương trình môn ${subjectName} lớp ${grade}, bộ sách Kết Nối Tri Thức.`;
+    case 'khbd': return `Giáo án (kế hoạch bài dạy) môn ${subjectName} lớp ${grade} cho bài "${topic}".`;
+    case 'dethi': return `Đề kiểm tra môn ${subjectName} lớp ${grade}, kèm ma trận, bản đặc tả và đáp án chi tiết.`;
+    case 'ontap': return `Tài liệu ôn tập, hệ thống lại kiến thức trọng tâm môn ${subjectName} lớp ${grade} theo chủ đề "${topic}".`;
+    case 'hsg': return `Chuyên đề bồi dưỡng học sinh giỏi môn ${subjectName} lớp ${grade} về "${topic}".`;
+    case 'skkn': return `Sáng kiến kinh nghiệm chia sẻ biện pháp nâng cao chất lượng dạy học môn ${subjectName} lớp ${grade}.`;
+    case 'stem': return `Chủ đề dạy học STEM tích hợp môn ${subjectName} lớp ${grade}: "${topic}".`;
   }
 }
+
 function schoolLevel(grade){return grade<=5?'Tiểu học':grade<=9?'THCS':'THPT';}
 
 function generateDoc(subjectId, grade, docType, idx){
   const subject = subjectOf(subjectId);
   const rng = rngFor(`${subjectId}-${grade}-${docType}-${idx}`);
-  const topics = TOPICS[subjectId];
+  const topics = TOPICS[subjectId] || ['Chủ đề bài học'];
   const topic = topics[Math.floor(rng()*topics.length)];
-  const edition = EDITIONS[Math.floor(rng()*EDITIONS.length)];
   let format = FORMATS[Math.floor(rng()*FORMATS.length)];
-  
-  // Xử lý riêng dung lượng cho "Giáo án cả năm"
-  let sizeStr = "";
-  let sizeUnit = "MB";
-  if (docType === 'khbd' && idx === 0) {
-    // Giáo án cả năm: 5.0 - 10.0 GB, định dạng DOCX/PPTX
-    const sizeGB = (5.0 + rng() * 5.0).toFixed(1);
-    sizeStr = sizeGB;
-    sizeUnit = "GB";
+  let sizeStr, sizeUnit;
+
+  if(docType === 'khbd' && idx === 0) {
     format = 'DOCX/PPTX';
+    sizeStr = (5.0 + rng()*5.0).toFixed(1);
+    sizeUnit = 'GB';
   } else {
-    // Các tài liệu khác: 0.4 - 10.0 MB
-    const sizeMB = (0.4 + rng() * 9.6).toFixed(1);
-    sizeStr = sizeMB;
+    sizeStr = (0.4 + rng()*9.6).toFixed(1);
+    sizeUnit = 'MB';
   }
 
   const downloads = Math.floor(200 + rng()*4800);
-  const daysAgo = Math.floor(rng()*330);
-  const d = new Date(Date.now() - daysAgo*86400000);
+  const d = new Date(Date.now() - Math.floor(rng()*330)*86400000);
   const dateStr = d.toLocaleDateString('vi-VN');
-  const author = AUTHORS[Math.floor(rng()*AUTHORS.length)];
-  const province = PROVINCES[Math.floor(rng()*PROVINCES.length)];
-  const school = `Trường ${schoolLevel(grade)} – ${province}`;
-  const title = buildTitle(docType, subject.name, grade, topic, edition, idx);
-  const description = descFor(docType, subject.name, grade, topic, idx);
-  return {subjectId, grade, docType, idx, title, topic, edition, format, sizeStr, sizeUnit, downloads, dateStr, author, school, description};
+  
+  return {
+    subjectId, grade, docType, idx, topic, 
+    title: buildTitle(docType, subject.name, grade, topic, idx),
+    description: descFor(docType, subject.name, grade, topic, idx),
+    edition: 'Kết Nối Tri Thức', author: AUTHORS[0],
+    school: `Trường ${schoolLevel(grade)} – ${PROVINCES[Math.floor(rng()*PROVINCES.length)]}`,
+    format, sizeStr, sizeUnit, downloads, dateStr
+  };
 }
 
-/* ============== RENDER HELPERS ============== */
 function docCardHTML(doc){
   const subject = subjectOf(doc.subjectId);
   const dt = doctypeOf(doc.docType);
-  return `<a class="doc-card" href="#/doc/${doc.subjectId}/${doc.grade}/${doc.docType}/${doc.idx}">
-    <div class="doc-badges">
-      <span class="badge badge-subject">${subject.icon} ${subject.name}</span>
-      <span class="badge badge-grade">Lớp ${doc.grade}</span>
-      <span class="badge badge-type">${dt.name}</span>
+  return `
+  <a class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 flex flex-col gap-3 shadow-sm hover:shadow-md hover:border-primary-500 transition-all duration-200 block" href="#/doc/${doc.subjectId}/${doc.grade}/${doc.docType}/${doc.idx}">
+    <div class="flex flex-wrap gap-2">
+      <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 group-hover:bg-primary-50 group-hover:text-primary-700 transition">${subject.icon} ${subject.name}</span>
+      <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 group-hover:bg-primary-50 group-hover:text-primary-700 transition">Lớp ${doc.grade}</span>
     </div>
-    <div class="doc-title">${doc.title}</div>
-    <div class="doc-meta">
-      <span class="mono">${doc.format}</span><span>·</span><span class="mono">${doc.sizeStr} ${doc.sizeUnit}</span><span>·</span><span class="mono">${doc.dateStr}</span>
+    <div class="font-heading font-bold text-slate-900 dark:text-white leading-snug line-clamp-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition">${doc.title}</div>
+    <div class="text-[13px] text-slate-500 dark:text-slate-400 font-mono mt-1 flex items-center gap-2 flex-wrap">
+      <span class="font-semibold">${doc.format}</span><span>•</span><span>${doc.sizeStr} ${doc.sizeUnit}</span><span>•</span><span>${doc.dateStr}</span>
     </div>
-    <div class="dl-link">
-      <span class="btn-contact" onclick="event.preventDefault(); event.stopPropagation(); showContactModal('${CONTACT_PHONE}')">📞 Liên hệ</span>
-      <span class="mono">${doc.downloads.toLocaleString('vi-VN')} lượt tải</span>
+    <div class="mt-auto pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-[13px] text-orange-600 dark:text-orange-400 font-bold">
+      <span class="flex items-center gap-1">📞 Liên hệ</span>
+      <span class="font-mono text-slate-400 font-medium">${doc.downloads.toLocaleString()} tải</span>
     </div>
   </a>`;
 }
 
 function breadcrumbHTML(items){
-  return `<div class="breadcrumb">` + items.map((it,i)=>{
-    const sep = i>0 ? '<span>/</span>' : '';
-    return sep + (it.href ? `<a href="${it.href}">${it.label}</a>` : `<span>${it.label}</span>`);
+  return `<div class="flex flex-wrap items-center gap-2 text-sm text-slate-500 font-medium py-6">` + items.map((it,i)=>{
+    const sep = i>0 ? `<span class="text-slate-300 dark:text-slate-700">/</span>` : '';
+    return sep + (it.href ? `<a href="${it.href}" class="hover:text-primary-600 transition">${it.label}</a>` : `<span class="text-slate-900 dark:text-white">${it.label}</span>`);
   }).join(' ') + `</div>`;
 }
 
-/* ============== PAGE RENDERERS ============== */
 function renderHome(){
   const latestHTML = LATEST.map(([s,g,t,i])=>docCardHTML(generateDoc(s,g,t,i))).join('');
   const subjectCardsHTML = SUBJECTS.map(s=>`
-    <a class="subject-card" href="#/subject/${s.id}">
-      <div class="sc-icon">${s.icon}</div>
-      <div class="sc-name">${s.name}</div>
-      <div class="sc-meta">Lớp ${s.grades[0]}–${s.grades[s.grades.length-1]}</div>
+    <a class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 hover:border-primary-500 hover:shadow-md transition text-center flex flex-col items-center justify-center group block" href="#/subject/${s.id}">
+      <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">${s.icon}</div>
+      <div class="font-heading font-bold text-slate-900 dark:text-white">${s.name}</div>
+      <div class="text-xs text-slate-500 font-mono mt-2">Lớp ${s.grades[0]}–${s.grades[s.grades.length-1]}</div>
     </a>`).join('');
   const doctypeChipsHTML = DOC_TYPES.map(t=>`
-    <div class="doctype-chip">
-      <div class="dt-icon">${t.icon}</div>
-      <div><div class="dt-name">${t.name}</div><div class="dt-desc">${t.desc}</div></div>
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 flex gap-4">
+      <div class="text-3xl">${t.icon}</div>
+      <div>
+        <div class="font-heading font-bold text-slate-900 dark:text-white">${t.name}</div>
+        <div class="text-sm text-slate-500 mt-1 leading-relaxed">${t.desc}</div>
+      </div>
     </div>`).join('');
 
   document.getElementById('app').innerHTML = `
-  <section class="hero">
-    <div class="hero-inner">
-      <div>
-        <h1>Thư viện học liệu, có <em>AI</em> đồng hành cho giáo viên Việt Nam</h1>
-        <p>Tra cứu giáo án, đề kiểm tra, SGK và chuyên đề bồi dưỡng theo đúng môn học, lớp và bộ sách bạn đang dạy — sắp xếp như một tủ thẻ mục lục thư viện, gọn và dễ tìm.</p>
-        <div class="hero-actions">
-          <a class="btn btn-brass" href="#/subject/toan">Khám phá danh mục</a>
-          <button class="btn btn-outline" id="heroAiBtn">✨ Hỏi trợ lý AI</button>
-        </div>
-        <div class="hero-stats">
-          <div><div class="stat-num mono">1800+</div><div class="stat-label">tài liệu</div></div>
-          <div><div class="stat-num mono">12</div><div class="stat-label">môn học</div></div>
-          <div><div class="stat-num mono">12</div><div class="stat-label">khối lớp</div></div>
-          <div><div class="stat-num mono">8</div><div class="stat-label">loại tài liệu</div></div>
-          <div><div class="stat-num mono">1</div><div class="stat-label">bộ sách GDPT 2018</div></div>
-        </div>
+  <section class="py-20 px-4 md:px-6 relative bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 transition-colors">
+    <div class="max-w-[1280px] mx-auto text-center max-w-3xl">
+      <h1 class="text-4xl md:text-5xl font-heading font-extrabold text-slate-900 dark:text-white leading-tight mb-6">
+        Thư viện học liệu tinh gọn cho giáo viên Việt Nam
+      </h1>
+      <p class="text-slate-600 dark:text-slate-400 text-lg mb-10 leading-relaxed mx-auto max-w-2xl">
+        Hệ thống sắp xếp khoa học, hiện đại. Tra cứu giáo án, đề thi và chuyên đề bồi dưỡng môn học của bạn dễ dàng hơn bao giờ hết.
+      </p>
+      <div class="flex justify-center flex-wrap gap-4 mb-12">
+        <a class="bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-3.5 rounded-xl transition shadow-sm" href="#/subject/toan">Duyệt danh mục</a>
+        <button class="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-bold px-8 py-3.5 rounded-xl transition shadow-sm" onclick="showAIModal()">✨ Hỏi trợ lý AI</button>
       </div>
-      <div class="card-fan">
-        <div class="index-card c1"><span class="hole"></span><div class="ic-icon">📐</div><div class="ic-name">Toán</div><div class="ic-count mono">12 khối · 96 mục</div></div>
-        <div class="index-card c2"><span class="hole"></span><div class="ic-icon">📖</div><div class="ic-name">Ngữ Văn</div><div class="ic-count mono">12 khối · 96 mục</div></div>
-        <div class="index-card c3"><span class="hole"></span><div class="ic-icon">🗣️</div><div class="ic-name">Tiếng Anh</div><div class="ic-count mono">12 khối · 96 mục</div></div>
-        <div class="index-card c4"><span class="hole"></span><div class="ic-icon">🔬</div><div class="ic-name">KHTN</div><div class="ic-count mono">4 khối · 32 mục</div></div>
-        <div class="index-card c5"><span class="hole"></span><div class="ic-icon">⚛️</div><div class="ic-name">Vật Lí</div><div class="ic-count mono">3 khối · 24 mục</div></div>
+      <div class="flex justify-center gap-8 md:gap-16 flex-wrap">
+        <div><div class="text-3xl font-heading font-extrabold text-primary-600 dark:text-primary-500">13</div><div class="text-xs uppercase tracking-wider text-slate-500 font-bold mt-2">Môn học</div></div>
+        <div><div class="text-3xl font-heading font-extrabold text-primary-600 dark:text-primary-500">12</div><div class="text-xs uppercase tracking-wider text-slate-500 font-bold mt-2">Khối lớp</div></div>
+        <div><div class="text-3xl font-heading font-extrabold text-primary-600 dark:text-primary-500">1800+</div><div class="text-xs uppercase tracking-wider text-slate-500 font-bold mt-2">Tài liệu</div></div>
       </div>
     </div>
   </section>
 
-  <div class="wrap">
-    <section class="section">
-      <div class="section-head">
-        <div><div class="eyebrow">Danh mục</div><h2>Duyệt theo môn học</h2></div>
-      </div>
-      <div class="subject-grid">${subjectCardsHTML}</div>
+  <div class="max-w-[1280px] mx-auto px-4 md:px-6">
+    <section class="py-16 border-b border-slate-200 dark:border-slate-800">
+      <h2 class="text-2xl font-heading font-bold text-slate-900 dark:text-white mb-8">Duyệt theo môn học</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">${subjectCardsHTML}</div>
     </section>
 
-    <section class="section" style="padding-top:0;">
-      <div class="section-head">
-        <div><div class="eyebrow">Cập nhật</div><h2>Tài liệu mới đăng</h2></div>
-        <span class="note">Dữ liệu mẫu minh hoạ</span>
+    <section class="py-16 border-b border-slate-200 dark:border-slate-800">
+      <div class="flex justify-between items-end mb-8 gap-4 flex-wrap">
+        <h2 class="text-2xl font-heading font-bold text-slate-900 dark:text-white">Tài liệu mới cập nhật</h2>
+        <span class="text-sm font-mono text-slate-500">Dữ liệu mẫu Kết Nối Tri Thức</span>
       </div>
-      <div class="doc-grid">${latestHTML}</div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">${latestHTML}</div>
     </section>
 
-    <section class="section" style="padding-top:0; padding-bottom:64px;">
-      <div class="section-head">
-        <div><div class="eyebrow">Phân loại</div><h2>Theo loại tài liệu</h2></div>
-      </div>
-      <div class="doctype-chip-grid">${doctypeChipsHTML}</div>
+    <section class="py-16">
+      <h2 class="text-2xl font-heading font-bold text-slate-900 dark:text-white mb-8">Phân loại học liệu</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">${doctypeChipsHTML}</div>
     </section>
   </div>`;
-
-  document.getElementById('heroAiBtn').onclick = ()=>showAIModal();
 }
 
 function renderSubjectHub(subjectId){
   const subject = subjectOf(subjectId);
   if(!subject){renderNotFound(); return;}
-  const gradeChips = subject.grades.map(g=>`<a class="chip" href="#/category/${subjectId}/${g}/khbd">Lớp ${g}</a>`).join('');
+  
+  const gradeChips = subject.grades.map(g=>`<a class="px-5 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-400 rounded-xl font-semibold transition block text-center" href="#/category/${subjectId}/${g}/khbd">Lớp ${g}</a>`).join('');
+  
   const doctypeChips = DOC_TYPES.map(t=>`
-    <a class="doctype-chip" href="#/category/${subjectId}/${subject.grades[0]}/${t.id}" style="text-decoration:none;">
-      <div class="dt-icon">${t.icon}</div>
-      <div><div class="dt-name">${t.name}</div><div class="dt-desc">${t.desc}</div></div>
+    <a class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 flex gap-4 hover:border-primary-500 transition group block" href="#/category/${subjectId}/${subject.grades[0]}/${t.id}">
+      <div class="text-3xl">${t.icon}</div>
+      <div>
+        <div class="font-heading font-bold text-slate-900 dark:text-white group-hover:text-primary-600 transition">${t.name}</div>
+        <div class="text-sm text-slate-500 mt-1">${t.desc}</div>
+      </div>
     </a>`).join('');
-  const estTotal = (subject.grades.length * DOC_TYPES.length * DOCS_PER_CATEGORY).toLocaleString('vi-VN');
 
   document.getElementById('app').innerHTML = `
-  <div class="wrap">
+  <div class="max-w-[1280px] mx-auto px-4 md:px-6">
     ${breadcrumbHTML([{label:'Trang chủ', href:'#/'},{label:subject.name}])}
-    <section class="section">
-      <h1 style="font-size:1.9rem;">${subject.icon} Tài liệu môn ${subject.name}</h1>
-      <p style="color:var(--ink-soft); max-width:640px;">Duyệt tài liệu môn ${subject.name} theo khối lớp ${subject.grades[0]}–${subject.grades[subject.grades.length-1]} và theo loại tài liệu. Ước tính <span class="mono">${estTotal}</span> tài liệu mẫu trong danh mục này.</p>
+    <section class="py-8">
+      <h1 class="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 dark:text-white mb-4">${subject.icon} Tài liệu môn ${subject.name}</h1>
+      <p class="text-slate-600 dark:text-slate-400 max-w-3xl text-lg">Hệ thống phân loại tài liệu môn ${subject.name} từ lớp ${subject.grades[0]} đến lớp ${subject.grades[subject.grades.length-1]}. Bạn vui lòng chọn khối lớp hoặc định dạng tài liệu bên dưới để bắt đầu.</p>
 
-      <div class="section-head" style="margin-top:30px;">
-        <div><div class="eyebrow">Chọn khối lớp</div></div>
-      </div>
-      <div class="chip-row">${gradeChips}</div>
+      <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider font-mono mt-12 mb-6">1. Chọn khối lớp</h3>
+      <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-8 gap-3">${gradeChips}</div>
 
-      <div class="section-head" style="margin-top:34px;">
-        <div><div class="eyebrow">Hoặc chọn loại tài liệu</div></div>
-      </div>
-      <div class="doctype-chip-grid">${doctypeChips}</div>
+      <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider font-mono mt-12 mb-6">2. Hoặc duyệt theo loại học liệu</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">${doctypeChips}</div>
     </section>
   </div>`;
 }
@@ -597,33 +445,32 @@ function renderCategory(subjectId, grade, docType){
   if(!subject || !subject.grades.includes(grade) || !doctypeOf(docType)){renderNotFound(); return;}
   const dt = doctypeOf(docType);
 
-  const gradeChips = subject.grades.map(g=>`<a class="chip ${g===grade?'active':''}" href="#/category/${subjectId}/${g}/${docType}">Lớp ${g}</a>`).join('');
-  const typeList = DOC_TYPES.map(t=>`<a class="${t.id===docType?'active':''}" href="#/category/${subjectId}/${grade}/${t.id}">${t.icon} ${t.name}</a>`).join('');
+  const gradeChips = subject.grades.map(g=>`<a class="px-4 py-2 rounded-lg text-sm font-semibold border text-center transition ${g===grade?'bg-primary-600 border-primary-600 text-white shadow-sm':'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:border-primary-500'}" href="#/category/${subjectId}/${g}/${docType}">Lớp ${g}</a>`).join('');
+  const typeList = DOC_TYPES.map(t=>`<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition ${t.id===docType?'bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400':'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'}" href="#/category/${subjectId}/${grade}/${t.id}"><span class="text-xl">${t.icon}</span> <span>${t.name}</span></a>`).join('');
 
   const docs = [];
   for(let i=0;i<DOCS_PER_CATEGORY;i++) docs.push(generateDoc(subjectId, grade, docType, i));
 
   document.getElementById('app').innerHTML = `
-  <div class="wrap">
+  <div class="max-w-[1280px] mx-auto px-4 md:px-6">
     ${breadcrumbHTML([{label:'Trang chủ', href:'#/'},{label:subject.name, href:'#/subject/'+subjectId},{label:'Lớp '+grade},{label:dt.name}])}
-    <section class="section">
-      <h1 style="font-size:1.7rem;">${dt.icon} ${dt.name} – ${subject.name} lớp ${grade}</h1>
-      <p style="color:var(--ink-soft); max-width:640px; margin-bottom:26px;">${dt.desc}.</p>
+    <section class="py-4">
+      <h1 class="text-2xl md:text-3xl font-heading font-extrabold text-slate-900 dark:text-white mb-2">${dt.icon} ${dt.name} – ${subject.name} lớp ${grade}</h1>
+      <p class="text-slate-500 mb-10">${dt.desc}.</p>
 
-      <div class="cat-layout">
-        <aside>
-          <div class="filter-box">
-            <h4>Khối lớp</h4>
-            <div class="chip-row">${gradeChips}</div>
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <aside class="lg:col-span-1 flex flex-col gap-8">
+          <div>
+            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono mb-4">Khối lớp</h4>
+            <div class="grid grid-cols-3 gap-2">${gradeChips}</div>
           </div>
-          <div class="filter-box">
-            <h4>Loại tài liệu</h4>
-            <div class="filter-list">${typeList}</div>
+          <div>
+            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono mb-4">Phân loại</h4>
+            <div class="flex flex-col gap-1">${typeList}</div>
           </div>
         </aside>
-        <div>
-          <div class="doc-grid">${docs.map(docCardHTML).join('')}</div>
-          <div class="note">Hiển thị ${DOCS_PER_CATEGORY}/${DOCS_PER_CATEGORY} tài liệu mẫu (bản demo).</div>
+        <div class="lg:col-span-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">${docs.map(docCardHTML).join('')}</div>
         </div>
       </div>
     </section>
@@ -639,41 +486,46 @@ function renderDoc(subjectId, grade, docType, idx){
 
   const relatedIdx = [];
   for(let i=0;i<DOCS_PER_CATEGORY;i++) if(i!==idx) relatedIdx.push(i);
-  const relatedHTML = relatedIdx.slice(0,6).map(i=>{
+  const relatedHTML = relatedIdx.slice(0,5).map(i=>{
     const rd = generateDoc(subjectId, grade, docType, i);
-    return `<a href="#/doc/${subjectId}/${grade}/${docType}/${i}">${rd.title}</a>`;
+    return `<a class="block py-3 border-b border-slate-100 dark:border-slate-800 text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition" href="#/doc/${subjectId}/${grade}/${docType}/${i}">${rd.title}</a>`;
   }).join('');
 
   document.getElementById('app').innerHTML = `
-  <div class="wrap">
-    ${breadcrumbHTML([{label:'Trang chủ', href:'#/'},{label:subject.name, href:'#/subject/'+subjectId},{label:'Lớp '+grade, href:'#/category/'+subjectId+'/'+grade+'/'+docType},{label:dt.name, href:'#/category/'+subjectId+'/'+grade+'/'+docType},{label:'Chi tiết'}])}
-    <section class="section">
-      <div class="detail-layout">
-        <div class="detail-card">
-          <div class="doc-badges" style="margin-bottom:12px;">
-            <span class="badge badge-subject">${subject.icon} ${subject.name}</span>
-            <span class="badge badge-grade">Lớp ${grade}</span>
-            <span class="badge badge-type">${dt.name}</span>
+  <div class="max-w-[1280px] mx-auto px-4 md:px-6">
+    ${breadcrumbHTML([{label:'Trang chủ', href:'#/'},{label:subject.name, href:'#/subject/'+subjectId},{label:'Lớp '+grade, href:'#/category/'+subjectId+'/'+grade+'/'+docType},{label:dt.name, href:'#/category/'+subjectId+'/'+grade+'/'+docType},{label:'Chi tiết tài liệu'}])}
+    <section class="py-4">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 md:p-10 rounded-2xl shadow-sm">
+          <div class="flex flex-wrap gap-2 mb-6">
+            <span class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">${subject.icon} Môn ${subject.name}</span>
+            <span class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Lớp ${grade}</span>
+            <span class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400">${dt.name}</span>
           </div>
-          <h1 style="font-size:1.6rem;">${doc.title}</h1>
-          <div class="meta-grid">
-            <div class="meta-item"><div class="mi-label">Tác giả</div><div class="mi-value">${doc.author}</div></div>
-            <div class="meta-item"><div class="mi-label">Đơn vị</div><div class="mi-value">${doc.school}</div></div>
-            <div class="meta-item"><div class="mi-label">Ngày đăng</div><div class="mi-value mono">${doc.dateStr}</div></div>
-            <div class="meta-item"><div class="mi-label">Bộ sách</div><div class="mi-value">${doc.edition}</div></div>
-            <div class="meta-item"><div class="mi-label">Định dạng / dung lượng</div><div class="mi-value mono">${doc.format} · ${doc.sizeStr} ${doc.sizeUnit}</div></div>
-            <div class="meta-item"><div class="mi-label">Lượt tải</div><div class="mi-value mono">${doc.downloads.toLocaleString('vi-VN')}</div></div>
+          <h1 class="text-2xl md:text-3xl font-heading font-extrabold text-slate-900 dark:text-white leading-tight">${doc.title}</h1>
+          
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-6 my-8 p-6 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-100 dark:border-slate-800">
+            <div><div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider font-mono mb-1">Tác giả</div><div class="font-semibold text-slate-900 dark:text-white text-sm">${doc.author}</div></div>
+            <div><div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider font-mono mb-1">Bộ sách</div><div class="font-semibold text-slate-900 dark:text-white text-sm">${doc.edition}</div></div>
+            <div><div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider font-mono mb-1">Ngày đăng</div><div class="font-semibold text-slate-900 dark:text-white text-sm font-mono">${doc.dateStr}</div></div>
+            <div class="col-span-2 md:col-span-1"><div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider font-mono mb-1">Định dạng & Dung lượng</div><div class="font-semibold text-slate-900 dark:text-white text-sm font-mono">${doc.format} • ${doc.sizeStr} ${doc.sizeUnit}</div></div>
+            <div><div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider font-mono mb-1">Lượt tải</div><div class="font-semibold text-slate-900 dark:text-white text-sm font-mono">${doc.downloads.toLocaleString()}</div></div>
           </div>
-          <p class="desc-text">${doc.description}</p>
-          <div style="margin-top:24px; display:flex; gap:12px; flex-wrap:wrap;">
-            <button class="btn btn-red" onclick="showContactModal('${CONTACT_PHONE}')">📞 Liên hệ Zalo</button>
-            <a class="btn btn-outline" style="color:var(--green-900); border-color:var(--line);" href="#/category/${subjectId}/${grade}/${docType}">← Quay lại danh mục</a>
+          
+          <div class="prose dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 text-base leading-relaxed mb-10">
+            <p>${doc.description}</p>
+          </div>
+          
+          <div class="flex flex-wrap gap-4 pt-8 border-t border-slate-100 dark:border-slate-800">
+            <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3.5 rounded-xl transition shadow-sm flex items-center gap-2" onclick="showContactModal()">📞 Liên hệ Zalo để tải</button>
+            <a class="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-bold px-8 py-3.5 rounded-xl transition shadow-sm" href="#/category/${subjectId}/${grade}/${docType}">Trở về thư mục</a>
           </div>
         </div>
-        <aside>
-          <div class="related-card">
-            <h4 style="font-family:'IBM Plex Mono',monospace; font-size:.74rem; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft); margin-bottom:6px;">Tài liệu liên quan</h4>
-            ${relatedHTML}
+        
+        <aside class="lg:col-span-1">
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-2xl shadow-sm sticky top-[100px]">
+            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono mb-4">Tài liệu cùng chuyên mục</h4>
+            <div class="flex flex-col">${relatedHTML}</div>
           </div>
         </aside>
       </div>
@@ -681,80 +533,100 @@ function renderDoc(subjectId, grade, docType, idx){
   </div>`;
 }
 
-function renderSearch(query){
-  const q = (query||'').trim();
-  const norm = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-  const nq = norm(q);
-
-  let matchedSubjects = [], matchedTypes = [], matchedTopics = [];
-  if(nq){
-    matchedSubjects = SUBJECTS.filter(s=>norm(s.name).includes(nq));
-    matchedTypes = DOC_TYPES.filter(t=>norm(t.name).includes(nq));
-    Object.keys(TOPICS).forEach(sid=>{
-      TOPICS[sid].forEach(topic=>{
-        if(norm(topic).includes(nq)) matchedTopics.push({subjectId:sid, topic});
-      });
-    });
-  }
-
-  const hasResults = matchedSubjects.length || matchedTypes.length || matchedTopics.length;
-
-  const subjectsHTML = matchedSubjects.map(s=>`
-    <a class="subject-card" href="#/subject/${s.id}"><div class="sc-icon">${s.icon}</div><div class="sc-name">${s.name}</div><div class="sc-meta">Xem danh mục</div></a>`).join('');
-
-  const typesHTML = matchedTypes.map(t=>`
-    <a class="doctype-chip" style="text-decoration:none;" href="#/category/toan/1/${t.id}"><div class="dt-icon">${t.icon}</div><div><div class="dt-name">${t.name}</div><div class="dt-desc">${t.desc}</div></div></a>`).join('');
-
-  const topicsHTML = matchedTopics.slice(0,8).map(m=>{
-    const s = subjectOf(m.subjectId);
-    return `<a class="chip" href="#/category/${m.subjectId}/${s.grades[0]}/khbd">${m.topic} <span style="color:var(--ink-soft);">· ${s.name}</span></a>`;
-  }).join('');
-
-  const browseHTML = SUBJECTS.map(s=>`
-    <a class="subject-card" href="#/subject/${s.id}"><div class="sc-icon">${s.icon}</div><div class="sc-name">${s.name}</div><div class="sc-meta">Lớp ${s.grades[0]}–${s.grades[s.grades.length-1]}</div></a>`).join('');
-
+function renderNotFound(){
   document.getElementById('app').innerHTML = `
-  <div class="wrap">
-    ${breadcrumbHTML([{label:'Trang chủ', href:'#/'},{label:'Kết quả tìm kiếm'}])}
-    <section class="section">
-      <h1 style="font-size:1.6rem;">Kết quả tìm kiếm cho “${q || '...'}”</h1>
-      ${hasResults ? `
-        ${matchedSubjects.length ? `<div class="section-head" style="margin-top:20px;"><div class="eyebrow">Môn học</div></div><div class="subject-grid">${subjectsHTML}</div>` : ''}
-        ${matchedTopics.length ? `<div class="section-head" style="margin-top:30px;"><div class="eyebrow">Chủ đề liên quan</div></div><div class="chip-row">${topicsHTML}</div>` : ''}
-        ${matchedTypes.length ? `<div class="section-head" style="margin-top:30px;"><div class="eyebrow">Loại tài liệu</div></div><div class="doctype-chip-grid">${typesHTML}</div>` : ''}
-      ` : `
-        <div class="empty-state">
-          <div class="es-icon">🔍</div>
-          <p>Không tìm thấy kết quả phù hợp. Hãy thử từ khoá khác hoặc duyệt theo danh mục dưới đây.</p>
-        </div>
-        <div class="subject-grid">${browseHTML}</div>
-      `}
-    </section>
+  <div class="max-w-[1280px] mx-auto px-6 py-24 text-center">
+    <div class="text-6xl mb-6">📭</div>
+    <h2 class="text-2xl font-heading font-bold text-slate-900 dark:text-white">Trang không tồn tại</h2>
+    <p class="text-slate-500 mt-2 mb-8">Danh mục hoặc tài liệu bạn đang tìm kiếm chưa được cập nhật dữ liệu mẫu.</p>
+    <a class="bg-primary-600 hover:bg-primary-700 text-white font-bold px-6 py-3 rounded-xl inline-block transition shadow-sm" href="#/">Quay lại Trang chủ</a>
   </div>`;
 }
 
-function renderNotFound(){
-  document.getElementById('app').innerHTML = `
-  <div class="wrap"><section class="section empty-state">
-    <div class="es-icon">📭</div>
-    <h2>Không tìm thấy trang này</h2>
-    <p>Danh mục bạn truy cập không tồn tại trong dữ liệu mẫu.</p>
-    <a class="btn btn-brass" href="#/">Về trang chủ</a>
-  </section></div>`;
+function showContactModal() {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `<div class="modal-box bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-8 max-w-[400px] w-full text-center shadow-2xl">
+    <div class="text-5xl mb-4">💬</div>
+    <h3 class="text-xl font-heading font-bold text-slate-900 dark:text-white">Liên hệ lấy tài liệu</h3>
+    <p class="text-sm text-slate-600 dark:text-slate-400 mt-3 mb-6 leading-relaxed">Hãy liên hệ trực tiếp qua Zalo để nhận trọn bộ học liệu chuẩn, không lỗi font, kèm hỗ trợ chỉnh sửa giáo án chuyên nghiệp.</p>
+    <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 mb-8 font-mono text-2xl font-extrabold text-primary-600 dark:text-primary-400 tracking-widest">
+      ${CONTACT_PHONE}
+    </div>
+    <div class="flex gap-3 justify-center">
+      <a href="https://zalo.me/${CONTACT_PHONE}" target="_blank" class="bg-primary-600 hover:bg-primary-700 text-white font-bold text-sm px-6 py-3 rounded-xl transition flex-1 shadow-sm">Mở Zalo</a>
+      <button class="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-bold text-sm px-6 py-3 rounded-xl transition flex-1" id="modalClose">Đóng</button>
+    </div>
+  </div>`;
+  document.body.appendChild(overlay);
+  const close = ()=> overlay.remove();
+  overlay.addEventListener('click', e=>{ if(e.target===overlay) close(); });
+  overlay.querySelector('#modalClose').addEventListener('click', close);
 }
 
-/* ============== NAV / MEGA PANEL ============== */
+function buildOptionButton(icon, text) {
+  return `<button class="w-full bg-slate-50 dark:bg-slate-800 hover:bg-white dark:hover:bg-slate-700 border border-slate-100 dark:border-slate-700 hover:border-primary-500 dark:hover:border-primary-500 hover:shadow-md p-4 rounded-xl flex items-center gap-4 transition-all group" onclick="showContactModal()">
+    <span class="text-2xl">${icon}</span>
+    <span class="font-bold text-sm text-slate-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 text-left flex-1">${text}</span>
+  </button>`;
+}
+
+function showAIModal(){
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `<div class="modal-box bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-8 max-w-[440px] w-full shadow-2xl">
+    <div class="flex items-center gap-3 mb-2">
+      <div class="text-2xl">✨</div>
+      <h3 class="text-xl font-heading font-bold text-slate-900 dark:text-white">Trợ lý EduAI</h3>
+    </div>
+    <p class="text-sm text-slate-600 dark:text-slate-400 mb-8">Hệ thống cung cấp giải pháp AI toàn diện cho giáo viên. Hãy chọn mục bạn quan tâm để chuyên viên hỗ trợ:</p>
+    <div class="flex flex-col gap-3 mb-8">
+      ${buildOptionButton('📊', 'Mô phỏng AI trong dạy học')}
+      ${buildOptionButton('💻', 'Phần mềm giáo dục AI giá rẻ')}
+      ${buildOptionButton('🎓', 'Khóa học AI trong dạy học')}
+    </div>
+    <button class="w-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-bold text-sm px-4 py-3 rounded-xl transition" id="modalClose">Đóng lại</button>
+  </div>`;
+  document.body.appendChild(overlay);
+  const close = ()=> overlay.remove();
+  overlay.addEventListener('click', e=>{ if(e.target===overlay) close(); });
+  overlay.querySelector('#modalClose').addEventListener('click', close);
+  overlay.querySelectorAll('button[onclick]').forEach(btn => btn.addEventListener('click', close));
+}
+
+function showServiceModal(){
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `<div class="modal-box bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-8 max-w-[440px] w-full shadow-2xl">
+    <div class="flex items-center gap-3 mb-2">
+      <div class="text-2xl">🚀</div>
+      <h3 class="text-xl font-heading font-bold text-slate-900 dark:text-white">Dịch vụ mở rộng</h3>
+    </div>
+    <p class="text-sm text-slate-600 dark:text-slate-400 mb-8">EduAI cung cấp các dịch vụ tối ưu công nghệ hỗ trợ giáo viên. Vui lòng chọn dịch vụ:</p>
+    <div class="flex flex-col gap-3 mb-8">
+      ${buildOptionButton('📈', 'Dịch vụ MXH (Tăng Follow, Like, Tym...)')}
+      ${buildOptionButton('🤖', 'Gemini AI Pro, Canva, Claude giá rẻ')}
+      ${buildOptionButton('🌐', 'Xây dựng Fanpage dạy học online')}
+    </div>
+    <button class="w-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-bold text-sm px-4 py-3 rounded-xl transition" id="modalClose">Đóng lại</button>
+  </div>`;
+  document.body.appendChild(overlay);
+  const close = ()=> overlay.remove();
+  overlay.addEventListener('click', e=>{ if(e.target===overlay) close(); });
+  overlay.querySelector('#modalClose').addEventListener('click', close);
+  overlay.querySelectorAll('button[onclick]').forEach(btn => btn.addEventListener('click', close));
+}
+
 let megaState = {subjectId:null, grade:null};
 
 function buildSubjectRow(){
-  document.getElementById('subjectRow').innerHTML = SUBJECTS.map(s=>
-    `<button class="subject-tab" data-id="${s.id}">${s.icon} ${s.name}</button>`
-  ).join('');
-  document.getElementById('subjectRow').querySelectorAll('.subject-tab').forEach(btn=>{
+  const navHTML = SUBJECTS.map(s=>`<button class="px-5 py-3 whitespace-nowrap text-sm font-semibold transition-colors border-b-[3px] border-transparent text-white/80 hover:text-white" data-id="${s.id}">${s.icon} ${s.name}</button>`).join('');
+  document.getElementById('subjectRow').innerHTML = navHTML;
+  document.getElementById('subjectRow').querySelectorAll('[data-id]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const id = btn.dataset.id;
-      if(megaState.subjectId === id){ closeMegaPanel(); }
-      else { openMegaPanel(id); }
+      if(megaState.subjectId === id) closeMegaPanel();
+      else openMegaPanel(id);
     });
   });
 }
@@ -764,140 +636,77 @@ function openMegaPanel(subjectId, grade){
   megaState.subjectId = subjectId;
   megaState.grade = grade || subject.grades[0];
   const panel = document.getElementById('megaPanel');
-  const gradeChips = subject.grades.map(g=>
-    `<button class="chip ${g===megaState.grade?'active':''}" data-grade="${g}">Lớp ${g}</button>`).join('');
-  const typeLinks = DOC_TYPES.map(t=>
-    `<a href="#/category/${subjectId}/${megaState.grade}/${t.id}">${t.icon} ${t.name}</a>`).join('');
-  panel.innerHTML = `<div class="mega-inner">
-    <div class="mega-col"><h4>Chọn khối lớp</h4><div class="chip-row">${gradeChips}</div></div>
-    <div class="mega-col"><h4>Loại tài liệu – Lớp ${megaState.grade}</h4><div class="mega-doctype-list">${typeLinks}</div></div>
-  </div>`;
+  
+  const gradeChips = subject.grades.map(g=>`<button class="px-4 py-1.5 rounded-lg text-sm font-semibold transition ${g===megaState.grade?'bg-primary-600 text-white':'bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'}" data-grade="${g}">Lớp ${g}</button>`).join('');
+  const typeLinks = DOC_TYPES.map(t=>`<a class="flex items-center gap-3 p-3 hover:bg-slate-50 dark:hover:bg-slate-900 rounded-xl transition text-sm font-medium text-slate-900 dark:text-white" href="#/category/${subjectId}/${megaState.grade}/${t.id}"><span class="text-xl">${t.icon}</span> ${t.name}</a>`).join('');
+  
+  panel.innerHTML = `
+    <div class="max-w-[1280px] mx-auto px-4 md:px-6 py-8 grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div><h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono mb-4">Khối lớp</h4><div class="flex flex-wrap gap-2">${gradeChips}</div></div>
+      <div><h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono mb-4">Học liệu lớp ${megaState.grade}</h4><div class="grid grid-cols-2 gap-2">${typeLinks}</div></div>
+    </div>`;
+  
   panel.classList.remove('hidden');
-  panel.querySelectorAll('[data-grade]').forEach(btn=>{
-    btn.addEventListener('click', ()=> openMegaPanel(subjectId, parseInt(btn.dataset.grade,10)));
-  });
-  panel.querySelectorAll('a').forEach(a=> a.addEventListener('click', closeMegaPanel));
+  panel.querySelectorAll('[data-grade]').forEach(btn=>btn.addEventListener('click', ()=>openMegaPanel(subjectId, parseInt(btn.dataset.grade,10))));
+  panel.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMegaPanel));
   highlightActiveTab(subjectId);
 }
+
 function closeMegaPanel(){
   megaState = {subjectId:null, grade:null};
   document.getElementById('megaPanel').classList.add('hidden');
   highlightActiveTab(currentRouteSubject());
 }
+
 function highlightActiveTab(subjectId){
-  document.querySelectorAll('.subject-tab').forEach(b=>{
-    b.classList.toggle('active', b.dataset.id===subjectId);
+  document.querySelectorAll('#subjectRow [data-id]').forEach(b=>{
+    const isActive = b.dataset.id === subjectId;
+    b.classList.toggle('border-white', isActive);
+    b.classList.toggle('text-white', isActive);
+    b.classList.toggle('text-white/80', !isActive);
   });
 }
+
 function currentRouteSubject(){
-  const parts = parseHash();
-  if(parts[0]==='subject') return parts[1];
-  if(parts[0]==='category' || parts[0]==='doc') return parts[1];
-  return null;
+  const parts = location.hash.slice(2).split('/').filter(Boolean).map(decodeURIComponent);
+  return (parts[0]==='subject' || parts[0]==='category' || parts[0]==='doc') ? parts[1] : null;
 }
 
 document.addEventListener('click', (e)=>{
-  if(!megaState.subjectId) return;
-  const nav = document.querySelector('.catalog-nav');
-  if(!nav.contains(e.target)) closeMegaPanel();
+  if(megaState.subjectId && !document.querySelector('nav').contains(e.target)) closeMegaPanel();
 });
 
-/* ============== MODALS ============== */
-function showTextModal(title, message){
-  const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
-  overlay.innerHTML = `<div class="modal-box">
-    <h3>${title}</h3><p>${message}</p>
-    <button class="btn btn-brass" id="modalClose">Đã hiểu</button>
-  </div>`;
-  document.body.appendChild(overlay);
-  const close = ()=> overlay.remove();
-  overlay.addEventListener('click', e=>{ if(e.target===overlay) close(); });
-  overlay.querySelector('#modalClose').addEventListener('click', close);
-}
-
-function showContactModal(phone){
-  const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
-  overlay.innerHTML = `<div class="modal-box" style="text-align:center;">
-    <h3 style="margin-bottom:10px; color:var(--green-900);">📞 Liên hệ Zalo</h3>
-    <p style="font-size:0.9rem; color:var(--ink-soft); margin-bottom:16px;">Vui lòng kết nối qua Zalo để nhận tư vấn và lấy tài liệu:</p>
-    <div style="font-size:1.8rem; font-weight:700; color:var(--red); font-family:'IBM Plex Mono',monospace; margin-bottom:24px; letter-spacing: 2px;">${phone}</div>
-    <div style="display:flex; gap:12px;">
-      <a class="btn btn-red" href="https://zalo.me/${phone}" target="_blank" style="flex:1; justify-content:center;">Mở Zalo ngay</a>
-      <button class="btn btn-outline" style="color:var(--ink); border-color:var(--line); flex:1; justify-content:center;" id="modalClose">Đóng</button>
-    </div>
-  </div>`;
-  document.body.appendChild(overlay);
-  const close = ()=> overlay.remove();
-  overlay.addEventListener('click', e=>{ if(e.target===overlay) close(); });
-  overlay.querySelector('#modalClose').addEventListener('click', close);
-}
-
-function showAIModal(){
-  const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
-  overlay.innerHTML = `<div class="modal-box">
-    <h3 style="margin-bottom:10px; font-size:1.4rem; color:var(--green-900); display:flex; align-items:center; gap:8px;">✨ Trợ lý AI EduAI</h3>
-    <p style="font-size:0.9rem; color:var(--ink-soft); margin-bottom:20px;">Vui lòng chọn mục bạn muốn tìm hiểu:</p>
-    <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:24px;">
-      <button class="ai-opt-btn" onclick="showContactModal('${CONTACT_PHONE}')">
-        <span style="font-size:1.3rem;">🤖</span>
-        <span style="font-weight:600; flex:1;">Mô phỏng AI trong dạy học</span>
-      </button>
-      <button class="ai-opt-btn" onclick="showContactModal('${CONTACT_PHONE}')">
-        <span style="font-size:1.3rem;">⚡</span>
-        <span style="font-weight:600; flex:1;">Phần mềm giáo dục AI giá rẻ</span>
-      </button>
-      <button class="ai-opt-btn" onclick="showContactModal('${CONTACT_PHONE}')">
-        <span style="font-size:1.3rem;">🎓</span>
-        <span style="font-weight:600; flex:1;">Khóa học AI trong dạy học</span>
-      </button>
-    </div>
-    <div style="text-align:right;">
-      <button class="btn btn-outline" style="color:var(--ink); border-color:var(--line);" id="modalClose">Đóng</button>
-    </div>
-  </div>`;
-  document.body.appendChild(overlay);
-  const close = ()=> overlay.remove();
-  overlay.addEventListener('click', e=>{ if(e.target===overlay) close(); });
-  overlay.querySelector('#modalClose').addEventListener('click', close);
-  
-  // Đóng modal AI khi người dùng chọn 1 mục
-  overlay.querySelectorAll('.ai-opt-btn').forEach(btn => {
-    btn.addEventListener('click', close);
-  });
-}
-
-/* ============== FOOTER ============== */
 function buildFooter(){
-  const subjectLinks = SUBJECTS.map(s=>`<a href="#/subject/${s.id}">${s.icon} ${s.name}</a>`).join('');
-  const typeLinks = DOC_TYPES.map(t=>`<a href="#/category/toan/1/${t.id}">${t.icon} ${t.name}</a>`).join('');
+  const links = SUBJECTS.slice(0,6).map(s=>`<a class="block py-1.5 hover:text-white transition text-sm" href="#/subject/${s.id}">${s.icon} Môn ${s.name}</a>`).join('');
   document.getElementById('footerGrid').innerHTML = `
-    <div>
-      <div class="logo" style="color:#fff;"><span class="stamp" style="width:30px;height:30px;font-size:.8rem; border-width:2px;">Edu</span>EduAI</div>
-      <p style="font-size:.85rem; max-width:280px; margin-top:10px;">Thư viện học liệu cho giáo viên Việt Nam, tổ chức theo môn học – khối lớp – loại tài liệu, có trợ lý AI hỗ trợ tra cứu.</p>
+    <div class="md:col-span-2">
+      <div class="flex items-center gap-2 mb-4">
+        <div class="logo-stamp w-8 h-8 rounded-full flex items-center justify-center font-mono font-bold text-xs text-white">Edu</div>
+        <span class="text-xl font-heading font-extrabold text-white">EduAI</span>
+      </div>
+      <p class="text-sm leading-relaxed max-w-sm">Hệ thống thư viện học liệu chuyên nghiệp, bám sát sách chương trình giáo dục phổ thông 2018 (Kết Nối Tri Thức). Tích hợp các giải pháp công nghệ AI dành cho giáo viên.</p>
     </div>
-    <div><h5>Môn học</h5>${subjectLinks}</div>
-    <div><h5>Loại tài liệu</h5>${typeLinks}</div>
-    <div><h5>Về EduAI</h5>
-      <a href="#" data-modal="Giới thiệu" data-msg="EduAI là một website demo minh hoạ giao diện, được xây dựng lại theo cấu trúc danh mục môn học – khối lớp – loại tài liệu, dùng dữ liệu mẫu.">Giới thiệu</a>
-      <a href="#" data-modal="Liên hệ" data-msg="Tính năng liên hệ chưa được kết nối trong bản demo này.">Liên hệ</a>
-      <a href="#" data-modal="Góp ý" data-msg="Cảm ơn bạn quan tâm! Form góp ý sẽ có trong bản phát triển đầy đủ.">Góp ý</a>
+    <div><h5 class="font-bold text-white mb-4">Danh mục môn học</h5>${links}</div>
+    <div><h5 class="font-bold text-white mb-4">Thông tin & Trợ giúp</h5>
+      <a href="#" class="block py-1.5 hover:text-white transition text-sm" onclick="showContactModal()">Liên hệ quảng cáo</a>
+      <a href="#" class="block py-1.5 hover:text-white transition text-sm" onclick="showContactModal()">Quy định bản quyền</a>
     </div>`;
-  document.getElementById('footerGrid').querySelectorAll('[data-modal]').forEach(a=>{
-    a.addEventListener('click', e=>{ e.preventDefault(); showTextModal(a.dataset.modal, a.dataset.msg); });
-  });
 }
 
-/* ============== ROUTER ============== */
-function parseHash(){
-  const h = location.hash.slice(2); // remove '#/'
-  return h.split('/').filter(Boolean).map(decodeURIComponent);
+function initTheme() {
+  const checkbox = document.getElementById('themeToggleCheckbox');
+  const saved = localStorage.getItem('theme');
+  if(saved === 'dark'){ document.documentElement.classList.add('dark'); checkbox.checked = true; }
+  else { document.documentElement.classList.remove('dark'); checkbox.checked = false; }
+  
+  checkbox.addEventListener('change', ()=>{
+    if(checkbox.checked){ document.documentElement.classList.add('dark'); localStorage.setItem('theme','dark'); }
+    else { document.documentElement.classList.remove('dark'); localStorage.setItem('theme','light'); }
+  });
 }
 
 function render(){
-  const parts = parseHash();
+  const parts = location.hash.slice(2).split('/').filter(Boolean).map(decodeURIComponent);
   if(!megaState.subjectId) highlightActiveTab(currentRouteSubject());
   window.scrollTo({top:0, behavior:'instant'});
 
@@ -905,52 +714,19 @@ function render(){
   if(parts[0]==='subject'){ renderSubjectHub(parts[1]); return; }
   if(parts[0]==='category'){ renderCategory(parts[1], parts[2], parts[3]); return; }
   if(parts[0]==='doc'){ renderDoc(parts[1], parts[2], parts[3], parts[4]); return; }
-  if(parts[0]==='search'){ renderSearch(parts[1]); return; }
   renderNotFound();
 }
 
-/* ============== INIT ============== */
+/* Initialize App */
+initTheme();
 buildSubjectRow();
 buildFooter();
 window.addEventListener('hashchange', render);
 render();
 
-/* ---- THEME TOGGLE ---- */
-const themeToggleBtn = document.getElementById('themeToggle');
-const rootEl = document.documentElement;
-// Lấy chế độ đã lưu trong localStorage, hoặc nếu chưa lưu thì kiểm tra cài đặt hệ thống của người dùng
-let currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-
-function applyTheme(theme) {
-  if (theme === 'dark') {
-    rootEl.setAttribute('data-theme', 'dark');
-    themeToggleBtn.innerHTML = '☀️'; // Đổi icon sang mặt trời để báo hiệu click sẽ về sáng
-  } else {
-    rootEl.removeAttribute('data-theme');
-    themeToggleBtn.innerHTML = '🌙'; // Đổi icon sang mặt trăng để báo hiệu click sẽ sang tối
-  }
-  localStorage.setItem('theme', theme);
-  currentTheme = theme;
-}
-
-// Chạy lần đầu khi load trang
-applyTheme(currentTheme);
-
-themeToggleBtn.addEventListener('click', () => {
-  applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
-});
-
-document.getElementById('searchForm').addEventListener('submit', e=>{
-  e.preventDefault();
-  const q = document.getElementById('searchInput').value;
-  location.hash = '#/search/' + encodeURIComponent(q);
-});
-document.getElementById('contactBtn').addEventListener('click', ()=>{
-  showContactModal(CONTACT_PHONE);
-});
-document.getElementById('aiBtn').addEventListener('click', ()=>{
-  showAIModal();
-});
+document.getElementById('searchForm').addEventListener('submit', e=>{ e.preventDefault(); location.hash = '#/'; });
+document.getElementById('contactBtn').addEventListener('click', showContactModal);
+document.getElementById('aiBtn').addEventListener('click', showAIModal);
 </script>
 </body>
 </html>
