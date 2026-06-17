@@ -4,199 +4,305 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EduAI – Thư viện học liệu cho giáo viên Việt Nam</title>
-
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23B23A2E' stroke='%23E5B5AF' stroke-width='6' stroke-dasharray='10,10'/><text x='50' y='65' font-family='sans-serif' font-size='38' font-weight='bold' fill='white' text-anchor='middle'>Edu</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
-
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  // Cấu hình Tailwind đồng bộ với Font chữ và Chế độ Sáng/Tối
-  tailwind.config = {
-    darkMode: 'class',
-    theme: {
-      extend: {
-        fontFamily: {
-          sans: ['Inter', 'sans-serif'],
-          heading: ['Plus Jakarta Sans', 'sans-serif'],
-          mono: ['IBM Plex Mono', 'monospace'],
-        },
-        colors: {
-          primary: {
-            50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8',
-          }
-        }
-      }
-    }
-  }
-</script>
-
-<!-- Favicon hình tròn đỏ ngói -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23B23A2E' stroke='%23E5B5AF' stroke-width='4' stroke-dasharray='6,6'/%3E%3Ctext x='50%25' y='57%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-weight='bold' font-size='26' fill='%23FFFFFF'%3EEdu%3C/text%3E%3C/svg%3E">
-
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    -webkit-font-smoothing: antialiased;
-  }
+:root {
+  --bg-page: #F4F6F9;
+  --bg-card: #FFFFFF;
+  --bg-header: #FFFFFF;
+  --text-main: #1A1D20;
+  --text-muted: #64748B;
+  --border: #E2E8F0;
   
-  /* Scrollbar gọn gàng */
-  ::-webkit-scrollbar { width: 8px; height: 8px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-  .dark ::-webkit-scrollbar-thumb { background: #475569; }
-
-  /* Logo Stamp */
-  .logo-stamp {
-    background-color: #B23A2E;
-    border: 2px dashed #E5B5AF;
-  }
-
-  /* Nút công tắc Sáng / Tối (Chuẩn thiết kế Day/Night Mode) */
-  .theme-switch {
-    position: relative;
-    width: 156px;
-    height: 40px;
-    cursor: pointer;
-    display: inline-block;
-    user-select: none;
-    flex-shrink: 0;
-  }
-  .theme-switch input { display: none; }
-  .theme-slider {
-    position: absolute; inset: 0;
-    background: linear-gradient(135deg, #56CCF2 0%, #2F80ED 100%);
-    border-radius: 99px;
-    transition: 0.4s;
-    box-shadow: inset 0 2px 6px rgba(0,0,0,0.15);
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 14px; overflow: hidden;
-  }
-  /* Trạng thái Tối */
-  .theme-switch input:checked + .theme-slider {
-    background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
-    box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
-  }
-  /* Viên bi */
-  .theme-slider::before {
-    content: ""; position: absolute;
-    height: 32px; width: 32px;
-    left: 4px; bottom: 4px;
-    background-color: #FFD026;
-    border-radius: 50%;
-    transition: 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    z-index: 10;
-  }
-  /* Hiệu ứng trăng khuyết khi ở chế độ tối */
-  .theme-switch input:checked + .theme-slider::before {
-    transform: translateX(116px);
-    background-color: #E2E8F0;
-    box-shadow: inset -8px -3px 0px 0px #94A3B8;
-  }
-  /* Chữ trạng thái */
-  .theme-text {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-weight: 800; font-size: 10px;
-    letter-spacing: 0.05em; color: #FFFFFF;
-    z-index: 8; pointer-events: none;
-    transition: 0.4s;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.15);
-  }
-  .text-dark { opacity: 0; transform: translateX(10px); }
-  .text-light { opacity: 1; transform: translateX(32px); }
+  --primary: #0EA5E9; /* Xanh nhạt chủ đạo (Sky Blue) */
+  --primary-hover: #0284C7;
+  --accent: #F59E0B; /* Vàng kim */
+  --accent-hover: #D97706;
   
-  .theme-switch input:checked + .theme-slider .text-light {
-    opacity: 0; transform: translateX(-10px);
-  }
-  .theme-switch input:checked + .theme-slider .text-dark {
-    opacity: 1; transform: translateX(-32px);
-  }
+  --shadow: 0 4px 20px rgba(0,0,0,0.05);
+  --shadow-hover: 0 10px 30px rgba(14, 165, 233, 0.15);
+  --radius: 12px;
+}
 
-  /* Modals */
-  .modal-overlay {
-    position: fixed; inset: 0;
-    background: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(4px);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 100; padding: 20px;
-    animation: fadeIn 0.2s ease-out;
-  }
-  .modal-box {
-    animation: scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  @keyframes scaleUp { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.dark {
+  --bg-page: #0F172A;
+  --bg-card: #1E293B;
+  --bg-header: #1E293B;
+  --text-main: #F8FAFC;
+  --text-muted: #94A3B8;
+  --border: #334155;
+  
+  --primary: #38BDF8;
+  --shadow: 0 4px 20px rgba(0,0,0,0.2);
+  --shadow-hover: 0 10px 30px rgba(56, 189, 248, 0.2);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg-page);
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  transition: background 0.3s, color 0.3s;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  margin: 0 0 .4em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+.mono { font-family: 'Inter', monospace; }
+
+.topbar {
+  background: var(--bg-header);
+  padding: 14px 24px;
+  display: flex; align-items: center; gap: 24px;
+  flex-wrap: wrap;
+  position: sticky; top: 0; z-index: 50;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.3s;
+}
+.logo {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1.5rem;
+  letter-spacing: -0.03em;
+}
+.logo .stamp {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: #B23A2E;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px;
+  color: white;
+  border: 2px dashed #E5B5AF;
+}
+
+.search-form { flex: 1; min-width: 220px; max-width: 520px; display: flex; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border-radius: 8px;}
+.search-form input {
+  flex: 1; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px 0 0 8px;
+  font-family: inherit; font-size: .95rem;
+  background: var(--bg-page); color: var(--text-main);
+  outline: none; transition: border 0.2s;
+}
+.search-form input:focus { border-color: var(--primary); }
+.search-form button {
+  padding: 12px 20px; border: none; border-radius: 0 8px 8px 0;
+  background: var(--primary); color: white; font-weight: 600;
+  transition: background 0.2s;
+}
+.search-form button:hover { background: var(--primary-hover); }
+
+.topbar-actions { display: flex; gap: 10px; margin-left: auto; align-items: center; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 16px; border-radius: 8px; border: none;
+  font-weight: 600; font-size: .88rem; transition: all 0.2s;
+}
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-hover); }
+.btn-accent { background: var(--accent); color: white; }
+.btn-accent:hover { background: var(--accent-hover); }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+
+.theme-switch {
+  position: relative; width: 140px; height: 40px; border-radius: 20px;
+  background: #4facfe; cursor: pointer; overflow: hidden;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.1); transition: background 0.4s ease;
+}
+.dark .theme-switch { background: #1a202c; }
+.ts-knob {
+  position: absolute; top: 4px; left: 4px; width: 32px; height: 32px;
+  border-radius: 50%; background: #fbbf24;
+  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55), background 0.4s;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 2;
+}
+.dark .ts-knob { transform: translateX(100px); background: #e2e8f0; }
+.dark .ts-knob::after {
+  content: ''; position: absolute; top: 4px; right: 4px; width: 24px; height: 24px;
+  border-radius: 50%; background: #1a202c; transition: background 0.4s;
+}
+.ts-text {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800; color: white;
+  transition: transform 0.4s;
+}
+.ts-text-light { padding-left: 20px; }
+.ts-text-dark { padding-right: 20px; transform: translateY(40px); }
+.dark .ts-text-light { transform: translateY(-40px); }
+.dark .ts-text-dark { transform: translateY(0); }
+
+.vj-nav {
+  background: #0EA5E9; 
+  display: flex; position: sticky; top: 73px; z-index: 40;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.dark .vj-nav { background: #0369A1; } 
+.vj-home {
+  background: #0284C7; 
+  padding: 0 20px; display: flex; align-items: center; justify-content: center; color: #fff; transition: background 0.2s;
+}
+.vj-home:hover { background: #0369A1; }
+.vj-home svg { width: 20px; height: 20px; fill: currentColor; }
+.vj-row { flex: 1; display: flex; overflow-x: auto; scrollbar-width: none; }
+.vj-row::-webkit-scrollbar { display: none; }
+.vj-tab {
+  background: transparent; border: none; color: #fff; font-weight: 700; font-size: 13.5px;
+  text-transform: uppercase; padding: 15px 18px; white-space: nowrap; cursor: pointer;
+  transition: background 0.2s; font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: 0.5px;
+}
+.vj-tab:hover, .vj-tab.active { background: #38BDF8; } 
+.dark .vj-tab:hover, .dark .vj-tab.active { background: #0284C7; }
+
+.mega-panel { background: var(--bg-card); border-top: 1px solid var(--border); box-shadow: var(--shadow-hover); position: absolute; left: 0; right: 0; }
+.mega-panel.hidden { display: none; }
+.mega-inner { max-width: 1180px; margin: 0 auto; padding: 30px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+@media (max-width: 760px) { .mega-inner { grid-template-columns: 1fr; } }
+.mega-col h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-family: 'Inter', sans-serif; font-weight: 700; margin-bottom: 16px; border-bottom: 1px dashed var(--border); padding-bottom: 8px;}
+.mega-doctype-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.mega-link {
+  display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 8px; font-size: .95rem;
+  color: var(--text-main); border: 1px solid transparent; font-weight: 500;
+}
+.mega-link:hover { background: var(--bg-page); border-color: var(--border); color: var(--primary); }
+.mega-link .dt-icon { font-size: 1.4rem; }
+
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+.section { padding: 48px 0; }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 24px; gap: 12px; flex-wrap: wrap; }
+.section-head .eyebrow { font-size: .75rem; letter-spacing: .1em; color: var(--accent); text-transform: uppercase; font-weight: 700; margin-bottom: 4px;}
+
+.subject-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
+.subject-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 20px; transition: transform .2s, box-shadow .2s, border-color .2s;
+  text-align: center;
+}
+.subject-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: var(--primary); }
+.subject-card .sc-icon { font-size: 2rem; margin-bottom: 10px; }
+.subject-card .sc-name { font-weight: 700; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.1rem;}
+.subject-card .sc-meta { font-size: .8rem; color: var(--text-muted); margin-top: 6px; }
+
+.doc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 20px; }
+.doc-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 20px; display: flex; flex-direction: column; gap: 12px;
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+}
+.doc-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: var(--primary); }
+.doc-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+.badge { font-size: .7rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; letter-spacing: 0.5px;}
+.badge-subject { background: var(--bg-page); color: var(--primary); border: 1px solid var(--border);}
+.badge-grade { background: var(--bg-page); color: var(--text-main); border: 1px solid var(--border); }
+.badge-type { background: rgba(249, 115, 22, 0.1); color: var(--accent); }
+.doc-title { font-weight: 700; font-size: 1.05rem; line-height: 1.4; }
+.doc-meta { font-size: .8rem; color: var(--text-muted); display: flex; gap: 12px; flex-wrap: wrap; font-weight: 500;}
+.doc-card .dl-link { margin-top: auto; font-weight: 600; font-size: .85rem; color: var(--primary); border-top: 1px dashed var(--border); padding-top: 12px; display: flex; justify-content: space-between; }
+
+.cat-layout { display: grid; grid-template-columns: 240px 1fr; gap: 30px; align-items: start; }
+@media (max-width: 760px) { .cat-layout { grid-template-columns: 1fr; } }
+.filter-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 20px;}
+.filter-box h4 { font-size: .75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 12px; }
+.chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border); background: var(--bg-page); font-size: .85rem; font-weight: 600; color: var(--text-main); cursor: pointer;}
+.chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+.filter-list a { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 8px; font-size: .9rem; font-weight: 500; color: var(--text-muted); }
+.filter-list a.active { background: var(--bg-page); color: var(--primary); font-weight: 700; border: 1px solid var(--border);}
+.filter-list a:hover:not(.active) { color: var(--primary); }
+
+.detail-layout { display: grid; grid-template-columns: 1fr 300px; gap: 40px; align-items: start; }
+@media (max-width: 860px) { .detail-layout { grid-template-columns: 1fr; } }
+.detail-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow); }
+.meta-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 24px 0; padding: 20px; background: var(--bg-page); border-radius: 12px; border: 1px solid var(--border); }
+.meta-item .mi-label { font-size: .75rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); font-weight: 600;}
+.meta-item .mi-value { font-weight: 700; margin-top: 4px; font-size: .95rem; }
+.desc-text { color: var(--text-muted); line-height: 1.8; font-size: 1.05rem;}
+
+.related-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; position: sticky; top: 140px; }
+.related-card a { display: block; padding: 12px 0; border-bottom: 1px dashed var(--border); font-size: .9rem; font-weight: 600; line-height: 1.4; color: var(--text-main); transition: color 0.2s;}
+.related-card a:hover { color: var(--primary); }
+.related-card a:last-child { border-bottom: none; }
+
+.breadcrumb { font-size: .85rem; color: var(--text-muted); padding: 24px 0 0; display: flex; gap: 8px; flex-wrap: wrap; font-weight: 500;}
+.breadcrumb a { color: var(--primary); }
+.breadcrumb a:hover { text-decoration: underline; }
+.empty-state { text-align: center; padding: 80px 20px; color: var(--text-muted); }
+
+.hero { background: var(--bg-header); padding: 80px 0; border-bottom: 1px solid var(--border); text-align: center;}
+.hero h1 { font-size: 3rem; line-height: 1.2; max-width: 800px; margin: 0 auto 20px; color: var(--text-main); }
+.hero h1 em { color: var(--primary); font-style: normal; }
+.hero p { color: var(--text-muted); max-width: 600px; font-size: 1.1rem; margin: 0 auto 32px; }
+.hero-stats { display: flex; gap: 32px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
+.hero-stats .stat-num { font-size: 1.8rem; font-weight: 800; color: var(--primary); font-family: 'Plus Jakarta Sans', sans-serif;}
+.hero-stats .stat-label { font-size: .85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;}
+
+footer { background: var(--bg-card); border-top: 1px solid var(--border); margin-top: 60px; }
+.footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; padding: 60px 24px; max-width: 1180px; margin: 0 auto; }
+@media (max-width: 760px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+.footer-grid h5 { font-size: .85rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-main); margin-bottom: 16px; }
+.footer-grid a { display: block; font-size: .9rem; padding: 6px 0; color: var(--text-muted); font-weight: 500;}
+.footer-grid a:hover { color: var(--primary); }
+.footer-bottom { border-top: 1px solid var(--border); padding: 20px 24px; text-align: center; font-size: .85rem; color: var(--text-muted); }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px; backdrop-filter: blur(4px); }
+.modal-box { background: var(--bg-card); border-radius: 16px; padding: 32px; width: 100%; max-width: 460px; box-shadow: 0 24px 50px rgba(0,0,0,0.2); border: 1px solid var(--border); }
+.modal-box h3 { margin-bottom: 16px; font-size: 1.4rem; color: var(--text-main); }
+.modal-box p { font-size: .95rem; color: var(--text-muted); margin-bottom: 24px; }
+.modal-list a { display: flex; align-items: center; justify-content: space-between; padding: 16px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; font-weight: 600; color: var(--text-main); transition: all 0.2s; }
+.modal-list a:hover { border-color: var(--primary); box-shadow: var(--shadow); transform: translateY(-2px); }
 </style>
 </head>
+<body>
 
-<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-200">
-
-<!-- Thanh Header -->
-<header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm transition-colors duration-200">
-  <div class="max-w-[1280px] mx-auto px-4 md:px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
-    
-    <!-- Logo -->
-    <a href="#/" class="flex items-center gap-3 shrink-0">
-      <div class="logo-stamp w-10 h-10 rounded-full flex items-center justify-center font-mono font-bold text-sm text-white">Edu</div>
-      <span class="text-2xl font-heading font-extrabold tracking-tight text-primary-600 dark:text-primary-500">EduAI</span>
-    </a>
-    
-    <!-- Thanh tìm kiếm -->
-    <form class="flex-1 min-w-[240px] max-w-[480px] flex rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 focus-within:border-primary-500 dark:focus-within:border-primary-500 transition shadow-sm" id="searchForm">
-      <input type="text" id="searchInput" placeholder="Tìm kiếm tài liệu học tập..." class="flex-1 px-4 py-2.5 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 outline-none text-sm placeholder-slate-400">
-      <button type="submit" class="bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 font-semibold px-5 text-sm transition">Tìm</button>
-    </form>
-
-    <!-- Nút chức năng -->
-    <div class="flex items-center gap-3 flex-wrap">
-      <label class="theme-switch" title="Chuyển đổi giao diện Sáng/Tối">
-        <input type="checkbox" id="themeToggleCheckbox">
-        <div class="theme-slider">
-          <span class="theme-text text-light">CHẾ ĐỘ SÁNG</span>
-          <span class="theme-text text-dark">CHẾ ĐỘ TỐI</span>
-        </div>
-      </label>
-      
-      <button class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:text-primary-600 dark:hover:text-primary-400 hover:border-primary-500 font-semibold text-sm px-4 py-2.5 rounded-xl transition flex items-center gap-2 shadow-sm" onclick="showServiceModal()">
-        🚀 Dịch vụ khác
-      </button>
-      <button class="bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/50 font-semibold text-sm px-4 py-2.5 rounded-xl transition flex items-center gap-2 shadow-sm" id="aiBtn">
-        ✨ Trợ lý AI
-      </button>
-      <button class="bg-orange-500 hover:bg-orange-600 text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition shadow-sm" id="contactBtn">
-        📞 Liên hệ
-      </button>
+<header class="topbar">
+  <a href="#/" class="logo"><span class="stamp">Edu</span>EduAI</a>
+  <form class="search-form" id="searchForm">
+    <input type="text" id="searchInput" placeholder="Tìm kiếm chuyên đề, giáo án, đề thi...">
+    <button type="submit">Tìm</button>
+  </form>
+  <div class="topbar-actions">
+    <div class="theme-switch" id="themeToggle" title="Chuyển chế độ Sáng/Tối">
+      <div class="ts-text ts-text-light">CHẾ ĐỘ SÁNG</div>
+      <div class="ts-text ts-text-dark">CHẾ ĐỘ TỐI</div>
+      <div class="ts-knob"></div>
     </div>
-
+    <button class="btn btn-outline" id="servicesBtn">🚀 Dịch vụ khác</button>
+    <button class="btn btn-outline" id="aiBtn">✨ Trợ lý AI</button>
+    <button class="btn btn-accent" id="contactBtn">📞 Liên hệ</button>
   </div>
 </header>
 
-<!-- Thanh Danh mục môn học -->
-<nav class="bg-primary-600 dark:bg-slate-900 sticky top-[73px] z-40 shadow-md">
-  <div class="max-w-[1280px] mx-auto px-4 md:px-6">
-    <div class="flex gap-2 overflow-x-auto py-1.5 scrollbar-none" id="subjectRow"></div>
+<nav class="vj-nav">
+  <div class="wrap" style="display:flex; width: 100%; padding:0;">
+    <a href="#/" class="vj-home" title="Trang chủ">
+      <svg viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg>
+    </a>
+    <div class="vj-row" id="vjRow"></div>
   </div>
-  <!-- Menu con hiển thị khi bấm vào môn học -->
-  <div class="hidden absolute left-0 right-0 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 shadow-xl z-50 transition-colors" id="megaPanel"></div>
 </nav>
+<div class="mega-panel hidden" id="megaPanel"></div>
 
-<!-- Vùng nội dung chính -->
-<main id="app" class="min-h-[75vh]"></main>
+<main id="app"></main>
 
-<!-- Footer -->
-<footer class="bg-slate-900 text-slate-400 mt-16">
-  <div class="max-w-[1280px] mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 py-12 px-6" id="footerGrid"></div>
-  <div class="border-t border-slate-800 py-6 px-6 text-center text-xs bg-slate-950">
-    EduAI © 2026 — Được phát triển và xây dựng bởi Nguyễn Tiến Thành - Uy tín - chất lượng - giá rẻ.
+<footer>
+  <div class="footer-grid" id="footerGrid"></div>
+  <div class="footer-bottom">
+    EduAI © 2026 — Nền tảng học liệu điện tử chất lượng cao dành cho giáo viên Việt Nam.
   </div>
 </footer>
 
 <script>
-/* ============== DATA CONFIGURATION ============== */
 const DOCS_PER_CATEGORY = 8;
-const CONTACT_PHONE = "0819161835";
+const ZALO_PHONE = "0819161835";
+const FACEBOOK_LINK = "https://www.facebook.com/nguyen.t.thanh.545926";
 
 const SUBJECTS = [
   {id:'toan', name:'Toán', icon:'📐', grades:range(1,12)},
@@ -206,18 +312,19 @@ const SUBJECTS = [
   {id:'vatli', name:'Vật Lí', icon:'⚛️', grades:range(10,12)},
   {id:'hoahoc', name:'Hóa Học', icon:'🧪', grades:range(10,12)},
   {id:'sinhhoc', name:'Sinh Học', icon:'🌱', grades:range(10,12)},
-  {id:'tinhoc', name:'Tin Học', icon:'💻', grades:range(3,12)},
-  {id:'congnghe', name:'Công Nghệ', icon:'⚙️', grades:range(1,12)},
   {id:'lichsu', name:'Lịch Sử', icon:'🏛️', grades:range(4,12)},
   {id:'dialy', name:'Địa Lí', icon:'🌍', grades:range(4,12)},
   {id:'gdcd', name:'GDCD / KTPL', icon:'⚖️', grades:range(6,12)},
-  {id:'hdtn', name:'HĐ Trải Nghiệm', icon:'🏕️', grades:range(1,12)},
+  {id:'tinhoc', name:'Tin Học', icon:'💻', grades:range(3,12)},
+  {id:'congnghe', name:'Công Nghệ', icon:'⚙️', grades:range(1,12)},
+  {id:'hdtn', name:'Hoạt Động Trải Nghiệm', icon:'🎯', grades:range(1,12)},
 ];
 
 const DOC_TYPES = [
   {id:'sgk', name:'SGK, SGV, STK', icon:'📘', desc:'Sách giáo khoa, sách giáo viên, sách tham khảo'},
   {id:'khgd', name:'KHGD (PPCT)', icon:'🗒️', desc:'Kế hoạch giáo dục – Phân phối chương trình'},
-  {id:'khbd', name:'KHBD (Giáo án)', icon:'✏️', desc:'Kế hoạch bài dạy theo từng bài học'},
+  {id:'khbd', name:'KHBD (Giáo án)', icon:'✏️', desc:'Kế hoạch bài dạy theo từng bài học / Giáo án cả năm'},
+  {id:'daythem', name:'Chuyên đề dạy thêm', icon:'📝', desc:'Trọn bộ chuyên đề dạy thêm, bài tập cả năm (File Word)'},
   {id:'dethi', name:'Đề thi – Đề kiểm tra', icon:'📝', desc:'Đề kiểm tra định kì, đề thi học kì kèm đáp án'},
   {id:'ontap', name:'Tài liệu ôn tập', icon:'📚', desc:'Hệ thống kiến thức và bài tập ôn luyện'},
   {id:'hsg', name:'Tài liệu HSG', icon:'🏆', desc:'Chuyên đề bồi dưỡng học sinh giỏi'},
@@ -233,177 +340,157 @@ const TOPICS = {
   vatli:['Chuyển động cơ học','Lực và áp suất','Điện học cơ bản','Quang học','Nhiệt học','Điện từ học','Dao động và sóng','Thuyết tương đối hẹp'],
   hoahoc:['Cấu tạo nguyên tử','Bảng tuần hoàn nguyên tố','Phản ứng oxi hoá – khử','Axit – bazơ – muối','Hoá học hữu cơ cơ bản','Polime và vật liệu'],
   sinhhoc:['Tế bào và mô','Hệ tuần hoàn','Di truyền học','Sinh thái học','Quang hợp và hô hấp','Tiến hoá'],
-  tinhoc:['Soạn thảo văn bản','Lập trình Scratch','Mạng máy tính cơ bản','Cơ sở dữ liệu','Lập trình Python','An toàn thông tin'],
-  congnghe:['Kĩ thuật trồng trọt','Thiết kế kĩ thuật','An toàn điện trong gia đình','Chế biến thực phẩm'],
   lichsu:['Việt Nam thời kì dựng nước','Phong trào đấu tranh giành độc lập','Lịch sử thế giới cận đại','Cách mạng công nghiệp'],
   dialy:['Địa lí tự nhiên Việt Nam','Dân cư và đô thị hoá','Khí hậu và thuỷ văn','Địa lí kinh tế các vùng'],
   gdcd:['Quyền và nghĩa vụ công dân','Pháp luật hôn nhân – gia đình','Kĩ năng sống và ứng xử','Kinh tế thị trường cơ bản'],
-  hdtn:['Khám phá bản thân','Rèn luyện nếp sống','Chủ đề nghề nghiệp','Tham gia hoạt động cộng đồng','Bảo vệ môi trường'],
+  tinhoc:['Soạn thảo văn bản','Lập trình Scratch','Mạng máy tính cơ bản','Cơ sở dữ liệu','Lập trình Python','An toàn thông tin'],
+  congnghe:['Kĩ thuật trồng trọt','Thiết kế kĩ thuật','An toàn điện trong gia đình','Chế biến thực phẩm'],
+  hdtn:['Khám phá bản thân','Rèn luyện bản thân','Gia đình yêu thương','Nhà trường gắn bó','Truyền thống quê hương','Nghề nghiệp tương lai'],
 };
 
+const EDITIONS = ['Kết Nối Tri Thức'];
 const FORMATS = ['PDF','DOCX','PPTX'];
-const AUTHORS = ['EduAI']; 
+const AUTHORS = ['EduAI'];
 const PROVINCES = ['Hà Nội','TP. Hồ Chí Minh','Đà Nẵng','Hải Phòng','Cần Thơ','Huế','Nghệ An','Phú Thọ','Thanh Hoá','Bình Dương'];
-
-const LATEST = [
-  ['toan',5,'khbd',0],['nguvan',9,'dethi',1],['khtn',8,'ontap',2],['tienganh',6,'khbd',1],
-  ['hoahoc',11,'hsg',0],['khtn',7,'sgk',2],['hdtn',10,'khbd',0],['tinhoc',4,'stem',0],
-  ['dialy',10,'ontap',1],['congnghe',3,'khgd',0],
-];
 
 function range(a,b){const r=[];for(let i=a;i<=b;i++)r.push(i);return r;}
 function subjectOf(id){return SUBJECTS.find(s=>s.id===id);}
 function doctypeOf(id){return DOC_TYPES.find(t=>t.id===id);}
 
-function strHash(s){let h=0;for(let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))>>>0; return h;}
+function strHash(s){let h=0;for(let i=0;i<s.length;i++){h=(h*31+s.charCodeAt(i))>>>0;}return h;}
 function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
 function rngFor(seed){return mulberry32(strHash(seed));}
 
-function buildTitle(docType, subjectName, grade, topic, idx){
-  if(docType === 'khbd' && idx === 0) return `Giáo án cả năm môn ${subjectName} lớp ${grade} – Kết Nối Tri Thức`;
-  
+function buildTitle(docType, subjectName, grade, topic, edition, idx){
+  if(docType === 'khbd' && idx === 0) return `Giáo án cả năm ${subjectName} lớp ${grade} – ${edition}`;
+  if(docType === 'daythem' && idx === 0) return `Trọn bộ chuyên đề dạy thêm cả năm ${subjectName} lớp ${grade} (File Word)`;
   switch(docType){
-    case 'sgk': return `SGK – SGV – STK môn ${subjectName} lớp ${grade} (Kết Nối Tri Thức)`;
-    case 'khgd': return `Kế hoạch giáo dục (PPCT) môn ${subjectName} lớp ${grade} – Kết Nối Tri Thức`;
+    case 'sgk': return `SGK – SGV – STK ${subjectName} lớp ${grade} (${edition})`;
+    case 'khgd': return `Kế hoạch giáo dục (PPCT) ${subjectName} lớp ${grade} – ${edition}`;
     case 'khbd': return `Giáo án ${subjectName} lớp ${grade} – Bài ${idx}: ${topic}`;
-    case 'dethi': return `Đề kiểm tra môn ${subjectName} lớp ${grade} – ${['Giữa kì 1','Cuối kì 1','Giữa kì 2','Cuối kì 2'][idx%4]} (có đáp án)`;
-    case 'ontap': return `Tài liệu ôn tập môn ${subjectName} lớp ${grade} – Chủ đề: ${topic}`;
-    case 'hsg': return `Bồi dưỡng học sinh giỏi môn ${subjectName} lớp ${grade} – Chuyên đề: ${topic}`;
-    case 'skkn': return `SKKN: Một số biện pháp nâng cao chất lượng dạy học môn ${subjectName} lớp ${grade}`;
-    case 'stem': return `Chủ đề STEM môn ${subjectName} lớp ${grade}: ${topic}`;
+    case 'daythem': return `Chuyên đề dạy thêm ${subjectName} lớp ${grade} – Chủ đề: ${topic}`;
+    case 'dethi': return `Đề kiểm tra ${subjectName} lớp ${grade} – ${['Giữa kì 1','Cuối kì 1','Giữa kì 2','Cuối kì 2'][idx%4]} (có đáp án)`;
+    case 'ontap': return `Tài liệu ôn tập ${subjectName} lớp ${grade} – Chủ đề: ${topic}`;
+    case 'hsg': return `Bồi dưỡng học sinh giỏi ${subjectName} lớp ${grade} – Chuyên đề: ${topic}`;
+    case 'skkn': return `SKKN: Một số biện pháp nâng cao chất lượng dạy học ${subjectName} lớp ${grade}`;
+    case 'stem': return `Chủ đề STEM ${subjectName} lớp ${grade}: ${topic}`;
   }
 }
-
 function descFor(docType, subjectName, grade, topic, idx){
-  if(docType === 'khbd' && idx === 0) return `Bộ tài liệu tích hợp toàn bộ kế hoạch bài dạy (giáo án) môn ${subjectName} lớp ${grade} đầy đủ cả năm học, biên soạn kĩ lưỡng theo cấu trúc chương trình mới Kết Nối Tri Thức.`;
-  
+  if(docType === 'khbd' && idx === 0) return `Trọn bộ giáo án (Kế hoạch bài dạy) môn ${subjectName} lớp ${grade} cho cả năm học. File Word/PowerPoint chuẩn cấu trúc, dễ dàng chỉnh sửa, bám sát sách giáo khoa ${EDITIONS[0]}.`;
+  if(docType === 'daythem' && idx === 0) return `Trọn bộ tài liệu, chuyên đề và bài tập dạy thêm môn ${subjectName} lớp ${grade} cho cả năm học. Bản Word (DOCX) dễ dàng chỉnh sửa, phân loại bài tập từ cơ bản đến nâng cao.`;
   switch(docType){
-    case 'sgk': return `Tài liệu sách môn ${subjectName} lớp ${grade}, biên soạn theo chương trình GDPT 2018 bộ Kết Nối Tri Thức.`;
-    case 'khgd': return `Kế hoạch giáo dục và phân phối chương trình môn ${subjectName} lớp ${grade}, bộ sách Kết Nối Tri Thức.`;
-    case 'khbd': return `Giáo án (kế hoạch bài dạy) môn ${subjectName} lớp ${grade} cho bài "${topic}".`;
+    case 'sgk': return `Tài liệu sách giáo khoa, sách giáo viên và sách tham khảo môn ${subjectName} lớp ${grade}, biên soạn theo chương trình GDPT 2018.`;
+    case 'khgd': return `Kế hoạch giáo dục và phân phối chương trình môn ${subjectName} lớp ${grade}, trình bày chi tiết số tiết và tiến độ dạy học theo tuần.`;
+    case 'khbd': return `Giáo án (kế hoạch bài dạy) môn ${subjectName} lớp ${grade} cho bài "${topic}", trình bày đầy đủ mục tiêu, thiết bị dạy học, tiến trình hoạt động.`;
+    case 'daythem': return `Tài liệu dạy thêm, bài tập rèn luyện nâng cao môn ${subjectName} lớp ${grade} bám sát chủ đề "${topic}".`;
     case 'dethi': return `Đề kiểm tra môn ${subjectName} lớp ${grade}, kèm ma trận, bản đặc tả và đáp án chi tiết.`;
     case 'ontap': return `Tài liệu ôn tập, hệ thống lại kiến thức trọng tâm môn ${subjectName} lớp ${grade} theo chủ đề "${topic}".`;
-    case 'hsg': return `Chuyên đề bồi dưỡng học sinh giỏi môn ${subjectName} lớp ${grade} về "${topic}".`;
+    case 'hsg': return `Chuyên đề bồi dưỡng học sinh giỏi môn ${subjectName} lớp ${grade} về "${topic}", tổng hợp dạng bài nâng cao.`;
     case 'skkn': return `Sáng kiến kinh nghiệm chia sẻ biện pháp nâng cao chất lượng dạy học môn ${subjectName} lớp ${grade}.`;
-    case 'stem': return `Chủ đề dạy học STEM tích hợp môn ${subjectName} lớp ${grade}: "${topic}".`;
+    case 'stem': return `Chủ đề dạy học STEM tích hợp môn ${subjectName} lớp ${grade}: "${topic}", hướng dẫn tổ chức hoạt động trải nghiệm.`;
   }
 }
-
 function schoolLevel(grade){return grade<=5?'Tiểu học':grade<=9?'THCS':'THPT';}
 
 function generateDoc(subjectId, grade, docType, idx){
   const subject = subjectOf(subjectId);
   const rng = rngFor(`${subjectId}-${grade}-${docType}-${idx}`);
-  const topics = TOPICS[subjectId] || ['Chủ đề bài học'];
+  const topics = TOPICS[subjectId] || TOPICS['toan'];
   const topic = topics[Math.floor(rng()*topics.length)];
+  const edition = EDITIONS[0];
+  
   let format = FORMATS[Math.floor(rng()*FORMATS.length)];
-  let sizeStr, sizeUnit;
+  let sizeStr = (0.4 + rng()*9.6).toFixed(1);
+  let sizeUnit = 'MB';
 
   if(docType === 'khbd' && idx === 0) {
     format = 'DOCX/PPTX';
     sizeStr = (5.0 + rng()*5.0).toFixed(1);
     sizeUnit = 'GB';
-  } else {
-    sizeStr = (0.4 + rng()*9.6).toFixed(1);
+  }
+
+  if(docType === 'daythem') {
+    format = 'DOCX';
+    sizeStr = (10.0 + rng()*40.0).toFixed(1); 
     sizeUnit = 'MB';
   }
 
   const downloads = Math.floor(200 + rng()*4800);
-  const d = new Date(Date.now() - Math.floor(rng()*330)*86400000);
+  const daysAgo = Math.floor(rng()*330);
+  const d = new Date(Date.now() - daysAgo*86400000);
   const dateStr = d.toLocaleDateString('vi-VN');
-  
-  return {
-    subjectId, grade, docType, idx, topic, 
-    title: buildTitle(docType, subject.name, grade, topic, idx),
-    description: descFor(docType, subject.name, grade, topic, idx),
-    edition: 'Kết Nối Tri Thức', author: AUTHORS[0],
-    school: `Trường ${schoolLevel(grade)} – ${PROVINCES[Math.floor(rng()*PROVINCES.length)]}`,
-    format, sizeStr, sizeUnit, downloads, dateStr
-  };
+  const author = AUTHORS[0];
+  const province = PROVINCES[Math.floor(rng()*PROVINCES.length)];
+  const school = `Trường ${schoolLevel(grade)} – ${province}`;
+  const title = buildTitle(docType, subject.name, grade, topic, edition, idx);
+  const description = descFor(docType, subject.name, grade, topic, idx);
+  return {subjectId, grade, docType, idx, title, topic, edition, format, sizeStr, sizeUnit, downloads, dateStr, author, school, description};
 }
 
 function docCardHTML(doc){
   const subject = subjectOf(doc.subjectId);
   const dt = doctypeOf(doc.docType);
-  return `
-  <a class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 flex flex-col gap-3 shadow-sm hover:shadow-md hover:border-primary-500 transition-all duration-200 block" href="#/doc/${doc.subjectId}/${doc.grade}/${doc.docType}/${doc.idx}">
-    <div class="flex flex-wrap gap-2">
-      <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 group-hover:bg-primary-50 group-hover:text-primary-700 transition">${subject.icon} ${subject.name}</span>
-      <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 group-hover:bg-primary-50 group-hover:text-primary-700 transition">Lớp ${doc.grade}</span>
+  return `<a class="doc-card" href="#/doc/${doc.subjectId}/${doc.grade}/${doc.docType}/${doc.idx}">
+    <div class="doc-badges">
+      <span class="badge badge-subject">${subject.icon} ${subject.name}</span>
+      <span class="badge badge-grade">Lớp ${doc.grade}</span>
+      <span class="badge badge-type">${dt.name}</span>
     </div>
-    <div class="font-heading font-bold text-slate-900 dark:text-white leading-snug line-clamp-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition">${doc.title}</div>
-    <div class="text-[13px] text-slate-500 dark:text-slate-400 font-mono mt-1 flex items-center gap-2 flex-wrap">
-      <span class="font-semibold">${doc.format}</span><span>•</span><span>${doc.sizeStr} ${doc.sizeUnit}</span><span>•</span><span>${doc.dateStr}</span>
+    <div class="doc-title">${doc.title}</div>
+    <div class="doc-meta">
+      <span>${doc.format}</span><span>·</span><span>${doc.sizeStr} ${doc.sizeUnit}</span><span>·</span><span>${doc.dateStr}</span>
     </div>
-    <div class="mt-auto pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-[13px] text-orange-600 dark:text-orange-400 font-bold">
-      <span class="flex items-center gap-1">📞 Liên hệ</span>
-      <span class="font-mono text-slate-400 font-medium">${doc.downloads.toLocaleString()} tải</span>
-    </div>
+    <div class="dl-link"><span>Xem chi tiết</span><span>${doc.downloads.toLocaleString('vi-VN')} tải</span></div>
   </a>`;
 }
 
 function breadcrumbHTML(items){
-  return `<div class="flex flex-wrap items-center gap-2 text-sm text-slate-500 font-medium py-6">` + items.map((it,i)=>{
-    const sep = i>0 ? `<span class="text-slate-300 dark:text-slate-700">/</span>` : '';
-    return sep + (it.href ? `<a href="${it.href}" class="hover:text-primary-600 transition">${it.label}</a>` : `<span class="text-slate-900 dark:text-white">${it.label}</span>`);
+  return `<div class="breadcrumb">` + items.map((it,i)=>{
+    const sep = i>0 ? '<span>/</span>' : '';
+    return sep + (it.href ? `<a href="${it.href}">${it.label}</a>` : `<span>${it.label}</span>`);
   }).join(' ') + `</div>`;
 }
 
 function renderHome(){
+  const LATEST = [
+    ['toan',5,'daythem',0],['hdtn',10,'khbd',0],['khtn',8,'ontap',2],['tienganh',6,'khbd',1],
+    ['nguvan',9,'dethi',1],['hoahoc',11,'daythem',0],['khtn',7,'sgk',2],['lichsu',12,'dethi',0]
+  ];
   const latestHTML = LATEST.map(([s,g,t,i])=>docCardHTML(generateDoc(s,g,t,i))).join('');
   const subjectCardsHTML = SUBJECTS.map(s=>`
-    <a class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 hover:border-primary-500 hover:shadow-md transition text-center flex flex-col items-center justify-center group block" href="#/subject/${s.id}">
-      <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">${s.icon}</div>
-      <div class="font-heading font-bold text-slate-900 dark:text-white">${s.name}</div>
-      <div class="text-xs text-slate-500 font-mono mt-2">Lớp ${s.grades[0]}–${s.grades[s.grades.length-1]}</div>
+    <a class="subject-card" href="#/subject/${s.id}">
+      <div class="sc-icon">${s.icon}</div>
+      <div class="sc-name">${s.name}</div>
+      <div class="sc-meta">Lớp ${s.grades[0]}–${s.grades[s.grades.length-1]}</div>
     </a>`).join('');
-  const doctypeChipsHTML = DOC_TYPES.map(t=>`
-    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 flex gap-4">
-      <div class="text-3xl">${t.icon}</div>
-      <div>
-        <div class="font-heading font-bold text-slate-900 dark:text-white">${t.name}</div>
-        <div class="text-sm text-slate-500 mt-1 leading-relaxed">${t.desc}</div>
-      </div>
-    </div>`).join('');
 
   document.getElementById('app').innerHTML = `
-  <section class="py-20 px-4 md:px-6 relative bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 transition-colors">
-    <div class="max-w-[1280px] mx-auto text-center max-w-3xl">
-      <h1 class="text-4xl md:text-5xl font-heading font-extrabold text-slate-900 dark:text-white leading-tight mb-6">
-        Thư viện học liệu tinh gọn cho giáo viên Việt Nam
-      </h1>
-      <p class="text-slate-600 dark:text-slate-400 text-lg mb-10 leading-relaxed mx-auto max-w-2xl">
-        Hệ thống sắp xếp khoa học, hiện đại. Tra cứu giáo án, đề thi và chuyên đề bồi dưỡng môn học của bạn dễ dàng hơn bao giờ hết.
-      </p>
-      <div class="flex justify-center flex-wrap gap-4 mb-12">
-        <a class="bg-primary-600 hover:bg-primary-700 text-white font-bold px-8 py-3.5 rounded-xl transition shadow-sm" href="#/subject/toan">Duyệt danh mục</a>
-        <button class="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-bold px-8 py-3.5 rounded-xl transition shadow-sm" onclick="showAIModal()">✨ Hỏi trợ lý AI</button>
+  <section class="hero">
+    <div class="wrap">
+      <h1>Thư viện học liệu, có <em>AI</em> đồng hành cho giáo viên Việt Nam</h1>
+      <p>Tra cứu chuyên đề dạy thêm, giáo án, đề kiểm tra, SGK bám sát chương trình GDPT 2018.</p>
+      <div style="display:flex; justify-content:center; gap:12px; margin-top:20px;">
+        <a class="btn btn-primary" style="padding: 12px 24px; font-size: 1rem;" href="#/category/toan/10/daythem">Khám phá chuyên đề</a>
       </div>
-      <div class="flex justify-center gap-8 md:gap-16 flex-wrap">
-        <div><div class="text-3xl font-heading font-extrabold text-primary-600 dark:text-primary-500">13</div><div class="text-xs uppercase tracking-wider text-slate-500 font-bold mt-2">Môn học</div></div>
-        <div><div class="text-3xl font-heading font-extrabold text-primary-600 dark:text-primary-500">12</div><div class="text-xs uppercase tracking-wider text-slate-500 font-bold mt-2">Khối lớp</div></div>
-        <div><div class="text-3xl font-heading font-extrabold text-primary-600 dark:text-primary-500">1800+</div><div class="text-xs uppercase tracking-wider text-slate-500 font-bold mt-2">Tài liệu</div></div>
+      <div class="hero-stats">
+        <div><div class="stat-num">1800+</div><div class="stat-label">tài liệu</div></div>
+        <div><div class="stat-num">13</div><div class="stat-label">môn học</div></div>
+        <div><div class="stat-num">12</div><div class="stat-label">khối lớp</div></div>
+        <div><div class="stat-num">1</div><div class="stat-label">bộ sách GDPT 2018</div></div>
       </div>
     </div>
   </section>
 
-  <div class="max-w-[1280px] mx-auto px-4 md:px-6">
-    <section class="py-16 border-b border-slate-200 dark:border-slate-800">
-      <h2 class="text-2xl font-heading font-bold text-slate-900 dark:text-white mb-8">Duyệt theo môn học</h2>
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">${subjectCardsHTML}</div>
+  <div class="wrap">
+    <section class="section">
+      <div class="section-head"><div><div class="eyebrow">Danh mục</div><h2>Duyệt theo môn học</h2></div></div>
+      <div class="subject-grid">${subjectCardsHTML}</div>
     </section>
 
-    <section class="py-16 border-b border-slate-200 dark:border-slate-800">
-      <div class="flex justify-between items-end mb-8 gap-4 flex-wrap">
-        <h2 class="text-2xl font-heading font-bold text-slate-900 dark:text-white">Tài liệu mới cập nhật</h2>
-        <span class="text-sm font-mono text-slate-500">Dữ liệu mẫu Kết Nối Tri Thức</span>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">${latestHTML}</div>
-    </section>
-
-    <section class="py-16">
-      <h2 class="text-2xl font-heading font-bold text-slate-900 dark:text-white mb-8">Phân loại học liệu</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">${doctypeChipsHTML}</div>
+    <section class="section" style="padding-top:0; padding-bottom:60px;">
+      <div class="section-head"><div><div class="eyebrow">Cập nhật</div><h2>Tài liệu mới đăng</h2></div></div>
+      <div class="doc-grid">${latestHTML}</div>
     </section>
   </div>`;
 }
@@ -411,30 +498,24 @@ function renderHome(){
 function renderSubjectHub(subjectId){
   const subject = subjectOf(subjectId);
   if(!subject){renderNotFound(); return;}
-  
-  const gradeChips = subject.grades.map(g=>`<a class="px-5 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-400 rounded-xl font-semibold transition block text-center" href="#/category/${subjectId}/${g}/khbd">Lớp ${g}</a>`).join('');
-  
-  const doctypeChips = DOC_TYPES.map(t=>`
-    <a class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 flex gap-4 hover:border-primary-500 transition group block" href="#/category/${subjectId}/${subject.grades[0]}/${t.id}">
-      <div class="text-3xl">${t.icon}</div>
-      <div>
-        <div class="font-heading font-bold text-slate-900 dark:text-white group-hover:text-primary-600 transition">${t.name}</div>
-        <div class="text-sm text-slate-500 mt-1">${t.desc}</div>
-      </div>
-    </a>`).join('');
+  const gradeChips = subject.grades.map(g=>`<a class="chip" href="#/category/${subjectId}/${g}/daythem">Lớp ${g}</a>`).join('');
+  const doctypeChips = DOC_TYPES.map(t=>`<a class="chip" href="#/category/${subjectId}/${subject.grades[0]}/${t.id}">${t.icon} ${t.name}</a>`).join('');
 
   document.getElementById('app').innerHTML = `
-  <div class="max-w-[1280px] mx-auto px-4 md:px-6">
+  <div class="wrap">
     ${breadcrumbHTML([{label:'Trang chủ', href:'#/'},{label:subject.name}])}
-    <section class="py-8">
-      <h1 class="text-3xl md:text-4xl font-heading font-extrabold text-slate-900 dark:text-white mb-4">${subject.icon} Tài liệu môn ${subject.name}</h1>
-      <p class="text-slate-600 dark:text-slate-400 max-w-3xl text-lg">Hệ thống phân loại tài liệu môn ${subject.name} từ lớp ${subject.grades[0]} đến lớp ${subject.grades[subject.grades.length-1]}. Bạn vui lòng chọn khối lớp hoặc định dạng tài liệu bên dưới để bắt đầu.</p>
-
-      <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider font-mono mt-12 mb-6">1. Chọn khối lớp</h3>
-      <div class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-8 gap-3">${gradeChips}</div>
-
-      <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider font-mono mt-12 mb-6">2. Hoặc duyệt theo loại học liệu</h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">${doctypeChips}</div>
+    <section class="section">
+      <h1 style="font-size:2rem;">${subject.icon} Môn ${subject.name}</h1>
+      <p class="desc-text" style="max-width:700px; margin-bottom: 30px;">Duyệt tài liệu môn ${subject.name} theo khối lớp ${subject.grades[0]}–${subject.grades[subject.grades.length-1]} và theo loại tài liệu.</p>
+      
+      <div class="filter-box">
+        <h4>Chọn khối lớp</h4>
+        <div class="chip-row">${gradeChips}</div>
+      </div>
+      <div class="filter-box">
+        <h4>Hoặc chọn loại tài liệu</h4>
+        <div class="chip-row">${doctypeChips}</div>
+      </div>
     </section>
   </div>`;
 }
@@ -445,32 +526,32 @@ function renderCategory(subjectId, grade, docType){
   if(!subject || !subject.grades.includes(grade) || !doctypeOf(docType)){renderNotFound(); return;}
   const dt = doctypeOf(docType);
 
-  const gradeChips = subject.grades.map(g=>`<a class="px-4 py-2 rounded-lg text-sm font-semibold border text-center transition ${g===grade?'bg-primary-600 border-primary-600 text-white shadow-sm':'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 hover:border-primary-500'}" href="#/category/${subjectId}/${g}/${docType}">Lớp ${g}</a>`).join('');
-  const typeList = DOC_TYPES.map(t=>`<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition ${t.id===docType?'bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400':'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'}" href="#/category/${subjectId}/${grade}/${t.id}"><span class="text-xl">${t.icon}</span> <span>${t.name}</span></a>`).join('');
+  const gradeChips = subject.grades.map(g=>`<a class="chip ${g===grade?'active':''}" href="#/category/${subjectId}/${g}/${docType}">Lớp ${g}</a>`).join('');
+  const typeList = DOC_TYPES.map(t=>`<a class="${t.id===docType?'active':''}" href="#/category/${subjectId}/${grade}/${t.id}"><span>${t.icon}</span> ${t.name}</a>`).join('');
 
   const docs = [];
   for(let i=0;i<DOCS_PER_CATEGORY;i++) docs.push(generateDoc(subjectId, grade, docType, i));
 
   document.getElementById('app').innerHTML = `
-  <div class="max-w-[1280px] mx-auto px-4 md:px-6">
+  <div class="wrap">
     ${breadcrumbHTML([{label:'Trang chủ', href:'#/'},{label:subject.name, href:'#/subject/'+subjectId},{label:'Lớp '+grade},{label:dt.name}])}
-    <section class="py-4">
-      <h1 class="text-2xl md:text-3xl font-heading font-extrabold text-slate-900 dark:text-white mb-2">${dt.icon} ${dt.name} – ${subject.name} lớp ${grade}</h1>
-      <p class="text-slate-500 mb-10">${dt.desc}.</p>
+    <section class="section">
+      <h1 style="font-size:1.8rem;">${dt.name} – ${subject.name} lớp ${grade}</h1>
+      <p class="desc-text" style="max-width:700px; margin-bottom:30px;">${dt.desc}.</p>
 
-      <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        <aside class="lg:col-span-1 flex flex-col gap-8">
-          <div>
-            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono mb-4">Khối lớp</h4>
-            <div class="grid grid-cols-3 gap-2">${gradeChips}</div>
+      <div class="cat-layout">
+        <aside>
+          <div class="filter-box">
+            <h4>Khối lớp</h4>
+            <div class="chip-row">${gradeChips}</div>
           </div>
-          <div>
-            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono mb-4">Phân loại</h4>
-            <div class="flex flex-col gap-1">${typeList}</div>
+          <div class="filter-box">
+            <h4>Loại tài liệu</h4>
+            <div class="filter-list" style="display:flex; flex-direction:column; gap:4px;">${typeList}</div>
           </div>
         </aside>
-        <div class="lg:col-span-3">
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">${docs.map(docCardHTML).join('')}</div>
+        <div>
+          <div class="doc-grid">${docs.map(docCardHTML).join('')}</div>
         </div>
       </div>
     </section>
@@ -484,48 +565,40 @@ function renderDoc(subjectId, grade, docType, idx){
   const dt = doctypeOf(docType);
   const doc = generateDoc(subjectId, grade, docType, idx);
 
-  const relatedIdx = [];
-  for(let i=0;i<DOCS_PER_CATEGORY;i++) if(i!==idx) relatedIdx.push(i);
-  const relatedHTML = relatedIdx.slice(0,5).map(i=>{
+  const relatedHTML = range(0,3).filter(i=>i!==idx).map(i=>{
     const rd = generateDoc(subjectId, grade, docType, i);
-    return `<a class="block py-3 border-b border-slate-100 dark:border-slate-800 text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-primary-600 dark:hover:text-primary-400 transition" href="#/doc/${subjectId}/${grade}/${docType}/${i}">${rd.title}</a>`;
+    return `<a href="#/doc/${subjectId}/${grade}/${docType}/${i}">${rd.title}</a>`;
   }).join('');
 
   document.getElementById('app').innerHTML = `
-  <div class="max-w-[1280px] mx-auto px-4 md:px-6">
-    ${breadcrumbHTML([{label:'Trang chủ', href:'#/'},{label:subject.name, href:'#/subject/'+subjectId},{label:'Lớp '+grade, href:'#/category/'+subjectId+'/'+grade+'/'+docType},{label:dt.name, href:'#/category/'+subjectId+'/'+grade+'/'+docType},{label:'Chi tiết tài liệu'}])}
-    <section class="py-4">
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div class="lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 md:p-10 rounded-2xl shadow-sm">
-          <div class="flex flex-wrap gap-2 mb-6">
-            <span class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">${subject.icon} Môn ${subject.name}</span>
-            <span class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">Lớp ${grade}</span>
-            <span class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400">${dt.name}</span>
+  <div class="wrap">
+    ${breadcrumbHTML([{label:'Trang chủ', href:'#/'},{label:subject.name, href:'#/subject/'+subjectId},{label:'Lớp '+grade, href:'#/category/'+subjectId+'/'+grade+'/'+docType},{label:dt.name, href:'#/category/'+subjectId+'/'+grade+'/'+docType},{label:'Chi tiết'}])}
+    <section class="section">
+      <div class="detail-layout">
+        <div class="detail-card">
+          <div class="doc-badges" style="margin-bottom:16px;">
+            <span class="badge badge-subject">${subject.icon} ${subject.name}</span>
+            <span class="badge badge-grade">Lớp ${grade}</span>
+            <span class="badge badge-type">${dt.name}</span>
           </div>
-          <h1 class="text-2xl md:text-3xl font-heading font-extrabold text-slate-900 dark:text-white leading-tight">${doc.title}</h1>
-          
-          <div class="grid grid-cols-2 md:grid-cols-3 gap-6 my-8 p-6 bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-100 dark:border-slate-800">
-            <div><div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider font-mono mb-1">Tác giả</div><div class="font-semibold text-slate-900 dark:text-white text-sm">${doc.author}</div></div>
-            <div><div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider font-mono mb-1">Bộ sách</div><div class="font-semibold text-slate-900 dark:text-white text-sm">${doc.edition}</div></div>
-            <div><div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider font-mono mb-1">Ngày đăng</div><div class="font-semibold text-slate-900 dark:text-white text-sm font-mono">${doc.dateStr}</div></div>
-            <div class="col-span-2 md:col-span-1"><div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider font-mono mb-1">Định dạng & Dung lượng</div><div class="font-semibold text-slate-900 dark:text-white text-sm font-mono">${doc.format} • ${doc.sizeStr} ${doc.sizeUnit}</div></div>
-            <div><div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider font-mono mb-1">Lượt tải</div><div class="font-semibold text-slate-900 dark:text-white text-sm font-mono">${doc.downloads.toLocaleString()}</div></div>
+          <h1 style="font-size:1.8rem;">${doc.title}</h1>
+          <div class="meta-grid">
+            <div class="meta-item"><div class="mi-label">Tác giả</div><div class="mi-value">${doc.author}</div></div>
+            <div class="meta-item"><div class="mi-label">Đơn vị</div><div class="mi-value">${doc.school}</div></div>
+            <div class="meta-item"><div class="mi-label">Ngày đăng</div><div class="mi-value mono">${doc.dateStr}</div></div>
+            <div class="meta-item"><div class="mi-label">Bộ sách</div><div class="mi-value">${doc.edition}</div></div>
+            <div class="meta-item"><div class="mi-label">Định dạng</div><div class="mi-value mono">${doc.format}</div></div>
+            <div class="meta-item"><div class="mi-label">Dung lượng</div><div class="mi-value mono" style="color:var(--accent);">${doc.sizeStr} ${doc.sizeUnit}</div></div>
           </div>
-          
-          <div class="prose dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 text-base leading-relaxed mb-10">
-            <p>${doc.description}</p>
-          </div>
-          
-          <div class="flex flex-wrap gap-4 pt-8 border-t border-slate-100 dark:border-slate-800">
-            <button class="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-3.5 rounded-xl transition shadow-sm flex items-center gap-2" onclick="showContactModal()">📞 Liên hệ Zalo để tải</button>
-            <a class="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-bold px-8 py-3.5 rounded-xl transition shadow-sm" href="#/category/${subjectId}/${grade}/${docType}">Trở về thư mục</a>
+          <p class="desc-text">${doc.description}</p>
+          <div style="margin-top:30px; display:flex; gap:12px; flex-wrap:wrap;">
+            <button class="btn btn-accent" style="padding:12px 24px;" onclick="showContactModal()">📞 Liên hệ để tải xuống</button>
           </div>
         </div>
-        
-        <aside class="lg:col-span-1">
-          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-2xl shadow-sm sticky top-[100px]">
-            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono mb-4">Tài liệu cùng chuyên mục</h4>
-            <div class="flex flex-col">${relatedHTML}</div>
+        <aside>
+          <div class="related-card">
+            <h4 style="font-size:.8rem; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); margin-bottom:12px;">Tài liệu liên quan</h4>
+            ${relatedHTML}
           </div>
         </aside>
       </div>
@@ -535,198 +608,287 @@ function renderDoc(subjectId, grade, docType, idx){
 
 function renderNotFound(){
   document.getElementById('app').innerHTML = `
-  <div class="max-w-[1280px] mx-auto px-6 py-24 text-center">
-    <div class="text-6xl mb-6">📭</div>
-    <h2 class="text-2xl font-heading font-bold text-slate-900 dark:text-white">Trang không tồn tại</h2>
-    <p class="text-slate-500 mt-2 mb-8">Danh mục hoặc tài liệu bạn đang tìm kiếm chưa được cập nhật dữ liệu mẫu.</p>
-    <a class="bg-primary-600 hover:bg-primary-700 text-white font-bold px-6 py-3 rounded-xl inline-block transition shadow-sm" href="#/">Quay lại Trang chủ</a>
+  <div class="wrap"><section class="section empty-state">
+    <h2 style="font-size:3rem; margin-bottom:10px;">📭</h2>
+    <h2>Không tìm thấy trang</h2>
+    <p>Nội dung bạn tìm kiếm không tồn tại hoặc đã bị gỡ.</p>
+    <a class="btn btn-primary" style="margin-top:20px;" href="#/">Về trang chủ</a>
+  </section></div>`;
+}
+
+function renderSearch(query){
+  const q = (query||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  
+  // Từ điển AI map (Đã nạp thêm rất nhiều từ khóa)
+  const dict = {
+    'giao an': 'khbd', 'khbd': 'khbd', 'ke hoach bai day': 'khbd', 'giao an ca nam': 'khbd',
+    'de thi': 'dethi', 'de kiem tra': 'dethi', 'kiem tra': 'dethi', 'giua ki': 'dethi', 'cuoi ki': 'dethi',
+    'day them': 'daythem', 'chuyen de': 'daythem', 'bai tap': 'daythem', 'chuyen de day them': 'daythem',
+    'sgk': 'sgk', 'sach giao khoa': 'sgk', 'hsg': 'hsg', 'hoc sinh gioi': 'hsg', 'boi duong': 'hsg',
+    'on tap': 'ontap', 'de cuong': 'ontap', 'skkn': 'skkn', 'sang kien': 'skkn',
+    'toan': 'toan', 'van': 'nguvan', 'ngu van': 'nguvan', 'anh': 'tienganh', 'tieng anh': 'tienganh',
+    'ly': 'vatli', 'vat ly': 'vatli', 'vat li': 'vatli', 'hoa': 'hoahoc', 'hoa hoc': 'hoahoc', 
+    'sinh': 'sinhhoc', 'sinh hoc': 'sinhhoc', 'khtn': 'khtn', 'khoa hoc tu nhien': 'khtn',
+    'su': 'lichsu', 'lich su': 'lichsu', 'dia': 'dialy', 'dia ly': 'dialy', 'dia li': 'dialy',
+    'gdcd': 'gdcd', 'cong dan': 'gdcd', 'tin': 'tinhoc', 'tin hoc': 'tinhoc', 'cong nghe': 'congnghe', 'hdtn': 'hdtn', 'trai nghiem': 'hdtn'
+  };
+
+  let foundDocType = null;
+  let foundSubject = null;
+  let foundGrade = null;
+  let foundTopic = false;
+
+  // Quét ý định (Intent extraction)
+  Object.keys(dict).forEach(key => { 
+    if(q.includes(key)) {
+      const val = dict[key];
+      if(DOC_TYPES.some(t => t.id === val)) foundDocType = val;
+      if(SUBJECTS.some(s => s.id === val)) foundSubject = val;
+    }
+  });
+  
+  const gradeMatch = q.match(/(?:lop|khoi|\s|^)(\d{1,2})(?:\s|$)/);
+  if(gradeMatch) foundGrade = parseInt(gradeMatch[1]);
+
+  // Điều hướng thông minh (Smart Router)
+  if (foundSubject && !foundDocType && !foundGrade) {
+    location.replace(`#/subject/${foundSubject}`); return;
+  }
+  
+  let matchedDocsHTML = "";
+  let results = [];
+  
+  // NẾU CHỈ GÕ TÊN LOẠI TÀI LIỆU (VD: "CHUYÊN ĐỀ", "GIÁO ÁN") MÀ KHÔNG GÕ MÔN -> HIỆN TẤT CẢ CÁC MÔN & CÁC LỚP
+  if (foundDocType && !foundSubject) {
+    foundTopic = true;
+    SUBJECTS.forEach(s => {
+       // Nếu có gõ lớp (VD: "chuyên đề lớp 10") thì chỉ lấy lớp đó, không thì lấy toàn bộ các lớp
+       let gradesToShow = (foundGrade && s.grades.includes(foundGrade)) ? [foundGrade] : s.grades;
+       
+       gradesToShow.forEach(g => {
+           results.push(generateDoc(s.id, g, foundDocType, 0)); // File trọn bộ cả năm
+           results.push(generateDoc(s.id, g, foundDocType, 1)); // File chuyên đề/bài học 1
+           results.push(generateDoc(s.id, g, foundDocType, 2)); // File chuyên đề/bài học 2
+       });
+    });
+  }
+  // QUÉT CHỦ ĐỀ SÂU TRONG TÊN BÀI HỌC
+  else if (!foundSubject && !foundDocType) {
+    Object.keys(TOPICS).forEach(sid => {
+      TOPICS[sid].forEach((topic, idx) => {
+        if(topic.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').includes(q)){
+          foundTopic = true;
+          const s = subjectOf(sid);
+          let g = (foundGrade && s.grades.includes(foundGrade)) ? foundGrade : s.grades[0];
+          let dt = 'khbd';
+          if(q.includes('bai tap') || q.includes('chuyen de')) dt = 'daythem';
+          results.push(generateDoc(sid, g, dt, idx+1)); 
+        }
+      });
+    });
+  }
+
+  // Trộn ngẫu nhiên mảng để kết quả hiển thị đan xen nhiều môn học/lớp học khác nhau
+  results.sort(() => Math.random() - 0.5);
+
+  if(results.length > 0) {
+     // Tăng giới hạn hiển thị từ 12 lên 80 file để người dùng lướt "mỏi tay"
+     matchedDocsHTML = results.slice(0, 80).map(docCardHTML).join('');
+  }
+
+  // Render trang kết quả Fallback
+  document.getElementById('app').innerHTML = `
+  <div class="wrap">
+    ${breadcrumbHTML([{label:'Trang chủ', href:'#/'},{label:'Tìm kiếm'}])}
+    <section class="section">
+      <h1 style="font-size:1.8rem; margin-bottom: 20px;">Kết quả cho: "${query}"</h1>
+      ${foundTopic && matchedDocsHTML ? `
+        <div class="section-head"><div><div class="eyebrow">Trí tuệ nhân tạo</div><h2>Gợi ý tài liệu phù hợp</h2></div></div>
+        <div class="doc-grid">${matchedDocsHTML}</div>
+      ` : `
+        <div class="empty-state">
+          <h2 style="font-size:3rem; margin-bottom:10px;">🔍</h2>
+          <h3>Chưa xác định rõ yêu cầu</h3>
+          <p>Hãy thử gõ rõ hơn, ví dụ: <b>Giáo án toán 10</b> hoặc <b>Chuyên đề văn 9</b>.</p>
+        </div>
+      `}
+    </section>
   </div>`;
 }
 
-function showContactModal() {
-  const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
-  overlay.innerHTML = `<div class="modal-box bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-8 max-w-[400px] w-full text-center shadow-2xl">
-    <div class="text-5xl mb-4">💬</div>
-    <h3 class="text-xl font-heading font-bold text-slate-900 dark:text-white">Liên hệ lấy tài liệu</h3>
-    <p class="text-sm text-slate-600 dark:text-slate-400 mt-3 mb-6 leading-relaxed">Hãy liên hệ trực tiếp qua Zalo để nhận trọn bộ học liệu chuẩn, không lỗi font, kèm hỗ trợ chỉnh sửa giáo án chuyên nghiệp.</p>
-    <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 mb-8 font-mono text-2xl font-extrabold text-primary-600 dark:text-primary-400 tracking-widest">
-      ${CONTACT_PHONE}
-    </div>
-    <div class="flex gap-3 justify-center">
-      <a href="https://zalo.me/${CONTACT_PHONE}" target="_blank" class="bg-primary-600 hover:bg-primary-700 text-white font-bold text-sm px-6 py-3 rounded-xl transition flex-1 shadow-sm">Mở Zalo</a>
-      <button class="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-bold text-sm px-6 py-3 rounded-xl transition flex-1" id="modalClose">Đóng</button>
-    </div>
-  </div>`;
-  document.body.appendChild(overlay);
-  const close = ()=> overlay.remove();
-  overlay.addEventListener('click', e=>{ if(e.target===overlay) close(); });
-  overlay.querySelector('#modalClose').addEventListener('click', close);
-}
+let megaState = { gradeMode: null };
 
-function buildOptionButton(icon, text) {
-  return `<button class="w-full bg-slate-50 dark:bg-slate-800 hover:bg-white dark:hover:bg-slate-700 border border-slate-100 dark:border-slate-700 hover:border-primary-500 dark:hover:border-primary-500 hover:shadow-md p-4 rounded-xl flex items-center gap-4 transition-all group" onclick="showContactModal()">
-    <span class="text-2xl">${icon}</span>
-    <span class="font-bold text-sm text-slate-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 text-left flex-1">${text}</span>
-  </button>`;
-}
+function buildNavRow(){
+  const grades = range(1, 12);
+  let html = grades.map(g => `<button class="vj-tab" data-grade="${g}">Lớp ${g}</button>`).join('');
+  html += `<button class="vj-tab" data-special="khbd" style="margin-left:auto;">Giáo án - Đề thi</button>`;
+  document.getElementById('vjRow').innerHTML = html;
 
-function showAIModal(){
-  const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
-  overlay.innerHTML = `<div class="modal-box bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-8 max-w-[440px] w-full shadow-2xl">
-    <div class="flex items-center gap-3 mb-2">
-      <div class="text-2xl">✨</div>
-      <h3 class="text-xl font-heading font-bold text-slate-900 dark:text-white">Trợ lý EduAI</h3>
-    </div>
-    <p class="text-sm text-slate-600 dark:text-slate-400 mb-8">Hệ thống cung cấp giải pháp AI toàn diện cho giáo viên. Hãy chọn mục bạn quan tâm để chuyên viên hỗ trợ:</p>
-    <div class="flex flex-col gap-3 mb-8">
-      ${buildOptionButton('📊', 'Mô phỏng AI trong dạy học')}
-      ${buildOptionButton('💻', 'Phần mềm giáo dục AI giá rẻ')}
-      ${buildOptionButton('🎓', 'Khóa học AI trong dạy học')}
-    </div>
-    <button class="w-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-bold text-sm px-4 py-3 rounded-xl transition" id="modalClose">Đóng lại</button>
-  </div>`;
-  document.body.appendChild(overlay);
-  const close = ()=> overlay.remove();
-  overlay.addEventListener('click', e=>{ if(e.target===overlay) close(); });
-  overlay.querySelector('#modalClose').addEventListener('click', close);
-  overlay.querySelectorAll('button[onclick]').forEach(btn => btn.addEventListener('click', close));
-}
-
-function showServiceModal(){
-  const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
-  overlay.innerHTML = `<div class="modal-box bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-8 max-w-[440px] w-full shadow-2xl">
-    <div class="flex items-center gap-3 mb-2">
-      <div class="text-2xl">🚀</div>
-      <h3 class="text-xl font-heading font-bold text-slate-900 dark:text-white">Dịch vụ mở rộng</h3>
-    </div>
-    <p class="text-sm text-slate-600 dark:text-slate-400 mb-8">EduAI cung cấp các dịch vụ tối ưu công nghệ hỗ trợ giáo viên. Vui lòng chọn dịch vụ:</p>
-    <div class="flex flex-col gap-3 mb-8">
-      ${buildOptionButton('📈', 'Dịch vụ MXH (Tăng Follow, Like, Tym...)')}
-      ${buildOptionButton('🤖', 'Gemini AI Pro, Canva, Claude giá rẻ')}
-      ${buildOptionButton('🌐', 'Xây dựng Fanpage dạy học online')}
-    </div>
-    <button class="w-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-bold text-sm px-4 py-3 rounded-xl transition" id="modalClose">Đóng lại</button>
-  </div>`;
-  document.body.appendChild(overlay);
-  const close = ()=> overlay.remove();
-  overlay.addEventListener('click', e=>{ if(e.target===overlay) close(); });
-  overlay.querySelector('#modalClose').addEventListener('click', close);
-  overlay.querySelectorAll('button[onclick]').forEach(btn => btn.addEventListener('click', close));
-}
-
-let megaState = {subjectId:null, grade:null};
-
-function buildSubjectRow(){
-  const navHTML = SUBJECTS.map(s=>`<button class="px-5 py-3 whitespace-nowrap text-sm font-semibold transition-colors border-b-[3px] border-transparent text-white/80 hover:text-white" data-id="${s.id}">${s.icon} ${s.name}</button>`).join('');
-  document.getElementById('subjectRow').innerHTML = navHTML;
-  document.getElementById('subjectRow').querySelectorAll('[data-id]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const id = btn.dataset.id;
-      if(megaState.subjectId === id) closeMegaPanel();
-      else openMegaPanel(id);
+  document.getElementById('vjRow').querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const mode = btn.dataset.grade ? parseInt(btn.dataset.grade) : btn.dataset.special;
+      if(megaState.gradeMode === mode) closeMegaPanel();
+      else openMegaPanelForGrade(mode);
     });
   });
 }
 
-function openMegaPanel(subjectId, grade){
-  const subject = subjectOf(subjectId);
-  megaState.subjectId = subjectId;
-  megaState.grade = grade || subject.grades[0];
+function openMegaPanelForGrade(mode){
+  megaState.gradeMode = mode;
   const panel = document.getElementById('megaPanel');
   
-  const gradeChips = subject.grades.map(g=>`<button class="px-4 py-1.5 rounded-lg text-sm font-semibold transition ${g===megaState.grade?'bg-primary-600 text-white':'bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'}" data-grade="${g}">Lớp ${g}</button>`).join('');
-  const typeLinks = DOC_TYPES.map(t=>`<a class="flex items-center gap-3 p-3 hover:bg-slate-50 dark:hover:bg-slate-900 rounded-xl transition text-sm font-medium text-slate-900 dark:text-white" href="#/category/${subjectId}/${megaState.grade}/${t.id}"><span class="text-xl">${t.icon}</span> ${t.name}</a>`).join('');
-  
-  panel.innerHTML = `
-    <div class="max-w-[1280px] mx-auto px-4 md:px-6 py-8 grid grid-cols-1 md:grid-cols-2 gap-10">
-      <div><h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono mb-4">Khối lớp</h4><div class="flex flex-wrap gap-2">${gradeChips}</div></div>
-      <div><h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono mb-4">Học liệu lớp ${megaState.grade}</h4><div class="grid grid-cols-2 gap-2">${typeLinks}</div></div>
+  if(mode === 'khbd') {
+    const typeLinks = DOC_TYPES.map(t=>`<a class="mega-link" href="#/category/toan/10/${t.id}"><span class="dt-icon">${t.icon}</span> <span style="font-weight:600;">${t.name}</span></a>`).join('');
+    panel.innerHTML = `<div class="mega-inner"><div class="mega-col" style="grid-column: 1 / -1;"><h4>Tra cứu theo loại tài liệu</h4><div class="mega-doctype-list" style="grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));">${typeLinks}</div></div></div>`;
+  } else {
+    const grade = parseInt(mode);
+    const subjectsForGrade = SUBJECTS.filter(s => s.grades.includes(grade));
+    const subjLinks = subjectsForGrade.map(s => `<a class="mega-link" href="#/category/${s.id}/${grade}/daythem"><span class="dt-icon">${s.icon}</span> <span style="font-weight:600;">Môn ${s.name}</span></a>`).join('');
+    const typeLinks = DOC_TYPES.map(t=>`<a class="mega-link" href="#/category/toan/${grade}/${t.id}"><span class="dt-icon">${t.icon}</span> <span style="font-weight:600;">${t.name}</span></a>`).join('');
+    
+    panel.innerHTML = `<div class="mega-inner">
+      <div class="mega-col"><h4>Môn học Lớp ${grade}</h4><div class="mega-doctype-list">${subjLinks}</div></div>
+      <div class="mega-col"><h4>Loại tài liệu Lớp ${grade}</h4><div class="mega-doctype-list">${typeLinks}</div></div>
     </div>`;
+  }
   
   panel.classList.remove('hidden');
-  panel.querySelectorAll('[data-grade]').forEach(btn=>btn.addEventListener('click', ()=>openMegaPanel(subjectId, parseInt(btn.dataset.grade,10))));
   panel.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMegaPanel));
-  highlightActiveTab(subjectId);
+  highlightActiveNav(mode);
 }
 
 function closeMegaPanel(){
-  megaState = {subjectId:null, grade:null};
+  megaState.gradeMode = null;
   document.getElementById('megaPanel').classList.add('hidden');
-  highlightActiveTab(currentRouteSubject());
+  highlightActiveNav(currentRouteGrade());
 }
 
-function highlightActiveTab(subjectId){
-  document.querySelectorAll('#subjectRow [data-id]').forEach(b=>{
-    const isActive = b.dataset.id === subjectId;
-    b.classList.toggle('border-white', isActive);
-    b.classList.toggle('text-white', isActive);
-    b.classList.toggle('text-white/80', !isActive);
+function highlightActiveNav(mode){
+  document.querySelectorAll('#vjRow button').forEach(b=>{
+    const isMatch = (b.dataset.grade == mode) || (b.dataset.special == mode);
+    b.classList.toggle('active', isMatch);
   });
 }
 
-function currentRouteSubject(){
+function currentRouteGrade() {
   const parts = location.hash.slice(2).split('/').filter(Boolean).map(decodeURIComponent);
-  return (parts[0]==='subject' || parts[0]==='category' || parts[0]==='doc') ? parts[1] : null;
+  if(parts[0] === 'category' || parts[0] === 'doc') return parseInt(parts[2]) || null;
+  return null;
 }
 
 document.addEventListener('click', (e)=>{
-  if(megaState.subjectId && !document.querySelector('nav').contains(e.target)) closeMegaPanel();
+  if(megaState.gradeMode){
+    const nav = document.querySelector('.vj-nav');
+    const panel = document.getElementById('megaPanel');
+    if(!nav.contains(e.target) && !panel.contains(e.target)) closeMegaPanel();
+  }
 });
 
-function buildFooter(){
-  const links = SUBJECTS.slice(0,6).map(s=>`<a class="block py-1.5 hover:text-white transition text-sm" href="#/subject/${s.id}">${s.icon} Môn ${s.name}</a>`).join('');
-  document.getElementById('footerGrid').innerHTML = `
-    <div class="md:col-span-2">
-      <div class="flex items-center gap-2 mb-4">
-        <div class="logo-stamp w-8 h-8 rounded-full flex items-center justify-center font-mono font-bold text-xs text-white">Edu</div>
-        <span class="text-xl font-heading font-extrabold text-white">EduAI</span>
-      </div>
-      <p class="text-sm leading-relaxed max-w-sm">Hệ thống thư viện học liệu chuyên nghiệp, bám sát sách chương trình giáo dục phổ thông 2018 (Kết Nối Tri Thức). Tích hợp các giải pháp công nghệ AI dành cho giáo viên.</p>
+function showModal(title, contentHTML){
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `<div class="modal-box">
+    <h3>${title}</h3>
+    ${contentHTML}
+    <div style="text-align:right; margin-top:20px;">
+      <button class="btn btn-outline" id="modalClose">Đóng lại</button>
     </div>
-    <div><h5 class="font-bold text-white mb-4">Danh mục môn học</h5>${links}</div>
-    <div><h5 class="font-bold text-white mb-4">Thông tin & Trợ giúp</h5>
-      <a href="#" class="block py-1.5 hover:text-white transition text-sm" onclick="showContactModal()">Liên hệ quảng cáo</a>
-      <a href="#" class="block py-1.5 hover:text-white transition text-sm" onclick="showContactModal()">Quy định bản quyền</a>
-    </div>`;
+  </div>`;
+  document.body.appendChild(overlay);
+  const close = ()=> overlay.remove();
+  overlay.addEventListener('click', e=>{ if(e.target===overlay) close(); });
+  overlay.querySelector('#modalClose').addEventListener('click', close);
 }
 
-function initTheme() {
-  const checkbox = document.getElementById('themeToggleCheckbox');
-  const saved = localStorage.getItem('theme');
-  if(saved === 'dark'){ document.documentElement.classList.add('dark'); checkbox.checked = true; }
-  else { document.documentElement.classList.remove('dark'); checkbox.checked = false; }
+function showContactModal(){
+  showModal('Thông liên hệ', `
+    <p>Vui lòng kết nối qua Zalo hoặc Facebook để nhận tư vấn và tải tài liệu nhanh nhất.</p>
+    <div style="display:flex; flex-direction:column; gap:16px;">
+        <div style="padding: 20px; background:var(--bg-page); border-radius:12px; border:1px solid var(--border); text-align:center;">
+          <div style="font-size:1.4rem; font-weight:800; color:#0068FF; font-family:'Plus Jakarta Sans', sans-serif;">Zalo: ${ZALO_PHONE}</div>
+          <a href="https://zalo.me/${ZALO_PHONE}" target="_blank" class="btn" style="background:#0068FF; color:white; width:100%; justify-content:center; margin-top:12px; font-size:1.05rem;">Nhắn tin Zalo 🚀</a>
+        </div>
+        <div style="padding: 20px; background:var(--bg-page); border-radius:12px; border:1px solid var(--border); text-align:center;">
+          <div style="font-size:1.4rem; font-weight:800; color:#0866FF; font-family:'Plus Jakarta Sans', sans-serif;">FB: Nguyễn T. Thành</div>
+          <a href="${FACEBOOK_LINK}" target="_blank" class="btn" style="background:#0866FF; color:white; width:100%; justify-content:center; margin-top:12px; font-size:1.05rem;">Kết nối Facebook 🚀</a>
+        </div>
+    </div>
+  `);
+}
+
+document.getElementById('servicesBtn').onclick = () => {
+  const list = [
+    {n: '🚀 Dịch vụ Mạng Xã Hội', m: 'Tăng follower, tym, like...'},
+    {n: '🤖 Tài khoản AI Pro giá rẻ', m: 'Gemini Advanced, Canva Pro, Claude...'},
+    {n: '🌐 Xây dựng Fanpage', m: 'Hệ thống Fanpage dạy học online chuyên nghiệp'}
+  ];
+  const html = `<p>Chọn dịch vụ để kết nối Zalo tư vấn chi tiết:</p><div class="modal-list">` + 
+    list.map(i=>`<a href="https://zalo.me/${ZALO_PHONE}" target="_blank"><div><div style="font-size:1rem; font-family:'Plus Jakarta Sans', sans-serif;">${i.n}</div><div style="font-size:.8rem; color:var(--text-muted); font-weight:500; margin-top:4px;">${i.m}</div></div><span style="color:var(--primary);">↗</span></a>`).join('') + `</div>`;
+  showModal('Dịch vụ khác', html);
+};
+
+document.getElementById('aiBtn').onclick = () => {
+  const list = [
+    {n: 'Mô phỏng AI trong dạy học', m: 'Giải pháp tích hợp AI cho lớp học'},
+    {n: 'Phần mềm giáo dục AI', m: 'Cung cấp công cụ AI giá rẻ cho giáo viên'},
+    {n: 'Khóa học AI thực chiến', m: 'Đào tạo ứng dụng AI trong giảng dạy'}
+  ];
+  const html = `<p>Khám phá hệ sinh thái AI dành cho giáo dục:</p><div class="modal-list">` + 
+    list.map(i=>`<a href="https://zalo.me/${ZALO_PHONE}" target="_blank"><div><div style="font-size:1rem; font-family:'Plus Jakarta Sans', sans-serif;">${i.n}</div><div style="font-size:.8rem; color:var(--text-muted); font-weight:500; margin-top:4px;">${i.m}</div></div><span style="color:var(--primary);">↗</span></a>`).join('') + `</div>`;
+  showModal('Trợ lý AI & Đào tạo', html);
+};
+
+document.getElementById('contactBtn').onclick = showContactModal;
+
+function buildFooter(){
+  document.getElementById('footerGrid').innerHTML = `
+    <div>
+      <div class="logo"><span class="stamp">Edu</span>EduAI</div>
+      <p style="font-size:.9rem; color:var(--text-muted); margin-top:16px; font-weight:500; padding-right:20px;">Hệ thống cung cấp chuyên đề, giáo án, tài liệu số chuyên nghiệp cho giáo viên toàn quốc.</p>
+    </div>
+    <div><h5>Giáo án - Đề thi</h5><a href="#/category/toan/10/daythem">Toán học</a><a href="#/category/nguvan/10/daythem">Ngữ văn</a><a href="#/category/tienganh/10/daythem">Tiếng anh</a></div>
+    <div><h5>Loại tài liệu</h5><a href="#/category/toan/10/daythem">Chuyên đề dạy thêm</a><a href="#/category/toan/10/khbd">Giáo án (KHBD)</a><a href="#/category/toan/10/dethi">Đề kiểm tra</a></div>
+    <div><h5>Hỗ trợ</h5><a href="#" onclick="showContactModal()">Liên hệ</a><a href="#" onclick="document.getElementById('servicesBtn').click()">Dịch vụ khác</a><a href="#" onclick="document.getElementById('aiBtn').click()">Trợ lý AI</a></div>`;
+}
+
+function initTheme(){
+  const isDark = localStorage.getItem('eduai_theme') === 'dark';
+  if(isDark) document.documentElement.classList.add('dark');
   
-  checkbox.addEventListener('change', ()=>{
-    if(checkbox.checked){ document.documentElement.classList.add('dark'); localStorage.setItem('theme','dark'); }
-    else { document.documentElement.classList.remove('dark'); localStorage.setItem('theme','light'); }
+  document.getElementById('themeToggle').addEventListener('click', ()=>{
+    const darkNow = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('eduai_theme', darkNow ? 'dark' : 'light');
   });
 }
 
+function parseHash(){
+  return location.hash.slice(2).split('/').filter(Boolean).map(decodeURIComponent);
+}
+
 function render(){
-  const parts = location.hash.slice(2).split('/').filter(Boolean).map(decodeURIComponent);
-  if(!megaState.subjectId) highlightActiveTab(currentRouteSubject());
+  const parts = parseHash();
+  if(!megaState.gradeMode) highlightActiveNav(currentRouteGrade());
   window.scrollTo({top:0, behavior:'instant'});
 
   if(parts.length===0){ renderHome(); return; }
   if(parts[0]==='subject'){ renderSubjectHub(parts[1]); return; }
   if(parts[0]==='category'){ renderCategory(parts[1], parts[2], parts[3]); return; }
   if(parts[0]==='doc'){ renderDoc(parts[1], parts[2], parts[3], parts[4]); return; }
+  if(parts[0]==='search'){ renderSearch(parts[1]); return; }
   renderNotFound();
 }
 
-/* Initialize App */
 initTheme();
-buildSubjectRow();
+buildNavRow();
 buildFooter();
 window.addEventListener('hashchange', render);
 render();
 
-document.getElementById('searchForm').addEventListener('submit', e=>{ e.preventDefault(); location.hash = '#/'; });
-document.getElementById('contactBtn').addEventListener('click', showContactModal);
-document.getElementById('aiBtn').addEventListener('click', showAIModal);
+document.getElementById('searchForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  const q = document.getElementById('searchInput').value;
+  if(q) location.hash = '#/search/' + encodeURIComponent(q);
+});
 </script>
 </body>
 </html>
