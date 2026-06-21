@@ -458,11 +458,19 @@ function renderHome(){
     ['nguvan',9,'dethi',1],['hoahoc',11,'daythem',0],['khtn',7,'sgk',2],['lichsu',12,'dethi',0]
   ];
   const latestHTML = LATEST.map(([s,g,t,i])=>docCardHTML(generateDoc(s,g,t,i))).join('');
+  
   const subjectCardsHTML = SUBJECTS.map(s=>`
     <a class="subject-card" href="#/subject/${s.id}">
       <div class="sc-icon">${s.icon}</div>
       <div class="sc-name">${s.name}</div>
       <div class="sc-meta">Lớp ${s.grades[0]}–${s.grades[s.grades.length-1]}</div>
+    </a>`).join('');
+
+  const docTypeCardsHTML = DOC_TYPES.map(t=>`
+    <a class="subject-card" href="#/search/${t.id}">
+      <div class="sc-icon">${t.icon}</div>
+      <div class="sc-name">${t.name}</div>
+      <div class="sc-meta" style="font-size: 0.75rem; margin-top: 8px; color: var(--text-muted);">${t.desc.split(',')[0]}</div>
     </a>`).join('');
 
   document.getElementById('app').innerHTML = `
@@ -471,7 +479,7 @@ function renderHome(){
       <h1>Thư viện học liệu, có <em>AI</em> đồng hành cho giáo viên Việt Nam</h1>
       <p>Tra cứu chuyên đề dạy thêm, giáo án, đề kiểm tra, SGK bám sát chương trình GDPT 2018.</p>
       <div style="display:flex; justify-content:center; gap:12px; margin-top:20px;">
-        <a class="btn btn-primary" style="padding: 12px 24px; font-size: 1rem;" href="#/category/toan/10/daythem">Khám phá chuyên đề</a>
+        <a class="btn btn-primary" style="padding: 12px 24px; font-size: 1rem;" href="#/search/daythem">Khám phá chuyên đề</a>
       </div>
       <div class="hero-stats">
         <div><div class="stat-num">1800+</div><div class="stat-label">tài liệu</div></div>
@@ -486,6 +494,11 @@ function renderHome(){
     <section class="section">
       <div class="section-head"><div><div class="eyebrow">Danh mục</div><h2>Duyệt theo môn học</h2></div></div>
       <div class="subject-grid">${subjectCardsHTML}</div>
+    </section>
+
+    <section class="section" style="padding-top:0;">
+      <div class="section-head"><div><div class="eyebrow">Phân loại</div><h2>Các loại tài liệu</h2></div></div>
+      <div class="subject-grid">${docTypeCardsHTML}</div>
     </section>
 
     <section class="section" style="padding-top:0; padding-bottom:60px;">
@@ -632,6 +645,9 @@ function renderSearch(query){
     'su': 'lichsu', 'lich su': 'lichsu', 'dia': 'dialy', 'dia ly': 'dialy', 'dia li': 'dialy',
     'gdcd': 'gdcd', 'cong dan': 'gdcd', 'tin': 'tinhoc', 'tin hoc': 'tinhoc', 'cong nghe': 'congnghe', 'hdtn': 'hdtn', 'trai nghiem': 'hdtn'
   };
+
+  // Nạp thêm id của từng loại tài liệu vào từ điển để khi click từ Trang chủ (vd: href="#/search/daythem") sẽ tự bắt đúng
+  DOC_TYPES.forEach(t => dict[t.id] = t.id);
 
   let foundDocType = null;
   let foundSubject = null;
@@ -829,12 +845,12 @@ document.getElementById('servicesBtn').onclick = () => {
 
 document.getElementById('aiBtn').onclick = () => {
   const list = [
-    {n: 'Mô phỏng AI trong dạy học', m: 'Giải pháp tích hợp AI cho lớp học'},
-    {n: 'Phần mềm giáo dục AI', m: 'Cung cấp công cụ AI giá rẻ cho giáo viên'},
-    {n: 'Khóa học AI thực chiến', m: 'Đào tạo ứng dụng AI trong giảng dạy'}
+    {n: 'Mô phỏng AI trong dạy học', m: 'Giải pháp tích hợp AI cho lớp học', link: `https://zalo.me/${ZALO_PHONE}`},
+    {n: 'Phần mềm giáo dục AI', m: 'Cung cấp các công cụ AI FREE cho giáo viên', link: 'https://sites.google.com/view/hotrogiaoduc06/binhham?authuser=0'},
+    {n: 'Khóa học AI thực chiến', m: 'Đào tạo ứng dụng AI trong giảng dạy', link: `https://zalo.me/${ZALO_PHONE}`}
   ];
   const html = `<p>Khám phá hệ sinh thái AI dành cho giáo dục:</p><div class="modal-list">` + 
-    list.map(i=>`<a href="https://zalo.me/${ZALO_PHONE}" target="_blank"><div><div style="font-size:1rem; font-family:'Plus Jakarta Sans', sans-serif;">${i.n}</div><div style="font-size:.8rem; color:var(--text-muted); font-weight:500; margin-top:4px;">${i.m}</div></div><span style="color:var(--primary);">↗</span></a>`).join('') + `</div>`;
+    list.map(i=>`<a href="${i.link}" target="_blank"><div><div style="font-size:1rem; font-family:'Plus Jakarta Sans', sans-serif;">${i.n}</div><div style="font-size:.8rem; color:var(--text-muted); font-weight:500; margin-top:4px;">${i.m}</div></div><span style="color:var(--primary);">↗</span></a>`).join('') + `</div>`;
   showModal('Trợ lý AI & Đào tạo', html);
 };
 
