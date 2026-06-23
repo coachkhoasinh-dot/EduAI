@@ -302,7 +302,6 @@ footer { background: var(--bg-card); border-top: 1px solid var(--border); margin
 <script>
 const DOCS_PER_CATEGORY = 8;
 const ZALO_PHONE = "0819161835";
-const FACEBOOK_LINK = "https://www.facebook.com/nguyen.t.thanh.545926";
 
 const SUBJECTS = [
   {id:'toan', name:'Toán', icon:'📐', grades:range(1,12)},
@@ -380,7 +379,7 @@ function descFor(docType, subjectName, grade, topic, idx){
   if(docType === 'khbd' && idx === 0) return `Trọn bộ giáo án (Kế hoạch bài dạy) môn ${subjectName} lớp ${grade} cho cả năm học. File Word/PowerPoint chuẩn cấu trúc, dễ dàng chỉnh sửa, bám sát sách giáo khoa ${EDITIONS[0]}.`;
   if(docType === 'daythem' && idx === 0) return `Trọn bộ tài liệu, chuyên đề và bài tập dạy thêm môn ${subjectName} lớp ${grade} cho cả năm học. Bản Word (DOCX) dễ dàng chỉnh sửa, phân loại bài tập từ cơ bản đến nâng cao.`;
   switch(docType){
-    case 'sgk': return `Tài liệu sách giáo khoa, sách giáo viên và sách tham khảo môn ${subjectName} lớp ${grade}, biên soạn theo chương trình GDPT 2018.`;
+    case 'sgk': return `Tài liệu sách giáo khoa, sách giáo viên và sách tham khảo môn ${subjectName} lớp ${grade}, biên soạn theo chương trình GDPT 2018. Trọn bộ file định dạng PDF.`;
     case 'khgd': return `Kế hoạch giáo dục và phân phối chương trình môn ${subjectName} lớp ${grade}, trình bày chi tiết số tiết và tiến độ dạy học theo tuần.`;
     case 'khbd': return `Giáo án (kế hoạch bài dạy) môn ${subjectName} lớp ${grade} cho bài "${topic}", trình bày đầy đủ mục tiêu, thiết bị dạy học, tiến trình hoạt động.`;
     case 'daythem': return `Tài liệu dạy thêm, bài tập rèn luyện nâng cao môn ${subjectName} lớp ${grade} bám sát chủ đề "${topic}".`;
@@ -403,6 +402,12 @@ function generateDoc(subjectId, grade, docType, idx){
   let format = FORMATS[Math.floor(rng()*FORMATS.length)];
   let sizeStr = (0.4 + rng()*9.6).toFixed(1);
   let sizeUnit = 'MB';
+
+  if(docType === 'sgk') {
+    format = 'PDF';
+    sizeStr = (15.0 + rng()*40.0).toFixed(1); // File SGK thường nặng hơn
+    sizeUnit = 'MB';
+  }
 
   if(docType === 'khbd' && idx === 0) {
     format = 'DOCX/PPTX';
@@ -455,7 +460,7 @@ function breadcrumbHTML(items){
 function renderHome(){
   const LATEST = [
     ['toan',5,'daythem',0],['hdtn',10,'khbd',0],['khtn',8,'ontap',2],['tienganh',6,'khbd',1],
-    ['nguvan',9,'dethi',1],['hoahoc',11,'daythem',0],['khtn',7,'sgk',2],['lichsu',12,'dethi',0]
+    ['nguvan',9,'dethi',1],['hoahoc',11,'daythem',0],['khtn',7,'sgk',0],['lichsu',12,'dethi',0]
   ];
   const latestHTML = LATEST.map(([s,g,t,i])=>docCardHTML(generateDoc(s,g,t,i))).join('');
   
@@ -543,7 +548,10 @@ function renderCategory(subjectId, grade, docType){
   const typeList = DOC_TYPES.map(t=>`<a class="${t.id===docType?'active':''}" href="#/category/${subjectId}/${grade}/${t.id}"><span>${t.icon}</span> ${t.name}</a>`).join('');
 
   const docs = [];
-  for(let i=0;i<DOCS_PER_CATEGORY;i++) docs.push(generateDoc(subjectId, grade, docType, i));
+  const displayLimit = (docType === 'sgk') ? 1 : DOCS_PER_CATEGORY;
+  for(let i=0; i<displayLimit; i++) {
+    docs.push(generateDoc(subjectId, grade, docType, i));
+  }
 
   document.getElementById('app').innerHTML = `
   <div class="wrap">
@@ -578,7 +586,8 @@ function renderDoc(subjectId, grade, docType, idx){
   const dt = doctypeOf(docType);
   const doc = generateDoc(subjectId, grade, docType, idx);
 
-  const relatedHTML = range(0,3).filter(i=>i!==idx).map(i=>{
+  const displayLimit = (docType === 'sgk') ? 1 : 4;
+  const relatedHTML = range(0, displayLimit - 1).filter(i=>i!==idx).map(i=>{
     const rd = generateDoc(subjectId, grade, docType, i);
     return `<a href="#/doc/${subjectId}/${grade}/${docType}/${i}">${rd.title}</a>`;
   }).join('');
@@ -605,13 +614,14 @@ function renderDoc(subjectId, grade, docType, idx){
           </div>
           <p class="desc-text">${doc.description}</p>
           <div style="margin-top:30px; display:flex; gap:12px; flex-wrap:wrap;">
+            <button class="btn btn-primary" style="padding:12px 24px;" onclick="showPreviewModal()">👁️ Xem trước</button>
             <button class="btn btn-accent" style="padding:12px 24px;" onclick="showContactModal()">📞 Liên hệ để tải xuống</button>
           </div>
         </div>
         <aside>
           <div class="related-card">
             <h4 style="font-size:.8rem; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); margin-bottom:12px;">Tài liệu liên quan</h4>
-            ${relatedHTML}
+            ${relatedHTML || '<p style="color:var(--text-muted); font-size: 0.9rem;">Không có tài liệu nào khác trong mục này.</p>'}
           </div>
         </aside>
       </div>
@@ -632,7 +642,6 @@ function renderNotFound(){
 function renderSearch(query){
   const q = (query||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
   
-  // Từ điển AI map (Đã nạp thêm rất nhiều từ khóa)
   const dict = {
     'giao an': 'khbd', 'khbd': 'khbd', 'ke hoach bai day': 'khbd', 'giao an ca nam': 'khbd',
     'de thi': 'dethi', 'de kiem tra': 'dethi', 'kiem tra': 'dethi', 'giua ki': 'dethi', 'cuoi ki': 'dethi',
@@ -642,11 +651,10 @@ function renderSearch(query){
     'toan': 'toan', 'van': 'nguvan', 'ngu van': 'nguvan', 'anh': 'tienganh', 'tieng anh': 'tienganh',
     'ly': 'vatli', 'vat ly': 'vatli', 'vat li': 'vatli', 'hoa': 'hoahoc', 'hoa hoc': 'hoahoc', 
     'sinh': 'sinhhoc', 'sinh hoc': 'sinhhoc', 'khtn': 'khtn', 'khoa hoc tu nhien': 'khtn',
-    'su': 'lichsu', 'lich su': 'lichsu', 'dia': 'dialy', 'dia ly': 'dialy', 'dia li': 'dialy',
+    'su': 'lichsu', 'lichsu': 'lichsu', 'dia': 'dialy', 'dia ly': 'dialy', 'dia li': 'dialy',
     'gdcd': 'gdcd', 'cong dan': 'gdcd', 'tin': 'tinhoc', 'tin hoc': 'tinhoc', 'cong nghe': 'congnghe', 'hdtn': 'hdtn', 'trai nghiem': 'hdtn'
   };
 
-  // Nạp thêm id của từng loại tài liệu vào từ điển để khi click từ Trang chủ (vd: href="#/search/daythem") sẽ tự bắt đúng
   DOC_TYPES.forEach(t => dict[t.id] = t.id);
 
   let foundDocType = null;
@@ -654,7 +662,6 @@ function renderSearch(query){
   let foundGrade = null;
   let foundTopic = false;
 
-  // Quét ý định (Intent extraction)
   Object.keys(dict).forEach(key => { 
     if(q.includes(key)) {
       const val = dict[key];
@@ -666,7 +673,6 @@ function renderSearch(query){
   const gradeMatch = q.match(/(?:lop|khoi|\s|^)(\d{1,2})(?:\s|$)/);
   if(gradeMatch) foundGrade = parseInt(gradeMatch[1]);
 
-  // Điều hướng thông minh (Smart Router)
   if (foundSubject && !foundDocType && !foundGrade) {
     location.replace(`#/subject/${foundSubject}`); return;
   }
@@ -674,21 +680,19 @@ function renderSearch(query){
   let matchedDocsHTML = "";
   let results = [];
   
-  // NẾU CHỈ GÕ TÊN LOẠI TÀI LIỆU (VD: "CHUYÊN ĐỀ", "GIÁO ÁN") MÀ KHÔNG GÕ MÔN -> HIỆN TẤT CẢ CÁC MÔN & CÁC LỚP
   if (foundDocType && !foundSubject) {
     foundTopic = true;
     SUBJECTS.forEach(s => {
-       // Nếu có gõ lớp (VD: "chuyên đề lớp 10") thì chỉ lấy lớp đó, không thì lấy toàn bộ các lớp
        let gradesToShow = (foundGrade && s.grades.includes(foundGrade)) ? [foundGrade] : s.grades;
-       
        gradesToShow.forEach(g => {
-           results.push(generateDoc(s.id, g, foundDocType, 0)); // File trọn bộ cả năm
-           results.push(generateDoc(s.id, g, foundDocType, 1)); // File chuyên đề/bài học 1
-           results.push(generateDoc(s.id, g, foundDocType, 2)); // File chuyên đề/bài học 2
+           results.push(generateDoc(s.id, g, foundDocType, 0)); 
+           if (foundDocType !== 'sgk') {
+               results.push(generateDoc(s.id, g, foundDocType, 1)); 
+               results.push(generateDoc(s.id, g, foundDocType, 2)); 
+           }
        });
     });
   }
-  // QUÉT CHỦ ĐỀ SÂU TRONG TÊN BÀI HỌC
   else if (!foundSubject && !foundDocType) {
     Object.keys(TOPICS).forEach(sid => {
       TOPICS[sid].forEach((topic, idx) => {
@@ -704,15 +708,12 @@ function renderSearch(query){
     });
   }
 
-  // Trộn ngẫu nhiên mảng để kết quả hiển thị đan xen nhiều môn học/lớp học khác nhau
   results.sort(() => Math.random() - 0.5);
 
   if(results.length > 0) {
-     // Tăng giới hạn hiển thị từ 12 lên 80 file để người dùng lướt "mỏi tay"
      matchedDocsHTML = results.slice(0, 80).map(docCardHTML).join('');
   }
 
-  // Render trang kết quả Fallback
   document.getElementById('app').innerHTML = `
   <div class="wrap">
     ${breadcrumbHTML([{label:'Trang chủ', href:'#/'},{label:'Tìm kiếm'}])}
@@ -817,40 +818,65 @@ function showModal(title, contentHTML){
 }
 
 function showContactModal(){
-  showModal('Thông liên hệ', `
-    <p>Vui lòng kết nối qua Zalo hoặc Facebook để nhận tư vấn và tải tài liệu nhanh nhất.</p>
+  showModal('Thông tin liên hệ', `
+    <p>Vui lòng kết nối qua Zalo để nhận tư vấn và tải tài liệu nhanh nhất.</p>
     <div style="display:flex; flex-direction:column; gap:16px;">
         <div style="padding: 20px; background:var(--bg-page); border-radius:12px; border:1px solid var(--border); text-align:center;">
           <div style="font-size:1.4rem; font-weight:800; color:#0068FF; font-family:'Plus Jakarta Sans', sans-serif;">Zalo: ${ZALO_PHONE}</div>
           <a href="https://zalo.me/${ZALO_PHONE}" target="_blank" class="btn" style="background:#0068FF; color:white; width:100%; justify-content:center; margin-top:12px; font-size:1.05rem;">Nhắn tin Zalo 🚀</a>
         </div>
-        <div style="padding: 20px; background:var(--bg-page); border-radius:12px; border:1px solid var(--border); text-align:center;">
-          <div style="font-size:1.4rem; font-weight:800; color:#0866FF; font-family:'Plus Jakarta Sans', sans-serif;">FB: Nguyễn T. Thành</div>
-          <a href="${FACEBOOK_LINK}" target="_blank" class="btn" style="background:#0866FF; color:white; width:100%; justify-content:center; margin-top:12px; font-size:1.05rem;">Kết nối Facebook 🚀</a>
-        </div>
+    </div>
+  `);
+}
+
+function showPreviewModal() {
+  showModal('Hệ thống đang bảo trì', `
+    <div style="text-align:center; padding: 10px 0;">
+      <div style="font-size:3.5rem; margin-bottom:16px;">🚧</div>
+      <p style="font-size:1.05rem; color:var(--text-main); font-weight:600; margin-bottom:12px;">Tính năng xem trước đang được nâng cấp!</p>
+      <p style="color:var(--text-muted); margin-bottom:24px; line-height: 1.5;">Để mang lại trải nghiệm tốt nhất, chúng tôi đang tạm dừng chức năng này. Nếu bạn cần tài liệu gấp, vui lòng liên hệ ngay qua số điện thoại/Zalo bên dưới.</p>
+      <a href="https://zalo.me/${ZALO_PHONE}" target="_blank" class="btn btn-primary" style="display:inline-flex; width:100%; justify-content:center; padding:14px; font-size:1rem; font-weight: 700;">📞 Liên hệ Zalo: ${ZALO_PHONE}</a>
+    </div>
+  `);
+}
+
+function showServiceMaintenance(serviceName) {
+  showModal('Hệ thống đang bảo trì', `
+    <div style="text-align:center; padding: 10px 0;">
+      <div style="font-size:3.5rem; margin-bottom:16px;">🚧</div>
+      <p style="font-size:1.05rem; color:var(--text-main); font-weight:600; margin-bottom:12px;">Dịch vụ "${serviceName}" đang được nâng cấp!</p>
+      <p style="color:var(--text-muted); margin-bottom:24px; line-height: 1.5;">Để mang lại chất lượng tốt nhất, chúng tôi đang tạm dừng cung cấp dịch vụ này. Vui lòng quay lại sau hoặc liên hệ Zalo nếu bạn cần hỗ trợ gấp.</p>
+      <a href="https://zalo.me/${ZALO_PHONE}" target="_blank" class="btn btn-primary" style="display:inline-flex; width:100%; justify-content:center; padding:14px; font-size:1rem; font-weight: 700;">📞 Liên hệ Zalo: ${ZALO_PHONE}</a>
     </div>
   `);
 }
 
 document.getElementById('servicesBtn').onclick = () => {
   const list = [
-    {n: '🚀 Dịch vụ Mạng Xã Hội', m: 'Tăng follower, tym, like...'},
-    {n: '🤖 Tài khoản AI Pro giá rẻ', m: 'Gemini Advanced, Canva Pro, Claude...'},
-    {n: '🌐 Xây dựng Fanpage', m: 'Hệ thống Fanpage dạy học online chuyên nghiệp'}
+    {n: '🚀 Dịch vụ Mạng Xã Hội', m: 'Tăng follower, tym, like...', lock: true, badge: 'BẢO TRÌ'},
+    {n: '🤖 Tài khoản AI Pro giá rẻ', m: 'Gemini Advanced, Canva Pro, Claude...', lock: false},
+    {n: '🌐 Xây dựng Fanpage', m: 'Hệ thống Fanpage dạy học online chuyên nghiệp', lock: true, badge: 'BẢO TRÌ'}
   ];
+  
   const html = `<p>Chọn dịch vụ để kết nối Zalo tư vấn chi tiết:</p><div class="modal-list">` + 
-    list.map(i=>`<a href="https://zalo.me/${ZALO_PHONE}" target="_blank"><div><div style="font-size:1rem; font-family:'Plus Jakarta Sans', sans-serif;">${i.n}</div><div style="font-size:.8rem; color:var(--text-muted); font-weight:500; margin-top:4px;">${i.m}</div></div><span style="color:var(--primary);">↗</span></a>`).join('') + `</div>`;
+    list.map(i=> i.lock 
+      ? `<a href="#" onclick="event.preventDefault(); showServiceMaintenance('${i.n}')"><div><div style="font-size:1rem; font-family:'Plus Jakarta Sans', sans-serif; display:flex; align-items:center; gap:8px;">${i.n} <span style="font-size:.65rem; background:rgba(245, 158, 11, 0.1); color:var(--accent); border:1px solid var(--accent); padding:2px 8px; border-radius:12px; font-weight:700; letter-spacing:0.5px;">${i.badge}</span></div><div style="font-size:.8rem; color:var(--text-muted); font-weight:500; margin-top:4px;">${i.m}</div></div><span style="color:var(--text-muted); font-size:1.2rem;">🔒</span></a>` 
+      : `<a href="https://zalo.me/${ZALO_PHONE}" target="_blank"><div><div style="font-size:1rem; font-family:'Plus Jakarta Sans', sans-serif;">${i.n}</div><div style="font-size:.8rem; color:var(--text-muted); font-weight:500; margin-top:4px;">${i.m}</div></div><span style="color:var(--primary);">↗</span></a>`
+    ).join('') + `</div>`;
   showModal('Dịch vụ khác', html);
 };
 
 document.getElementById('aiBtn').onclick = () => {
   const list = [
-    {n: 'Mô phỏng AI trong dạy học', m: 'Giải pháp tích hợp AI cho lớp học', link: `https://zalo.me/${ZALO_PHONE}`},
-    {n: 'Phần mềm giáo dục AI', m: 'Cung cấp các công cụ AI FREE cho giáo viên', link: 'https://sites.google.com/view/hotrogiaoduc06/binhham?authuser=0'},
-    {n: 'Khóa học AI thực chiến', m: 'Đào tạo ứng dụng AI trong giảng dạy', link: `https://zalo.me/${ZALO_PHONE}`}
+    {n: 'Mô phỏng AI trong dạy học', m: 'Giải pháp tích hợp AI cho lớp học', link: '#', lock: true, badge: 'SẮP HOÀN THIỆN'},
+    {n: 'Phần mềm giáo dục AI', m: 'Cung cấp các công cụ AI FREE cho giáo viên', link: 'https://sites.google.com/view/hotrogiaoduc06/binhham?authuser=0', lock: false},
+    {n: 'Khóa học AI thực chiến', m: 'Đào tạo ứng dụng AI trong giảng dạy', link: '#', lock: true, badge: 'SẮP HOÀN THIỆN'}
   ];
   const html = `<p>Khám phá hệ sinh thái AI dành cho giáo dục:</p><div class="modal-list">` + 
-    list.map(i=>`<a href="${i.link}" target="_blank"><div><div style="font-size:1rem; font-family:'Plus Jakarta Sans', sans-serif;">${i.n}</div><div style="font-size:.8rem; color:var(--text-muted); font-weight:500; margin-top:4px;">${i.m}</div></div><span style="color:var(--primary);">↗</span></a>`).join('') + `</div>`;
+    list.map(i=> i.lock 
+      ? `<a href="#" onclick="event.preventDefault(); showServiceMaintenance('${i.n}')"><div><div style="font-size:1rem; font-family:'Plus Jakarta Sans', sans-serif; display:flex; align-items:center; gap:8px;">${i.n} <span style="font-size:.65rem; background:rgba(245, 158, 11, 0.1); color:var(--accent); border:1px solid var(--accent); padding:2px 8px; border-radius:12px; font-weight:700; letter-spacing:0.5px;">${i.badge}</span></div><div style="font-size:.8rem; color:var(--text-muted); font-weight:500; margin-top:4px;">${i.m}</div></div><span style="color:var(--text-muted); font-size:1.2rem;">🔒</span></a>` 
+      : `<a href="${i.link}" target="_blank"><div><div style="font-size:1rem; font-family:'Plus Jakarta Sans', sans-serif;">${i.n}</div><div style="font-size:.8rem; color:var(--text-muted); font-weight:500; margin-top:4px;">${i.m}</div></div><span style="color:var(--primary);">↗</span></a>`
+    ).join('') + `</div>`;
   showModal('Trợ lý AI & Đào tạo', html);
 };
 
