@@ -16,9 +16,9 @@
   --text-muted: #64748B;
   --border: #E2E8F0;
   
-  --primary: #0EA5E9; /* Xanh nhạt chủ đạo (Sky Blue) */
+  --primary: #0EA5E9; 
   --primary-hover: #0284C7;
-  --accent: #F59E0B; /* Vàng kim */
+  --accent: #F59E0B; 
   --accent-hover: #D97706;
   
   --shadow: 0 4px 20px rgba(0,0,0,0.05);
@@ -322,7 +322,7 @@ const SUBJECTS = [
 const DOC_TYPES = [
   {id:'sgk', name:'SGK, SGV, STK', icon:'📘', desc:'Sách giáo khoa, sách giáo viên, sách tham khảo'},
   {id:'khgd', name:'KHGD (PPCT)', icon:'🗒️', desc:'Kế hoạch giáo dục – Phân phối chương trình'},
-  {id:'khbd', name:'KHBD (Giáo án)', icon:'✏️', desc:'Kế hoạch bài dạy theo từng bài học / Giáo án cả năm'},
+  {id:'khbd', name:'KHBD (Giáo án)', icon:'✏️', desc:'Trọn bộ giáo án cả năm (Bộ 1, 2, 3)'},
   {id:'daythem', name:'Chuyên đề dạy thêm', icon:'📝', desc:'Trọn bộ chuyên đề dạy thêm, bài tập cả năm (File Word)'},
   {id:'dethi', name:'Đề thi – Đề kiểm tra', icon:'📝', desc:'Đề kiểm tra định kì, đề thi học kì kèm đáp án'},
   {id:'ontap', name:'Tài liệu ôn tập', icon:'📚', desc:'Hệ thống kiến thức và bài tập ôn luyện'},
@@ -361,12 +361,17 @@ function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a
 function rngFor(seed){return mulberry32(strHash(seed));}
 
 function buildTitle(docType, subjectName, grade, topic, edition, idx){
-  if(docType === 'khbd' && idx === 0) return `Giáo án cả năm ${subjectName} lớp ${grade} – ${edition}`;
   if(docType === 'daythem' && idx === 0) return `Trọn bộ chuyên đề dạy thêm cả năm ${subjectName} lớp ${grade} (File Word)`;
+  if(docType === 'khbd') {
+    if(idx === 0) return `Giáo án cả năm ${subjectName} lớp ${grade} – Bộ 1`;
+    if(idx === 1) return `Giáo án cả năm ${subjectName} lớp ${grade} – Bộ 2`;
+    if(idx === 2) return `Giáo án cả năm ${subjectName} lớp ${grade} – Bộ 3`;
+    return `Giáo án cả năm ${subjectName} lớp ${grade} – Bộ ${idx+1}`;
+  }
+  
   switch(docType){
     case 'sgk': return `SGK – SGV – STK ${subjectName} lớp ${grade} (${edition})`;
-    case 'khgd': return `Kế hoạch giáo dục (PPCT) ${subjectName} lớp ${grade} – ${edition}`;
-    case 'khbd': return `Giáo án ${subjectName} lớp ${grade} – Bài ${idx}: ${topic}`;
+    case 'khgd': return `Kế hoạch giáo dục (PPCT) cả năm ${subjectName} lớp ${grade} – ${edition}`;
     case 'daythem': return `Chuyên đề dạy thêm ${subjectName} lớp ${grade} – Chủ đề: ${topic}`;
     case 'dethi': return `Đề kiểm tra ${subjectName} lớp ${grade} – ${['Giữa kì 1','Cuối kì 1','Giữa kì 2','Cuối kì 2'][idx%4]} (có đáp án)`;
     case 'ontap': return `Tài liệu ôn tập ${subjectName} lớp ${grade} – Chủ đề: ${topic}`;
@@ -376,12 +381,14 @@ function buildTitle(docType, subjectName, grade, topic, edition, idx){
   }
 }
 function descFor(docType, subjectName, grade, topic, idx){
-  if(docType === 'khbd' && idx === 0) return `Trọn bộ giáo án (Kế hoạch bài dạy) môn ${subjectName} lớp ${grade} cho cả năm học. File Word/PowerPoint chuẩn cấu trúc, dễ dàng chỉnh sửa, bám sát sách giáo khoa ${EDITIONS[0]}.`;
   if(docType === 'daythem' && idx === 0) return `Trọn bộ tài liệu, chuyên đề và bài tập dạy thêm môn ${subjectName} lớp ${grade} cho cả năm học. Bản Word (DOCX) dễ dàng chỉnh sửa, phân loại bài tập từ cơ bản đến nâng cao.`;
+  if(docType === 'khbd') {
+    return `Trọn bộ giáo án (Kế hoạch bài dạy) môn ${subjectName} lớp ${grade} cho cả năm học - Bộ ${idx+1}. File Word/PowerPoint chuẩn cấu trúc, dễ dàng chỉnh sửa, bám sát sách giáo khoa.`;
+  }
+  
   switch(docType){
     case 'sgk': return `Tài liệu sách giáo khoa, sách giáo viên và sách tham khảo môn ${subjectName} lớp ${grade}, biên soạn theo chương trình GDPT 2018. Trọn bộ file định dạng PDF.`;
-    case 'khgd': return `Kế hoạch giáo dục và phân phối chương trình môn ${subjectName} lớp ${grade}, trình bày chi tiết số tiết và tiến độ dạy học theo tuần.`;
-    case 'khbd': return `Giáo án (kế hoạch bài dạy) môn ${subjectName} lớp ${grade} cho bài "${topic}", trình bày đầy đủ mục tiêu, thiết bị dạy học, tiến trình hoạt động.`;
+    case 'khgd': return `Kế hoạch giáo dục và phân phối chương trình môn ${subjectName} lớp ${grade} cho cả năm học, trình bày chi tiết số tiết và tiến độ dạy học theo tuần.`;
     case 'daythem': return `Tài liệu dạy thêm, bài tập rèn luyện nâng cao môn ${subjectName} lớp ${grade} bám sát chủ đề "${topic}".`;
     case 'dethi': return `Đề kiểm tra môn ${subjectName} lớp ${grade}, kèm ma trận, bản đặc tả và đáp án chi tiết.`;
     case 'ontap': return `Tài liệu ôn tập, hệ thống lại kiến thức trọng tâm môn ${subjectName} lớp ${grade} theo chủ đề "${topic}".`;
@@ -405,14 +412,20 @@ function generateDoc(subjectId, grade, docType, idx){
 
   if(docType === 'sgk') {
     format = 'PDF';
-    sizeStr = (15.0 + rng()*40.0).toFixed(1); // File SGK thường nặng hơn
+    sizeStr = (15.0 + rng()*40.0).toFixed(1); 
     sizeUnit = 'MB';
   }
 
-  if(docType === 'khbd' && idx === 0) {
+  if(docType === 'khbd') {
     format = 'DOCX/PPTX';
     sizeStr = (5.0 + rng()*5.0).toFixed(1);
     sizeUnit = 'GB';
+  }
+
+  if(docType === 'khgd') {
+    format = 'DOCX';
+    sizeStr = (0.5 + rng()*2.0).toFixed(1);
+    sizeUnit = 'MB';
   }
 
   if(docType === 'daythem') {
@@ -548,7 +561,10 @@ function renderCategory(subjectId, grade, docType){
   const typeList = DOC_TYPES.map(t=>`<a class="${t.id===docType?'active':''}" href="#/category/${subjectId}/${grade}/${t.id}"><span>${t.icon}</span> ${t.name}</a>`).join('');
 
   const docs = [];
-  const displayLimit = (docType === 'sgk') ? 1 : DOCS_PER_CATEGORY;
+  let displayLimit = DOCS_PER_CATEGORY;
+  if (docType === 'sgk' || docType === 'khgd') displayLimit = 1;
+  if (docType === 'khbd') displayLimit = 3;
+  
   for(let i=0; i<displayLimit; i++) {
     docs.push(generateDoc(subjectId, grade, docType, i));
   }
@@ -582,11 +598,15 @@ function renderCategory(subjectId, grade, docType){
 function renderDoc(subjectId, grade, docType, idx){
   const subject = subjectOf(subjectId);
   grade = parseInt(grade,10); idx = parseInt(idx,10);
-  if(!subject || !subject.grades.includes(grade) || !doctypeOf(docType) || idx<0 || idx>=DOCS_PER_CATEGORY){renderNotFound(); return;}
+  
+  let displayLimit = DOCS_PER_CATEGORY;
+  if (docType === 'sgk' || docType === 'khgd') displayLimit = 1;
+  if (docType === 'khbd') displayLimit = 3;
+
+  if(!subject || !subject.grades.includes(grade) || !doctypeOf(docType) || idx<0 || idx>=displayLimit){renderNotFound(); return;}
   const dt = doctypeOf(docType);
   const doc = generateDoc(subjectId, grade, docType, idx);
 
-  const displayLimit = (docType === 'sgk') ? 1 : 4;
   const relatedHTML = range(0, displayLimit - 1).filter(i=>i!==idx).map(i=>{
     const rd = generateDoc(subjectId, grade, docType, i);
     return `<a href="#/doc/${subjectId}/${grade}/${docType}/${i}">${rd.title}</a>`;
@@ -648,6 +668,7 @@ function renderSearch(query){
     'day them': 'daythem', 'chuyen de': 'daythem', 'bai tap': 'daythem', 'chuyen de day them': 'daythem',
     'sgk': 'sgk', 'sach giao khoa': 'sgk', 'hsg': 'hsg', 'hoc sinh gioi': 'hsg', 'boi duong': 'hsg',
     'on tap': 'ontap', 'de cuong': 'ontap', 'skkn': 'skkn', 'sang kien': 'skkn',
+    'ke hoach giao duc': 'khgd', 'ppct': 'khgd', 'phan phoi chuong trinh': 'khgd',
     'toan': 'toan', 'van': 'nguvan', 'ngu van': 'nguvan', 'anh': 'tienganh', 'tieng anh': 'tienganh',
     'ly': 'vatli', 'vat ly': 'vatli', 'vat li': 'vatli', 'hoa': 'hoahoc', 'hoa hoc': 'hoahoc', 
     'sinh': 'sinhhoc', 'sinh hoc': 'sinhhoc', 'khtn': 'khtn', 'khoa hoc tu nhien': 'khtn',
@@ -685,8 +706,14 @@ function renderSearch(query){
     SUBJECTS.forEach(s => {
        let gradesToShow = (foundGrade && s.grades.includes(foundGrade)) ? [foundGrade] : s.grades;
        gradesToShow.forEach(g => {
-           results.push(generateDoc(s.id, g, foundDocType, 0)); 
-           if (foundDocType !== 'sgk') {
+           if (foundDocType === 'sgk' || foundDocType === 'khgd') {
+               results.push(generateDoc(s.id, g, foundDocType, 0)); 
+           } else if (foundDocType === 'khbd') {
+               results.push(generateDoc(s.id, g, foundDocType, 0)); 
+               results.push(generateDoc(s.id, g, foundDocType, 1)); 
+               results.push(generateDoc(s.id, g, foundDocType, 2)); 
+           } else {
+               results.push(generateDoc(s.id, g, foundDocType, 0)); 
                results.push(generateDoc(s.id, g, foundDocType, 1)); 
                results.push(generateDoc(s.id, g, foundDocType, 2)); 
            }
@@ -738,11 +765,14 @@ let megaState = { gradeMode: null };
 function buildNavRow(){
   const grades = range(1, 12);
   let html = grades.map(g => `<button class="vj-tab" data-grade="${g}">Lớp ${g}</button>`).join('');
-  html += `<button class="vj-tab" data-special="khbd" style="margin-left:auto;">Giáo án - Đề thi</button>`;
+  html += `<button class="vj-tab" data-special="khbd" style="margin-left:auto;">TÀI LIỆU</button>`;
   document.getElementById('vjRow').innerHTML = html;
 
   document.getElementById('vjRow').querySelectorAll('button').forEach(btn => {
     btn.addEventListener('click', () => {
+      // Thêm lệnh tự động cuộn mượt mà lên đầu trang khi bấm Menu
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      
       const mode = btn.dataset.grade ? parseInt(btn.dataset.grade) : btn.dataset.special;
       if(megaState.gradeMode === mode) closeMegaPanel();
       else openMegaPanelForGrade(mode);
@@ -761,11 +791,10 @@ function openMegaPanelForGrade(mode){
     const grade = parseInt(mode);
     const subjectsForGrade = SUBJECTS.filter(s => s.grades.includes(grade));
     const subjLinks = subjectsForGrade.map(s => `<a class="mega-link" href="#/category/${s.id}/${grade}/daythem"><span class="dt-icon">${s.icon}</span> <span style="font-weight:600;">Môn ${s.name}</span></a>`).join('');
-    const typeLinks = DOC_TYPES.map(t=>`<a class="mega-link" href="#/category/toan/${grade}/${t.id}"><span class="dt-icon">${t.icon}</span> <span style="font-weight:600;">${t.name}</span></a>`).join('');
     
+    // Đã xóa cột Loại tài liệu và cho cột Môn học tràn toàn màn hình
     panel.innerHTML = `<div class="mega-inner">
-      <div class="mega-col"><h4>Môn học Lớp ${grade}</h4><div class="mega-doctype-list">${subjLinks}</div></div>
-      <div class="mega-col"><h4>Loại tài liệu Lớp ${grade}</h4><div class="mega-doctype-list">${typeLinks}</div></div>
+      <div class="mega-col" style="grid-column: 1 / -1;"><h4>Môn học Lớp ${grade}</h4><div class="mega-doctype-list" style="grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));">${subjLinks}</div></div>
     </div>`;
   }
   
@@ -854,14 +883,14 @@ function showServiceMaintenance(serviceName) {
 document.getElementById('servicesBtn').onclick = () => {
   const list = [
     {n: '🚀 Dịch vụ Mạng Xã Hội', m: 'Tăng follower, tym, like...', lock: true, badge: 'BẢO TRÌ'},
-    {n: '🤖 Tài khoản AI Pro giá rẻ', m: 'Gemini Advanced, Canva Pro, Claude...', lock: false},
+    {n: '🤖 Tài khoản AI Pro giá rẻ', m: 'Gemini Advanced, Canva Pro, Claude...', link: 'https://sites.google.com/view/dichvukhac?usp=sharing', lock: false},
     {n: '🌐 Xây dựng Fanpage', m: 'Hệ thống Fanpage dạy học online chuyên nghiệp', lock: true, badge: 'BẢO TRÌ'}
   ];
   
-  const html = `<p>Chọn dịch vụ để kết nối Zalo tư vấn chi tiết:</p><div class="modal-list">` + 
+  const html = `<p>Chọn dịch vụ để xem chi tiết:</p><div class="modal-list">` + 
     list.map(i=> i.lock 
       ? `<a href="#" onclick="event.preventDefault(); showServiceMaintenance('${i.n}')"><div><div style="font-size:1rem; font-family:'Plus Jakarta Sans', sans-serif; display:flex; align-items:center; gap:8px;">${i.n} <span style="font-size:.65rem; background:rgba(245, 158, 11, 0.1); color:var(--accent); border:1px solid var(--accent); padding:2px 8px; border-radius:12px; font-weight:700; letter-spacing:0.5px;">${i.badge}</span></div><div style="font-size:.8rem; color:var(--text-muted); font-weight:500; margin-top:4px;">${i.m}</div></div><span style="color:var(--text-muted); font-size:1.2rem;">🔒</span></a>` 
-      : `<a href="https://zalo.me/${ZALO_PHONE}" target="_blank"><div><div style="font-size:1rem; font-family:'Plus Jakarta Sans', sans-serif;">${i.n}</div><div style="font-size:.8rem; color:var(--text-muted); font-weight:500; margin-top:4px;">${i.m}</div></div><span style="color:var(--primary);">↗</span></a>`
+      : `<a href="${i.link}" target="_blank"><div><div style="font-size:1rem; font-family:'Plus Jakarta Sans', sans-serif;">${i.n}</div><div style="font-size:.8rem; color:var(--text-muted); font-weight:500; margin-top:4px;">${i.m}</div></div><span style="color:var(--primary);">↗</span></a>`
     ).join('') + `</div>`;
   showModal('Dịch vụ khác', html);
 };
@@ -888,7 +917,7 @@ function buildFooter(){
       <div class="logo"><span class="stamp">Edu</span>EduAI</div>
       <p style="font-size:.9rem; color:var(--text-muted); margin-top:16px; font-weight:500; padding-right:20px;">Hệ thống cung cấp chuyên đề, giáo án, tài liệu số chuyên nghiệp cho giáo viên toàn quốc.</p>
     </div>
-    <div><h5>Giáo án - Đề thi</h5><a href="#/category/toan/10/daythem">Toán học</a><a href="#/category/nguvan/10/daythem">Ngữ văn</a><a href="#/category/tienganh/10/daythem">Tiếng anh</a></div>
+    <div><h5>Tài liệu</h5><a href="#/category/toan/10/daythem">Toán học</a><a href="#/category/nguvan/10/daythem">Ngữ văn</a><a href="#/category/tienganh/10/daythem">Tiếng anh</a></div>
     <div><h5>Loại tài liệu</h5><a href="#/category/toan/10/daythem">Chuyên đề dạy thêm</a><a href="#/category/toan/10/khbd">Giáo án (KHBD)</a><a href="#/category/toan/10/dethi">Đề kiểm tra</a></div>
     <div><h5>Hỗ trợ</h5><a href="#" onclick="showContactModal()">Liên hệ</a><a href="#" onclick="document.getElementById('servicesBtn').click()">Dịch vụ khác</a><a href="#" onclick="document.getElementById('aiBtn').click()">Trợ lý AI</a></div>`;
 }
