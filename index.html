@@ -139,6 +139,27 @@ button { font-family: inherit; cursor: pointer; }
 .dark .ts-text-light { transform: translateY(-40px); }
 .dark .ts-text-dark { transform: translateY(0); }
 
+.announcement-bar {
+  background: var(--primary);
+  color: white;
+  padding: 10px 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  overflow: hidden;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+.announcement-text {
+  display: inline-block;
+  padding-left: 100%;
+  animation: marquee 25s linear infinite;
+}
+@keyframes marquee {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-100%, 0); }
+}
+
 .vj-nav {
   background: #0EA5E9; 
   display: flex; position: sticky; top: 73px; z-index: 40;
@@ -164,8 +185,7 @@ button { font-family: inherit; cursor: pointer; }
 
 .mega-panel { background: var(--bg-card); border-top: 1px solid var(--border); box-shadow: var(--shadow-hover); position: absolute; left: 0; right: 0; }
 .mega-panel.hidden { display: none; }
-.mega-inner { max-width: 1180px; margin: 0 auto; padding: 30px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-@media (max-width: 760px) { .mega-inner { grid-template-columns: 1fr; } }
+.mega-inner { max-width: 1180px; margin: 0 auto; padding: 30px 24px; display: grid; grid-template-columns: 1fr; gap: 40px; }
 .mega-col h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); font-family: 'Inter', sans-serif; font-weight: 700; margin-bottom: 16px; border-bottom: 1px dashed var(--border); padding-bottom: 8px;}
 .mega-doctype-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
 .mega-link {
@@ -244,6 +264,105 @@ button { font-family: inherit; cursor: pointer; }
 .hero-stats .stat-num { font-size: 1.8rem; font-weight: 800; color: var(--primary); font-family: 'Plus Jakarta Sans', sans-serif;}
 .hero-stats .stat-label { font-size: .85rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;}
 
+/* CSS cho Biển quảng cáo chạy (Marquee) trên Trang chủ */
+.home-marquee-wrapper {
+  background: var(--bg-card);
+  border: 1px dashed var(--primary);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 30px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(14, 165, 233, 0.1);
+}
+.home-marquee-icon {
+  font-size: 1.5rem;
+  margin-right: 12px;
+  flex-shrink: 0;
+  z-index: 2;
+  background: var(--bg-card);
+  padding-right: 10px;
+}
+.home-marquee-content {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+.home-marquee-text {
+  display: inline-block;
+  padding-left: 100%;
+  animation: homeMarqueeScroll 20s linear infinite;
+  font-size: 1rem;
+  color: var(--text-main);
+}
+@keyframes homeMarqueeScroll {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-100%, 0); }
+}
+
+/* CSS Nút nổi hỗ trợ (Facebook, Zalo) */
+.floating-actions {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  z-index: 1000;
+  align-items: flex-end;
+}
+.fab {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
+  background: white;
+  cursor: pointer;
+}
+.fab:hover { transform: scale(1.1); }
+.fab-tooltip {
+  position: absolute;
+  bottom: 65px;
+  right: -5px;
+  background: #ffffff;
+  padding: 10px 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 1001;
+}
+.fab-tooltip::after {
+  content: ''; position: absolute;
+  bottom: -7px; right: 25px;
+  border-width: 8px 8px 0 8px;
+  border-style: solid;
+  border-color: #ffffff transparent transparent transparent;
+}
+.fab-tooltip::before {
+  content: ''; position: absolute;
+  bottom: -8px; right: 24px;
+  border-width: 9px 9px 0 9px;
+  border-style: solid;
+  border-color: var(--border) transparent transparent transparent;
+}
+.fab-close {
+  background: none; border: none; padding: 0;
+  color: #fb7185; font-size: 18px; cursor: pointer;
+  line-height: 1; font-weight: 300;
+}
+.fab-tooltip span {
+  color: #333; font-size: 0.95rem; font-weight: 500; line-height: 1.4; white-space: nowrap;
+}
+
 footer { background: var(--bg-card); border-top: 1px solid var(--border); margin-top: 60px; }
 .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; padding: 60px 24px; max-width: 1180px; margin: 0 auto; }
 @media (max-width: 760px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
@@ -252,7 +371,7 @@ footer { background: var(--bg-card); border-top: 1px solid var(--border); margin
 .footer-grid a:hover { color: var(--primary); }
 .footer-bottom { border-top: 1px solid var(--border); padding: 20px 24px; text-align: center; font-size: .85rem; color: var(--text-muted); }
 
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px; backdrop-filter: blur(4px); }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 2000; padding: 20px; backdrop-filter: blur(4px); }
 .modal-box { background: var(--bg-card); border-radius: 16px; padding: 32px; width: 100%; max-width: 460px; box-shadow: 0 24px 50px rgba(0,0,0,0.2); border: 1px solid var(--border); }
 .modal-box h3 { margin-bottom: 16px; font-size: 1.4rem; color: var(--text-main); }
 .modal-box p { font-size: .95rem; color: var(--text-muted); margin-bottom: 24px; }
@@ -261,6 +380,12 @@ footer { background: var(--bg-card); border-top: 1px solid var(--border); margin
 </style>
 </head>
 <body>
+
+<div class="announcement-bar">
+  <div class="announcement-text">
+    ✨ Ở đây chúng tôi có mọi tài liệu cho giáo viên có cả tích hợp NLS và mọi loại tài khoản AI giá rẻ liên hệ cho chúng tôi để biết chi tiết ✨
+  </div>
+</div>
 
 <header class="topbar">
   <a href="#/" class="logo"><span class="stamp">Edu</span>EduAI</a>
@@ -292,6 +417,26 @@ footer { background: var(--bg-card); border-top: 1px solid var(--border); margin
 
 <main id="app"></main>
 
+<div class="floating-actions">
+  <div style="position: relative;">
+      <div class="fab-tooltip" id="zaloTooltip">
+        <button class="fab-close" onclick="document.getElementById('zaloTooltip').style.display='none'">&#10005;</button>
+        <span>Hỗ trợ Zalo<br>24/24</span>
+      </div>
+      <a href="https://zalo.me/0819161835" target="_blank" class="fab" style="border: 1px solid #0068ff;">
+        <svg width="32" height="32" viewBox="0 0 100 100">
+          <path d="M50,10 C25,10 5,28 5,50 C5,63 13,74 25,81 L20,95 L37,88 C41,89 45,90 50,90 C75,90 95,72 95,50 C95,28 75,10 50,10 Z" fill="#0068FF"/>
+          <text x="50" y="62" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="white" text-anchor="middle">Zalo</text>
+        </svg>
+      </a>
+  </div>
+  <a href="https://www.facebook.com/thuvieneduai" target="_blank" class="fab" style="background: #0866FF;">
+    <svg viewBox="0 0 24 24" fill="white" width="26" height="26">
+      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+    </svg>
+  </a>
+</div>
+
 <footer>
   <div class="footer-grid" id="footerGrid"></div>
   <div class="footer-bottom">
@@ -302,6 +447,7 @@ footer { background: var(--bg-card); border-top: 1px solid var(--border); margin
 <script>
 const DOCS_PER_CATEGORY = 8;
 const ZALO_PHONE = "0819161835";
+const FACEBOOK_LINK = "https://www.facebook.com/thuvieneduai";
 
 const SUBJECTS = [
   {id:'tiengviet', name:'Tiếng Việt', icon:'📝', grades:range(1,5)},
@@ -523,7 +669,17 @@ function renderHome(){
   </section>
 
   <div class="wrap">
-    <section class="section">
+    <!-- Khung thông báo Marquee Quảng cáo chạy -->
+    <div class="home-marquee-wrapper">
+      <div class="home-marquee-icon">🔥</div>
+      <div class="home-marquee-content">
+        <div class="home-marquee-text">
+          <strong>THÔNG BÁO TỪ EDUAI:</strong> Ở đây chúng tôi có mọi tài liệu cho giáo viên, có cả tích hợp NLS và mọi loại tài khoản AI giá rẻ. <a href="https://zalo.me/${ZALO_PHONE}" target="_blank" style="color:var(--primary); font-weight:700; text-decoration:underline;">Liên hệ ngay</a> cho chúng tôi để biết chi tiết!
+        </div>
+      </div>
+    </div>
+
+    <section class="section" style="padding-top:0;">
       <div class="section-head"><div><div class="eyebrow">Danh mục</div><h2>Duyệt theo môn học</h2></div></div>
       <div class="subject-grid">${subjectCardsHTML}</div>
     </section>
@@ -785,7 +941,7 @@ function buildNavRow(){
 
   document.getElementById('vjRow').querySelectorAll('button').forEach(btn => {
     btn.addEventListener('click', () => {
-      // Thêm lệnh tự động cuộn mượt mà lên đầu trang khi bấm Menu
+      // Cuộn siêu mượt lên đầu trang khi bấm Menu
       window.scrollTo({ top: 0, behavior: 'smooth' });
       
       const mode = btn.dataset.grade ? parseInt(btn.dataset.grade) : btn.dataset.special;
@@ -807,7 +963,7 @@ function openMegaPanelForGrade(mode){
     const subjectsForGrade = SUBJECTS.filter(s => s.grades.includes(grade));
     const subjLinks = subjectsForGrade.map(s => `<a class="mega-link" href="#/category/${s.id}/${grade}/daythem"><span class="dt-icon">${s.icon}</span> <span style="font-weight:600;">Môn ${s.name}</span></a>`).join('');
     
-    // Đã xóa cột Loại tài liệu và cho cột Môn học tràn toàn màn hình
+    // Đã gỡ bỏ phần hiển thị Loại Tài Liệu và mở rộng phần Môn Học cho thoán
     panel.innerHTML = `<div class="mega-inner">
       <div class="mega-col" style="grid-column: 1 / -1;"><h4>Môn học Lớp ${grade}</h4><div class="mega-doctype-list" style="grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));">${subjLinks}</div></div>
     </div>`;
@@ -863,11 +1019,15 @@ function showModal(title, contentHTML){
 
 function showContactModal(){
   showModal('Thông tin liên hệ', `
-    <p>Vui lòng kết nối qua Zalo để nhận tư vấn và tải tài liệu nhanh nhất.</p>
+    <p>Vui lòng kết nối qua Zalo hoặc Facebook để nhận tư vấn và tải tài liệu nhanh nhất.</p>
     <div style="display:flex; flex-direction:column; gap:16px;">
         <div style="padding: 20px; background:var(--bg-page); border-radius:12px; border:1px solid var(--border); text-align:center;">
           <div style="font-size:1.4rem; font-weight:800; color:#0068FF; font-family:'Plus Jakarta Sans', sans-serif;">Zalo: ${ZALO_PHONE}</div>
           <a href="https://zalo.me/${ZALO_PHONE}" target="_blank" class="btn" style="background:#0068FF; color:white; width:100%; justify-content:center; margin-top:12px; font-size:1.05rem;">Nhắn tin Zalo 🚀</a>
+        </div>
+        <div style="padding: 20px; background:var(--bg-page); border-radius:12px; border:1px solid var(--border); text-align:center;">
+          <div style="font-size:1.4rem; font-weight:800; color:#0866FF; font-family:'Plus Jakarta Sans', sans-serif;">FB: Thư viện EduAI</div>
+          <a href="${FACEBOOK_LINK}" target="_blank" class="btn" style="background:#0866FF; color:white; width:100%; justify-content:center; margin-top:12px; font-size:1.05rem;">Kết nối Facebook 🚀</a>
         </div>
     </div>
   `);
@@ -954,7 +1114,9 @@ function parseHash(){
 function render(){
   const parts = parseHash();
   if(!megaState.gradeMode) highlightActiveNav(currentRouteGrade());
-  window.scrollTo({top:0, behavior:'instant'});
+  
+  // Tránh lướt lên đỉnh nến đang chuyển hướng tới chi tiết file
+  if(parts.length > 0 && parts[0] !== 'doc') window.scrollTo({top:0, behavior:'instant'});
 
   if(parts.length===0){ renderHome(); return; }
   if(parts[0]==='subject'){ renderSubjectHub(parts[1]); return; }
