@@ -9,34 +9,35 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg-page: #F4F6F9;
+  --bg-page: #FFF5F5;
   --bg-card: #FFFFFF;
   --bg-header: #FFFFFF;
   --text-main: #1A1D20;
-  --text-muted: #64748B;
-  --border: #E2E8F0;
+  --text-muted: #7A5C5C;
+  --border: #F3D9D9;
   
-  --primary: #0EA5E9; 
-  --primary-hover: #0284C7;
-  --accent: #F59E0B; 
-  --accent-hover: #D97706;
+  --primary: #D32F2F; 
+  --primary-hover: #B71C1C;
+  --accent: #B71C1C; 
+  --accent-hover: #8E1515;
   
   --shadow: 0 4px 20px rgba(0,0,0,0.05);
-  --shadow-hover: 0 10px 30px rgba(14, 165, 233, 0.15);
+  --shadow-hover: 0 10px 30px rgba(211, 47, 47, 0.18);
   --radius: 12px;
 }
 
 .dark {
-  --bg-page: #0F172A;
-  --bg-card: #1E293B;
-  --bg-header: #1E293B;
-  --text-main: #F8FAFC;
-  --text-muted: #94A3B8;
-  --border: #334155;
+  --bg-page: #1C1011;
+  --bg-card: #2A1718;
+  --bg-header: #2A1718;
+  --text-main: #FFF5F5;
+  --text-muted: #CDA9A9;
+  --border: #4A2C2E;
   
-  --primary: #38BDF8;
-  --shadow: 0 4px 20px rgba(0,0,0,0.2);
-  --shadow-hover: 0 10px 30px rgba(56, 189, 248, 0.2);
+  --primary: #F87171;
+  --accent: #EF5350;
+  --shadow: 0 4px 20px rgba(0,0,0,0.3);
+  --shadow-hover: 0 10px 30px rgba(248, 113, 113, 0.25);
 }
 
 * { box-sizing: border-box; }
@@ -113,10 +114,10 @@ button { font-family: inherit; cursor: pointer; }
 
 .theme-switch {
   position: relative; width: 140px; height: 40px; border-radius: 20px;
-  background: #4facfe; cursor: pointer; overflow: hidden;
+  background: #EF5350; cursor: pointer; overflow: hidden;
   box-shadow: inset 0 2px 6px rgba(0,0,0,0.1); transition: background 0.4s ease;
 }
-.dark .theme-switch { background: #1a202c; }
+.dark .theme-switch { background: #3A1517; }
 .ts-knob {
   position: absolute; top: 4px; left: 4px; width: 32px; height: 32px;
   border-radius: 50%; background: #fbbf24;
@@ -126,7 +127,7 @@ button { font-family: inherit; cursor: pointer; }
 .dark .ts-knob { transform: translateX(100px); background: #e2e8f0; }
 .dark .ts-knob::after {
   content: ''; position: absolute; top: 4px; right: 4px; width: 24px; height: 24px;
-  border-radius: 50%; background: #1a202c; transition: background 0.4s;
+  border-radius: 50%; background: #3A1517; transition: background 0.4s;
 }
 .ts-text {
   position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -161,16 +162,16 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 .vj-nav {
-  background: #0EA5E9; 
+  background: #D32F2F; 
   display: flex; position: sticky; top: 73px; z-index: 40;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-.dark .vj-nav { background: #0369A1; } 
+.dark .vj-nav { background: #8E1B1B; } 
 .vj-home {
-  background: #0284C7; 
+  background: #B71C1C; 
   padding: 0 20px; display: flex; align-items: center; justify-content: center; color: #fff; transition: background 0.2s;
 }
-.vj-home:hover { background: #0369A1; }
+.vj-home:hover { background: #8E1515; }
 .vj-home svg { width: 20px; height: 20px; fill: currentColor; }
 .vj-row { flex: 1; display: flex; overflow-x: auto; scrollbar-width: none; }
 .vj-row::-webkit-scrollbar { display: none; }
@@ -180,8 +181,8 @@ button { font-family: inherit; cursor: pointer; }
   transition: background 0.2s; font-family: 'Plus Jakarta Sans', sans-serif;
   letter-spacing: 0.5px;
 }
-.vj-tab:hover, .vj-tab.active { background: #38BDF8; } 
-.dark .vj-tab:hover, .dark .vj-tab.active { background: #0284C7; }
+.vj-tab:hover, .vj-tab.active { background: #EF5350; } 
+.dark .vj-tab:hover, .dark .vj-tab.active { background: #B71C1C; }
 
 .mega-panel { background: var(--bg-card); border-top: 1px solid var(--border); box-shadow: var(--shadow-hover); position: absolute; left: 0; right: 0; }
 .mega-panel.hidden { display: none; }
@@ -222,7 +223,7 @@ button { font-family: inherit; cursor: pointer; }
 .badge { font-size: .7rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; letter-spacing: 0.5px;}
 .badge-subject { background: var(--bg-page); color: var(--primary); border: 1px solid var(--border);}
 .badge-grade { background: var(--bg-page); color: var(--text-main); border: 1px solid var(--border); }
-.badge-type { background: rgba(249, 115, 22, 0.1); color: var(--accent); }
+.badge-type { background: rgba(211, 47, 47, 0.1); color: var(--accent); }
 .doc-title { font-weight: 700; font-size: 1.05rem; line-height: 1.4; }
 .doc-meta { font-size: .8rem; color: var(--text-muted); display: flex; gap: 12px; flex-wrap: wrap; font-weight: 500;}
 .doc-card .dl-link { margin-top: auto; font-weight: 600; font-size: .85rem; color: var(--primary); border-top: 1px dashed var(--border); padding-top: 12px; display: flex; justify-content: space-between; }
@@ -274,7 +275,7 @@ button { font-family: inherit; cursor: pointer; }
   overflow: hidden;
   display: flex;
   align-items: center;
-  box-shadow: 0 4px 15px rgba(14, 165, 233, 0.1);
+  box-shadow: 0 4px 15px rgba(211, 47, 47, 0.12);
 }
 .home-marquee-icon {
   font-size: 1.5rem;
@@ -377,6 +378,24 @@ footer { background: var(--bg-card); border-top: 1px solid var(--border); margin
 .modal-box p { font-size: .95rem; color: var(--text-muted); margin-bottom: 24px; }
 .modal-list a { display: flex; align-items: center; justify-content: space-between; padding: 16px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; font-weight: 600; color: var(--text-main); transition: all 0.2s; }
 .modal-list a:hover { border-color: var(--primary); box-shadow: var(--shadow); transform: translateY(-2px); }
+
+/* Hình minh hoạ môn học */
+.art-bg {
+  background:
+    radial-gradient(circle at 88% 14%, rgba(255,255,255,.16) 0 20%, transparent 21%),
+    radial-gradient(circle at 8% 100%, rgba(255,255,255,.12) 0 26%, transparent 27%),
+    linear-gradient(135deg, var(--c1), var(--c2));
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.art-bg svg { width: 100%; height: 100%; transition: transform .35s ease; }
+.subject-card.has-art { padding: 0; overflow: hidden; }
+.subject-card.has-art .sc-body { padding: 14px 16px 18px; }
+.sc-art { height: 112px; }
+.subject-card.has-art:hover .sc-art svg, .doc-card:hover .doc-art svg { transform: scale(1.08); }
+.doc-art { margin: -20px -20px 0; height: 100px; border-radius: var(--radius) var(--radius) 0 0; }
+.hub-head { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; margin-bottom: 30px; }
+.hub-art { width: 260px; height: 160px; border-radius: var(--radius); flex-shrink: 0; box-shadow: var(--shadow); }
+.detail-art { margin: -32px -32px 24px; height: 190px; border-radius: var(--radius) var(--radius) 0 0; }
 </style>
 </head>
 <body>
@@ -606,10 +625,43 @@ function generateDoc(subjectId, grade, docType, idx){
   return {subjectId, grade, docType, idx, title, topic, edition, format, sizeStr, sizeUnit, downloads, dateStr, author, school, description};
 }
 
+/* ===== Hình minh hoạ SVG cho từng môn học (nhúng sẵn, không cần tải ảnh ngoài) ===== */
+const ART_PALETTE = [['#E53935','#B71C1C'],['#EF5350','#C62828'],['#D32F2F','#7F1D1D'],['#F44336','#AD1457'],['#FF5252','#C62828']];
+const ART = {
+  tiengviet: `<rect x="80" y="30" width="80" height="95" rx="6" fill="#fff"/><rect x="80" y="30" width="12" height="95" rx="4" fill="#FFCDD2"/><text x="128" y="92" font-size="50" font-weight="800" font-family="Plus Jakarta Sans,Arial,sans-serif" fill="#C62828" text-anchor="middle">Aa</text><g transform="rotate(35 178 90)"><rect x="172" y="40" width="12" height="70" rx="2" fill="#FFD54F"/><polygon points="172,110 184,110 178,124" fill="#FFE0B2"/><rect x="172" y="34" width="12" height="9" rx="2" fill="#FFCDD2"/></g>`,
+  toan: `<polygon points="50,118 50,40 128,118" fill="#fff"/><polygon points="62,106 62,68 100,106" fill="#C62828" opacity=".85"/><path d="M50 118 H128" stroke="#FFD54F" stroke-width="4"/><g font-family="Plus Jakarta Sans,Arial,sans-serif" font-weight="800" fill="#fff"><text x="160" y="58" font-size="30">π</text><text x="150" y="98" font-size="26">x²</text><text x="186" y="120" font-size="26" fill="#FFD54F">√</text></g>`,
+  nguvan: `<path d="M120 50 C100 38 70 38 50 46 V118 C70 110 100 110 120 122 Z" fill="#fff"/><path d="M120 50 C140 38 170 38 190 46 V118 C170 110 140 110 120 122 Z" fill="#FFEBEE"/><path d="M120 50 V122" stroke="#C62828" stroke-width="2"/><path d="M64 62 h42 M64 76 h42 M64 90 h42 M134 62 h42 M134 76 h42 M134 90 h42" stroke="#E57373" stroke-width="4" stroke-linecap="round"/><path d="M150 38 v30 l8-7 8 7 v-30z" fill="#FFD54F"/>`,
+  tienganh: `<rect x="40" y="30" width="100" height="52" rx="14" fill="#fff"/><path d="M62 82 l-8 20 28-20z" fill="#fff"/><text x="90" y="65" font-size="23" font-weight="800" font-family="Plus Jakarta Sans,Arial,sans-serif" fill="#C62828" text-anchor="middle">Hello</text><rect x="112" y="76" width="90" height="46" rx="14" fill="#FFD54F"/><path d="M180 122 l10 16 -26-16z" fill="#FFD54F"/><text x="157" y="107" font-size="23" font-weight="800" font-family="Plus Jakarta Sans,Arial,sans-serif" fill="#7F1D1D" text-anchor="middle">ABC</text>`,
+  daoduc: `<path d="M120 108 C68 78 68 40 98 40 C110 40 117 47 120 54 C123 47 130 40 142 40 C172 40 172 78 120 108Z" fill="#fff"/><path d="M52 126 Q120 96 188 126" stroke="#FFCDD2" stroke-width="12" fill="none" stroke-linecap="round"/><path d="M190 36 l4 11 11 4-11 4-4 11-4-11-11-4 11-4z" fill="#FFD54F"/><path d="M50 50 l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="#fff" opacity=".8"/>`,
+  tnxh: `<polygon points="40,84 78,50 116,84" fill="#fff"/><rect x="49" y="84" width="58" height="40" fill="#FFEBEE"/><rect x="70" y="98" width="16" height="26" fill="#C62828"/><rect x="54" y="92" width="12" height="12" fill="#FFD54F"/><path d="M168 124 V84" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M168 108 q-18 -2 -22 -16 q16 0 22 16z" fill="#fff"/><g transform="translate(168 62)" fill="#FFD54F"><ellipse cy="-20" rx="7" ry="13"/><ellipse cy="-20" rx="7" ry="13" transform="rotate(45)"/><ellipse cy="-20" rx="7" ry="13" transform="rotate(90)"/><ellipse cy="-20" rx="7" ry="13" transform="rotate(135)"/><ellipse cy="-20" rx="7" ry="13" transform="rotate(180)"/><ellipse cy="-20" rx="7" ry="13" transform="rotate(225)"/><ellipse cy="-20" rx="7" ry="13" transform="rotate(270)"/><ellipse cy="-20" rx="7" ry="13" transform="rotate(315)"/><circle r="13" fill="#7F1D1D"/></g>`,
+  khoahoc: `<rect x="72" y="114" width="96" height="10" rx="4" fill="#fff"/><path d="M104 114 V96 Q152 104 152 70 Q152 46 128 42" stroke="#fff" stroke-width="10" fill="none" stroke-linecap="round"/><g transform="rotate(-25 112 60)"><rect x="100" y="22" width="22" height="58" rx="4" fill="#fff"/><rect x="104" y="80" width="14" height="14" fill="#FFCDD2"/><rect x="98" y="30" width="26" height="6" fill="#FFD54F"/></g><rect x="92" y="98" width="44" height="6" rx="2" fill="#FFD54F"/>`,
+  lichsudiali: `<circle cx="120" cy="75" r="48" fill="#fff"/><path d="M92 50 q12 -10 24 0 q6 12 -6 16 q-14 2 -18 -16z M126 68 q16 -8 26 6 q-4 18 -20 16 q-10 -8 -6 -22z M88 90 q10 0 12 12 q-10 6 -14 -2z" fill="#EF5350"/><ellipse cx="120" cy="75" rx="22" ry="48" fill="none" stroke="#E57373" stroke-width="2"/><path d="M72 75 h96" stroke="#E57373" stroke-width="2"/><path d="M34 100 q86 44 172 -6" stroke="#FFD54F" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="2 10"/>`,
+  khtn: `<ellipse cx="120" cy="78" rx="64" ry="16" transform="rotate(-20 120 78)" fill="none" stroke="#FFD54F" stroke-width="6"/><circle cx="120" cy="78" r="34" fill="#fff"/><path d="M90 66 q30 -10 60 0 M87 82 q33 -8 66 0 M92 98 q28 6 56 0" stroke="#FFCDD2" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M56 78 A64 16 0 0 0 184 78" transform="rotate(-20 120 78)" fill="none" stroke="#FFD54F" stroke-width="6"/><path d="M200 34 l3 8 8 3-8 3-3 8-3-8-8-3 8-3z M40 40 l2 6 6 2-6 2-2 6-2-6-6-2 6-2z M196 120 l2 6 6 2-6 2-2 6-2-6-6-2 6-2z" fill="#fff"/>`,
+  vatli: `<g fill="none" stroke="#fff" stroke-width="3"><ellipse cx="120" cy="75" rx="62" ry="22"/><ellipse cx="120" cy="75" rx="62" ry="22" transform="rotate(60 120 75)"/><ellipse cx="120" cy="75" rx="62" ry="22" transform="rotate(120 120 75)"/></g><circle cx="120" cy="75" r="11" fill="#FFD54F"/><circle cx="182" cy="75" r="7" fill="#fff"/><circle cx="89" cy="21" r="7" fill="#fff"/><circle cx="89" cy="129" r="7" fill="#fff"/>`,
+  hoahoc: `<path d="M108 28 H132 V60 L170 118 Q174 124 166 124 H74 Q66 124 70 118 L108 60 Z" fill="#fff"/><path d="M88 92 Q104 84 120 92 T152 92 L170 118 Q174 124 166 124 H74 Q66 124 70 118 Z" fill="#EF5350"/><rect x="103" y="23" width="34" height="8" rx="4" fill="#FFCDD2"/><circle cx="110" cy="108" r="5" fill="#fff" opacity=".85"/><circle cx="132" cy="102" r="4" fill="#fff" opacity=".85"/><circle cx="154" cy="40" r="7" fill="none" stroke="#fff" stroke-width="3"/><circle cx="170" cy="24" r="4" fill="none" stroke="#fff" stroke-width="3"/>`,
+  sinhhoc: `<path d="M120 122 V56" stroke="#fff" stroke-width="6" stroke-linecap="round"/><path d="M120 86 C80 86 60 60 64 38 C92 38 120 56 120 86Z" fill="#fff"/><path d="M120 70 C160 70 180 46 176 26 C148 26 120 44 120 70Z" fill="#FFCDD2"/><path d="M76 126 H164" stroke="#fff" stroke-width="6" stroke-linecap="round"/><circle cx="192" cy="104" r="5" fill="#FFD54F"/><circle cx="48" cy="100" r="4" fill="#fff" opacity=".7"/>`,
+  lichsu: `<polygon points="52,58 120,22 188,58" fill="#fff"/><rect x="58" y="62" width="124" height="8" fill="#FFCDD2"/><g fill="#fff"><rect x="68" y="74" width="16" height="40"/><rect x="98" y="74" width="16" height="40"/><rect x="126" y="74" width="16" height="40"/><rect x="156" y="74" width="16" height="40"/></g><rect x="52" y="114" width="136" height="10" rx="2" fill="#FFCDD2"/><circle cx="120" cy="46" r="7" fill="#C62828"/>`,
+  dialy: `<path d="M44 52 L86 42 L128 54 L170 42 L196 50 V112 L170 104 L128 116 L86 104 L44 114Z" fill="#fff"/><path d="M86 42 V104 M128 54 V116 M170 42 V104" stroke="#EF9A9A" stroke-width="2"/><path d="M130 22 c-18 0 -28 14 -28 28 0 20 28 46 28 46 s28 -26 28 -46 c0 -14 -10 -28 -28 -28z" fill="#FFD54F"/><circle cx="130" cy="50" r="10" fill="#C62828"/>`,
+  gdcd: `<path d="M120 30 V116" stroke="#fff" stroke-width="6"/><rect x="92" y="114" width="56" height="10" rx="4" fill="#fff"/><path d="M60 46 H180" stroke="#fff" stroke-width="6" stroke-linecap="round"/><circle cx="120" cy="30" r="9" fill="#FFD54F"/><path d="M60 46 L42 84 M60 46 L78 84 M180 46 L162 84 M180 46 L198 84" stroke="#fff" stroke-width="3"/><path d="M38 84 H82 A22 16 0 0 1 38 84 Z M158 84 H202 A22 16 0 0 1 158 84 Z" fill="#fff"/>`,
+  tinhoc: `<rect x="62" y="34" width="116" height="74" rx="8" fill="#fff"/><rect x="70" y="42" width="100" height="58" rx="4" fill="#7F1D1D"/><text x="120" y="82" font-size="30" font-weight="800" font-family="monospace" fill="#FFD54F" text-anchor="middle">&lt;/&gt;</text><path d="M44 110 H196 L186 122 H54Z" fill="#fff"/>`,
+  congnghe: `<circle cx="98" cy="74" r="32" fill="none" stroke="#fff" stroke-width="12" stroke-dasharray="10 10.1"/><circle cx="98" cy="74" r="27" fill="#fff"/><circle cx="98" cy="74" r="11" fill="none" stroke="#E57373" stroke-width="5"/><circle cx="160" cy="100" r="21" fill="none" stroke="#FFD54F" stroke-width="10" stroke-dasharray="8.2 8.2"/><circle cx="160" cy="100" r="17" fill="#FFD54F"/><circle cx="160" cy="100" r="7" fill="none" stroke="#C62828" stroke-width="4"/>`,
+  gdtc: `<circle cx="134" cy="36" r="12" fill="#fff"/><path d="M130 54 L114 84 L92 90 M114 84 L130 108 L112 126 M128 62 L154 74 L172 62 M128 62 L106 66" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M40 58 h30 M28 80 h40 M44 102 h26" stroke="#fff" opacity=".6" stroke-width="5" stroke-linecap="round"/><circle cx="196" cy="110" r="8" fill="#FFD54F"/>`,
+  nghethuat: `<path d="M116 30 C66 30 44 60 46 85 C48 110 78 120 96 114 C108 110 100 98 108 92 C118 86 146 100 171 90 C192 80 186 30 116 30Z" fill="#fff"/><circle cx="84" cy="58" r="8" fill="#E53935"/><circle cx="114" cy="48" r="8" fill="#FFD54F"/><circle cx="146" cy="56" r="8" fill="#EF9A9A"/><circle cx="72" cy="86" r="8" fill="#7F1D1D"/><circle cx="148" cy="86" r="8" fill="#C62828" opacity=".35"/><g transform="rotate(40 176 70)"><rect x="171" y="20" width="9" height="70" rx="4" fill="#FFD54F"/><rect x="170" y="88" width="11" height="14" fill="#FFCDD2"/><path d="M170 102 h11 l-5.5 14z" fill="#7F1D1D"/></g>`,
+  hdtn: `<circle cx="112" cy="78" r="46" fill="#fff"/><circle cx="112" cy="78" r="34" fill="#E53935"/><circle cx="112" cy="78" r="22" fill="#fff"/><circle cx="112" cy="78" r="10" fill="#E53935"/><path d="M112 78 L170 28" stroke="#FFD54F" stroke-width="5" stroke-linecap="round"/><path d="M170 28 l-3 -14 l10 6z M170 28 l14 3 l-8 8z" fill="#FFD54F"/>`
+};
+function artHTML(subjectId, cls){
+  const svg = ART[subjectId];
+  if(!svg) return '';
+  const idx = SUBJECTS.findIndex(s=>s.id===subjectId);
+  const [c1,c2] = ART_PALETTE[(idx<0?0:idx) % ART_PALETTE.length];
+  return `<div class="art-bg ${cls}" style="--c1:${c1};--c2:${c2}"><svg viewBox="0 0 240 150" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${svg}</svg></div>`;
+}
+
 function docCardHTML(doc){
   const subject = subjectOf(doc.subjectId);
   const dt = doctypeOf(doc.docType);
   return `<a class="doc-card" href="#/doc/${doc.subjectId}/${doc.grade}/${doc.docType}/${doc.idx}">
+    ${artHTML(doc.subjectId,'doc-art')}
     <div class="doc-badges">
       <span class="badge badge-subject">${subject.icon} ${subject.name}</span>
       <span class="badge badge-grade">Lớp ${doc.grade}</span>
@@ -638,10 +690,13 @@ function renderHome(){
   const latestHTML = LATEST.map(([s,g,t,i])=>docCardHTML(generateDoc(s,g,t,i))).join('');
   
   const subjectCardsHTML = SUBJECTS.map(s=>`
-    <a class="subject-card" href="#/subject/${s.id}">
-      <div class="sc-icon">${s.icon}</div>
-      <div class="sc-name">${s.name}</div>
-      <div class="sc-meta">Lớp ${s.grades[0]}–${s.grades[s.grades.length-1]}</div>
+    <a class="subject-card has-art" href="#/subject/${s.id}">
+      ${artHTML(s.id,'sc-art')}
+      <div class="sc-body">
+        <div class="sc-icon">${s.icon}</div>
+        <div class="sc-name">${s.name}</div>
+        <div class="sc-meta">Lớp ${s.grades[0]}–${s.grades[s.grades.length-1]}</div>
+      </div>
     </a>`).join('');
 
   const docTypeCardsHTML = DOC_TYPES.map(t=>`
@@ -706,8 +761,13 @@ function renderSubjectHub(subjectId){
   <div class="wrap">
     ${breadcrumbHTML([{label:'Trang chủ', href:'#/'},{label:subject.name}])}
     <section class="section">
-      <h1 style="font-size:2rem;">${subject.icon} Môn ${subject.name}</h1>
-      <p class="desc-text" style="max-width:700px; margin-bottom: 30px;">Duyệt tài liệu môn ${subject.name} theo khối lớp ${subject.grades[0]}–${subject.grades[subject.grades.length-1]} và theo loại tài liệu.</p>
+      <div class="hub-head">
+        ${artHTML(subject.id,'hub-art')}
+        <div>
+          <h1 style="font-size:2rem;">${subject.icon} Môn ${subject.name}</h1>
+          <p class="desc-text" style="max-width:700px; margin:0;">Duyệt tài liệu môn ${subject.name} theo khối lớp ${subject.grades[0]}–${subject.grades[subject.grades.length-1]} và theo loại tài liệu.</p>
+        </div>
+      </div>
       
       <div class="filter-box">
         <h4>Chọn khối lớp</h4>
@@ -788,6 +848,7 @@ function renderDoc(subjectId, grade, docType, idx){
     <section class="section">
       <div class="detail-layout">
         <div class="detail-card">
+          ${artHTML(subject.id,'detail-art')}
           <div class="doc-badges" style="margin-bottom:16px;">
             <span class="badge badge-subject">${subject.icon} ${subject.name}</span>
             <span class="badge badge-grade">Lớp ${grade}</span>
@@ -796,7 +857,6 @@ function renderDoc(subjectId, grade, docType, idx){
           <h1 style="font-size:1.8rem;">${doc.title}</h1>
           <div class="meta-grid">
             <div class="meta-item"><div class="mi-label">Tác giả</div><div class="mi-value">${doc.author}</div></div>
-            <div class="meta-item"><div class="mi-label">Đơn vị</div><div class="mi-value">${doc.school}</div></div>
             <div class="meta-item"><div class="mi-label">Ngày đăng</div><div class="mi-value mono">${doc.dateStr}</div></div>
             <div class="meta-item"><div class="mi-label">Bộ sách</div><div class="mi-value">${doc.edition}</div></div>
             <div class="meta-item"><div class="mi-label">Định dạng</div><div class="mi-value mono">${doc.format}</div></div>
@@ -830,7 +890,7 @@ function renderNotFound(){
 }
 
 function renderSearch(query){
-  const q = (query||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  const q = (query||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d');
   
   const dict = {
     'giao an': 'khbd', 'khbd': 'khbd', 'ke hoach bai day': 'khbd', 'giao an ca nam': 'khbd',
@@ -875,7 +935,7 @@ function renderSearch(query){
   if (foundDocType && !foundSubject) {
     foundTopic = true;
     SUBJECTS.forEach(s => {
-       let gradesToShow = (foundGrade && s.grades.includes(foundGrade)) ? [foundGrade] : s.grades;
+       let gradesToShow = foundGrade ? (s.grades.includes(foundGrade) ? [foundGrade] : []) : s.grades;
        gradesToShow.forEach(g => {
            if (foundDocType === 'sgk' || foundDocType === 'khgd') {
                results.push(generateDoc(s.id, g, foundDocType, 0)); 
@@ -891,10 +951,22 @@ function renderSearch(query){
        });
     });
   }
+  else if (foundSubject) {
+    const s = subjectOf(foundSubject);
+    const grades = foundGrade ? (s.grades.includes(foundGrade) ? [foundGrade] : []) : s.grades;
+    const types = foundDocType ? [foundDocType] : DOC_TYPES.map(t => t.id);
+    const limitOf = t => (t === 'sgk' || t === 'khgd') ? 1 : (t === 'khbd' ? 3 : DOCS_PER_CATEGORY);
+    const single = grades.length === 1 && types.length === 1;
+    grades.forEach(g => types.forEach(t => {
+      const n = single ? limitOf(t) : Math.min(limitOf(t), foundDocType ? 3 : 1);
+      for (let i = 0; i < n; i++) results.push(generateDoc(foundSubject, g, t, i));
+    }));
+    foundTopic = true;
+  }
   else if (!foundSubject && !foundDocType) {
     Object.keys(TOPICS).forEach(sid => {
       TOPICS[sid].forEach((topic, idx) => {
-        if(topic.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').includes(q)){
+        if(topic.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').includes(q)){
           foundTopic = true;
           const s = subjectOf(sid);
           let g = (foundGrade && s.grades.includes(foundGrade)) ? foundGrade : s.grades[0];
@@ -906,6 +978,7 @@ function renderSearch(query){
     });
   }
 
+  const recognized = !!(foundSubject || foundDocType);
   results.sort(() => Math.random() - 0.5);
 
   if(results.length > 0) {
@@ -920,6 +993,13 @@ function renderSearch(query){
       ${foundTopic && matchedDocsHTML ? `
         <div class="section-head"><div><div class="eyebrow">Trí tuệ nhân tạo</div><h2>Gợi ý tài liệu phù hợp</h2></div></div>
         <div class="doc-grid">${matchedDocsHTML}</div>
+      ` : recognized ? `
+        <div class="empty-state">
+          <h2 style="font-size:3rem; margin-bottom:10px;">📭</h2>
+          <h3>Tài liệu chưa được đăng</h3>
+          <p>Hiện tại tài liệu mà quý khách đang tìm kiếm chúng tôi chưa đăng lên. Vui lòng liên hệ để biết thêm chi tiết.</p>
+          <button class="btn btn-accent" style="margin-top:20px; padding:12px 24px;" onclick="showContactModal()">📞 Liên hệ ngay</button>
+        </div>
       ` : `
         <div class="empty-state">
           <h2 style="font-size:3rem; margin-bottom:10px;">🔍</h2>
@@ -1055,30 +1135,49 @@ function showServiceMaintenance(serviceName) {
   `);
 }
 
+function showVideoAIModal() {
+  showModal('Dịch vụ Video AI', `
+    <div style="text-align:center; padding: 10px 0;">
+      <div style="font-size:3.5rem; margin-bottom:16px;">🎬</div>
+      <p style="font-size:1.05rem; color:var(--text-main); font-weight:600; margin-bottom:12px;">Nhận làm video AI ngắn theo yêu cầu!</p>
+      <p style="color:var(--text-muted); margin-bottom:24px; line-height: 1.5;">Nếu bạn cần thuê làm video AI ngắn mục đích cho dạy học, giải trí... hãy liên hệ cho chúng tôi.</p>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <a href="https://drive.google.com/drive/folders/1PpMlbklsCV5sDlZyNXu1u9aFAXdON5ey?hl=vi" target="_blank" class="btn btn-accent" style="display:inline-flex; width:100%; justify-content:center; padding:14px; font-size:1rem; font-weight: 700;">▶️ Xem Video Demo</a>
+        <a href="https://zalo.me/${ZALO_PHONE}" target="_blank" class="btn btn-primary" style="display:inline-flex; width:100%; justify-content:center; padding:14px; font-size:1rem; font-weight: 700;">📞 Liên hệ tư vấn ngay</a>
+      </div>
+    </div>
+  `);
+}
+
 document.getElementById('servicesBtn').onclick = () => {
   const list = [
-    {n: '🚀 Dịch vụ Mạng Xã Hội', m: 'Tăng follower, tym, like...', lock: true, badge: 'BẢO TRÌ'},
-    {n: '🤖 Tài khoản AI Pro giá rẻ', m: 'Gemini Advanced, Canva Pro, Claude...', link: 'https://sites.google.com/view/dichvukhac?usp=sharing', lock: false},
-    {n: '🌐 Xây dựng Fanpage', m: 'Hệ thống Fanpage dạy học online chuyên nghiệp', lock: true, badge: 'BẢO TRÌ'}
+    {id: 'videoai', n: '🚀 Dịch vụ Video AI', m: 'Làm video AI ngắn dạy học, giải trí...', lock: true, badge: 'HOT'},
+    {id: 'aipro', n: '🤖 Tài khoản AI Pro giá rẻ', m: 'Gemini Advanced, Canva Pro, Claude...', link: 'https://sites.google.com/view/dichvukhac?usp=sharing', lock: false},
+    {id: 'fanpage', n: '🌐 Xây dựng Fanpage', m: 'Hệ thống Fanpage dạy học online chuyên nghiệp', lock: true, badge: 'BẢO TRÌ'}
   ];
   
   const html = `<p>Chọn dịch vụ để xem chi tiết:</p><div class="modal-list">` + 
-    list.map(i=> i.lock 
-      ? `<a href="#" onclick="event.preventDefault(); showServiceMaintenance('${i.n}')"><div><div style="font-size:1rem; font-family:'Plus Jakarta Sans', sans-serif; display:flex; align-items:center; gap:8px;">${i.n} <span style="font-size:.65rem; background:rgba(245, 158, 11, 0.1); color:var(--accent); border:1px solid var(--accent); padding:2px 8px; border-radius:12px; font-weight:700; letter-spacing:0.5px;">${i.badge}</span></div><div style="font-size:.8rem; color:var(--text-muted); font-weight:500; margin-top:4px;">${i.m}</div></div><span style="color:var(--text-muted); font-size:1.2rem;">🔒</span></a>` 
-      : `<a href="${i.link}" target="_blank"><div><div style="font-size:1rem; font-family:'Plus Jakarta Sans', sans-serif;">${i.n}</div><div style="font-size:.8rem; color:var(--text-muted); font-weight:500; margin-top:4px;">${i.m}</div></div><span style="color:var(--primary);">↗</span></a>`
-    ).join('') + `</div>`;
+    list.map(i=> {
+      if (!i.lock) {
+        return `<a href="${i.link}" target="_blank"><div><div style="font-size:1rem; font-family:'Plus Jakarta Sans', sans-serif;">${i.n}</div><div style="font-size:.8rem; color:var(--text-muted); font-weight:500; margin-top:4px;">${i.m}</div></div><span style="color:var(--primary);">↗</span></a>`;
+      } else if (i.id === 'videoai') {
+        return `<a href="#" onclick="event.preventDefault(); showVideoAIModal()"><div><div style="font-size:1rem; font-family:'Plus Jakarta Sans', sans-serif; display:flex; align-items:center; gap:8px;">${i.n} <span style="font-size:.65rem; background:rgba(183, 28, 28, 0.1); color:var(--accent); border:1px solid var(--accent); padding:2px 8px; border-radius:12px; font-weight:700; letter-spacing:0.5px;">${i.badge}</span></div><div style="font-size:.8rem; color:var(--text-muted); font-weight:500; margin-top:4px;">${i.m}</div></div><span style="color:var(--primary); font-size:1.2rem;">✨</span></a>`;
+      } else {
+        return `<a href="#" onclick="event.preventDefault(); showServiceMaintenance('${i.n}')"><div><div style="font-size:1rem; font-family:'Plus Jakarta Sans', sans-serif; display:flex; align-items:center; gap:8px;">${i.n} <span style="font-size:.65rem; background:rgba(183, 28, 28, 0.1); color:var(--accent); border:1px solid var(--accent); padding:2px 8px; border-radius:12px; font-weight:700; letter-spacing:0.5px;">${i.badge}</span></div><div style="font-size:.8rem; color:var(--text-muted); font-weight:500; margin-top:4px;">${i.m}</div></div><span style="color:var(--text-muted); font-size:1.2rem;">🔒</span></a>`;
+      }
+    }).join('') + `</div>`;
   showModal('Dịch vụ khác', html);
 };
 
 document.getElementById('aiBtn').onclick = () => {
   const list = [
-    {n: 'Mô phỏng AI trong dạy học', m: 'Giải pháp tích hợp AI cho lớp học', link: '#', lock: true, badge: 'SẮP HOÀN THIỆN'},
+    {n: 'Mô phỏng AI trong dạy học', m: 'Giải pháp tích hợp AI cho lớp học', link: 'https://coachkhoasinh-dot.github.io/mophong/?zarsrc=30&utm_source=zalo&utm_medium=zalo&utm_campaign=zalo', lock: false},
     {n: 'Phần mềm giáo dục AI', m: 'Cung cấp các công cụ AI FREE cho giáo viên', link: 'https://sites.google.com/view/hotrogiaoduc06/binhham?authuser=0', lock: false},
     {n: 'Khóa học AI thực chiến', m: 'Đào tạo ứng dụng AI trong giảng dạy', link: '#', lock: true, badge: 'SẮP HOÀN THIỆN'}
   ];
   const html = `<p>Khám phá hệ sinh thái AI dành cho giáo dục:</p><div class="modal-list">` + 
     list.map(i=> i.lock 
-      ? `<a href="#" onclick="event.preventDefault(); showServiceMaintenance('${i.n}')"><div><div style="font-size:1rem; font-family:'Plus Jakarta Sans', sans-serif; display:flex; align-items:center; gap:8px;">${i.n} <span style="font-size:.65rem; background:rgba(245, 158, 11, 0.1); color:var(--accent); border:1px solid var(--accent); padding:2px 8px; border-radius:12px; font-weight:700; letter-spacing:0.5px;">${i.badge}</span></div><div style="font-size:.8rem; color:var(--text-muted); font-weight:500; margin-top:4px;">${i.m}</div></div><span style="color:var(--text-muted); font-size:1.2rem;">🔒</span></a>` 
+      ? `<a href="#" onclick="event.preventDefault(); showServiceMaintenance('${i.n}')"><div><div style="font-size:1rem; font-family:'Plus Jakarta Sans', sans-serif; display:flex; align-items:center; gap:8px;">${i.n} <span style="font-size:.65rem; background:rgba(183, 28, 28, 0.1); color:var(--accent); border:1px solid var(--accent); padding:2px 8px; border-radius:12px; font-weight:700; letter-spacing:0.5px;">${i.badge}</span></div><div style="font-size:.8rem; color:var(--text-muted); font-weight:500; margin-top:4px;">${i.m}</div></div><span style="color:var(--text-muted); font-size:1.2rem;">🔒</span></a>` 
       : `<a href="${i.link}" target="_blank"><div><div style="font-size:1rem; font-family:'Plus Jakarta Sans', sans-serif;">${i.n}</div><div style="font-size:.8rem; color:var(--text-muted); font-weight:500; margin-top:4px;">${i.m}</div></div><span style="color:var(--primary);">↗</span></a>`
     ).join('') + `</div>`;
   showModal('Trợ lý AI & Đào tạo', html);
